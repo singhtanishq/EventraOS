@@ -1,0 +1,600 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: 16 42 67;
+    --color-primary-light: 48 101 129;
+    --color-secondary: 6 182 212;
+    --color-accent: 20 184 166;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-white text-eventra-navy-900 font-sans;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+
+  * {
+    @apply border-eventra-slate-200;
+  }
+
+  ::selection {
+    @apply bg-eventra-blue-500/20 text-eventra-blue-900;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-eventra-blue-500 ring-offset-2;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 font-medium rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply btn bg-eventra-navy-900 text-white hover:bg-eventra-navy-800 focus-visible:ring-eventra-navy-500 px-6 py-3 text-body-md;
+  }
+
+  .btn-secondary {
+    @apply btn bg-eventra-slate-100 text-eventra-navy-900 hover:bg-eventra-slate-200 focus-visible:ring-eventra-slate-400 px-6 py-3 text-body-md;
+  }
+
+  .btn-outline {
+    @apply btn border-2 border-eventra-navy-900 text-eventra-navy-900 hover:bg-eventra-navy-900 hover:text-white focus-visible:ring-eventra-navy-500 px-6 py-3 text-body-md;
+  }
+
+  .btn-ghost {
+    @apply btn text-eventra-navy-700 hover:bg-eventra-slate-100 focus-visible:ring-eventra-slate-400 px-4 py-2 text-body-sm;
+  }
+
+  .btn-danger {
+    @apply btn bg-eventra-red-600 text-white hover:bg-eventra-red-700 focus-visible:ring-eventra-red-500 px-6 py-3 text-body-md;
+  }
+
+  .btn-success {
+    @apply btn bg-eventra-green-600 text-white hover:bg-eventra-green-700 focus-visible:ring-eventra-green-500 px-6 py-3 text-body-md;
+  }
+
+  .btn-lg {
+    @apply px-8 py-4 text-body-lg;
+  }
+
+  .btn-sm {
+    @apply px-4 py-2 text-body-sm;
+  }
+
+  .btn-xs {
+    @apply px-3 py-1.5 text-body-xs;
+  }
+
+  .input {
+    @apply w-full px-4 py-3 rounded-xl border border-eventra-slate-300 bg-white text-eventra-navy-900 placeholder-eventra-slate-400 transition-all duration-200 focus:border-eventra-blue-500 focus:ring-2 focus:ring-eventra-blue-500/20 focus:outline-none;
+  }
+
+  .input-error {
+    @apply border-eventra-red-500 focus:border-eventra-red-500 focus:ring-eventra-red-500/20;
+  }
+
+  .label {
+    @apply block text-body-sm font-medium text-eventra-navy-700 mb-1.5;
+  }
+
+  .card {
+    @apply bg-white rounded-2xl border border-eventra-slate-200 shadow-card overflow-hidden transition-all duration-300 hover:shadow-card-hover;
+  }
+
+  .card-elevated {
+    @apply bg-white rounded-2xl shadow-elevated border border-eventra-slate-100;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-body-xs font-medium;
+  }
+
+  .badge-primary {
+    @apply badge bg-eventra-blue-100 text-eventra-blue-800;
+  }
+
+  .badge-success {
+    @apply badge bg-eventra-green-100 text-eventra-green-800;
+  }
+
+  .badge-warning {
+    @apply badge bg-eventra-amber-100 text-eventra-amber-800;
+  }
+
+  .badge-danger {
+    @apply badge bg-eventra-red-100 text-eventra-red-800;
+  }
+
+  .badge-neutral {
+    @apply badge bg-eventra-slate-100 text-eventra-slate-700;
+  }
+
+  .link {
+    @apply text-eventra-blue-600 hover:text-eventra-blue-700 underline-offset-2 hover:underline transition-colors;
+  }
+
+  .section-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .page-header {
+    @apply mb-8;
+  }
+
+  .page-title {
+    @apply text-display-sm font-display font-bold text-eventra-navy-900;
+  }
+
+  .page-subtitle {
+    @apply text-body-lg text-eventra-slate-600 mt-2;
+  }
+
+  .form-group {
+    @apply space-y-1.5;
+  }
+
+  .form-error {
+    @apply text-body-sm text-eventra-red-600;
+  }
+
+  .divider {
+    @apply relative flex items-center gap-4 my-6;
+  }
+
+  .divider::before,
+  .divider::after {
+    @apply content-[''] flex-1 h-px bg-eventra-slate-200;
+  }
+
+  .divider-text {
+    @apply text-body-sm text-eventra-slate-500 uppercase tracking-wider;
+  }
+
+  .skeleton {
+    @apply animate-pulse bg-eventra-slate-200 rounded-xl;
+  }
+
+  .skeleton-text {
+    @apply skeleton h-4 w-full;
+  }
+
+  .skeleton-title {
+    @apply skeleton h-6 w-3/4;
+  }
+
+  .skeleton-card {
+    @apply skeleton aspect-[4/3] w-full;
+  }
+
+  .container-narrow {
+    @apply max-w-3xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .grid-auto-fit {
+    @apply grid gap-6;
+  }
+
+  .grid-auto-fit-sm {
+    @apply grid gap-4;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animate-in {
+    animation: fadeIn 0.3s ease-out, slideUp 0.4s ease-out;
+  }
+
+  .glass {
+    @apply bg-white/80 backdrop-blur-xl border border-white/20;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-eventra-navy-900 to-eventra-blue-600 bg-clip-text text-transparent;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .transition-smooth {
+    @apply transition-all duration-300 ease-out;
+  }
+}
+
+/* React Day Picker Custom Styles */
+.rdp {
+  @apply p-4 bg-white rounded-2xl border border-eventra-slate-200;
+}
+
+.rdp-months {
+  @apply flex gap-4;
+}
+
+.rdp-month {
+  @apply w-full;
+}
+
+.rdp-caption {
+  @apply text-heading-sm font-semibold text-eventra-navy-900 mb-3;
+}
+
+.rdp-head_cell {
+  @apply text-body-xs font-medium text-eventra-slate-500 uppercase tracking-wider;
+}
+
+.rdp-cell {
+  @apply p-2;
+}
+
+.rdp-button {
+  @apply w-10 h-10 rounded-xl text-body-md font-medium transition-all duration-200 hover:bg-eventra-slate-100 focus:bg-eventra-blue-100 focus:text-eventra-blue-700;
+}
+
+.rdp-button:disabled {
+  @apply opacity-30 cursor-not-allowed hover:bg-transparent;
+}
+
+.rdp-button_selected,
+.rdp-button_selected:focus,
+.rdp-button_selected:hover {
+  @apply bg-eventra-navy-900 text-white hover:bg-eventra-navy-800;
+}
+
+.rdp-button_range_start {
+  @apply bg-eventra-navy-900 text-white rounded-l-xl rounded-r-none;
+}
+
+.rdp-button_range_end {
+  @apply bg-eventra-navy-900 text-white rounded-r-xl rounded-l-none;
+}
+
+.rdp-button_range_middle {
+  @apply bg-eventra-blue-50 text-eventra-blue-700 rounded-none;
+}
+
+.rdp-button_today {
+  @apply font-bold relative;
+}
+
+.rdp-button_today::after {
+  @apply content-[''] absolute bottom-2 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-eventra-navy-900;
+}
+
+.rdp-button_outside {
+  @apply text-eventra-slate-300 hover:text-eventra-slate-400;
+}
+
+/* Swiper Custom Styles */
+.swiper-pagination-bullet {
+  @apply bg-eventra-slate-400 opacity-50 transition-all;
+}
+
+.swiper-pagination-bullet-active {
+  @apply bg-eventra-navy-900 opacity-100 w-3 rounded-full;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  @apply text-eventra-navy-900 !important;
+}
+
+.swiper-button-next:after,
+.swiper-button-prev:after {
+  @apply text-heading-md !important;
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+  @apply w-2 h-2;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-eventra-slate-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-eventra-slate-300 rounded-full hover:bg-eventra-slate-400;
+}
+
+/* Toast Custom Styles */
+.toast-success {
+  @apply bg-eventra-green-600 text-white;
+}
+
+.toast-error {
+  @apply bg-eventra-red-600 text-white;
+}
+
+.toast-loading {
+  @apply bg-eventra-navy-900 text-white;
+}
+
+/* Modal/Dialog Overlay */
+.fixed-inset {
+  @apply fixed inset-0 z-50 flex items-center justify-center p-4;
+}
+
+.modal-overlay {
+  @apply fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity;
+}
+
+.modal-content {
+  @apply relative w-full max-w-lg max-h-[90vh] overflow-y-auto bg-white rounded-2xl shadow-elevated animate-scale-in;
+}
+
+/* Loading Spinner */
+.spinner {
+  @apply animate-spin rounded-full border-3 border-eventra-slate-200 border-t-eventra-navy-900;
+}
+
+/* Table Styles */
+.table-container {
+  @apply overflow-x-auto rounded-xl border border-eventra-slate-200;
+}
+
+.table {
+  @apply w-full text-left;
+}
+
+.table th {
+  @apply px-4 py-3 text-body-xs font-semibold text-eventra-slate-500 uppercase tracking-wider bg-eventra-slate-50 border-b border-eventra-slate-200;
+}
+
+.table td {
+  @apply px-4 py-3 text-body-sm text-eventra-navy-700 border-b border-eventra-slate-100;
+}
+
+.table tr:last-child td {
+  @apply border-b-0;
+}
+
+.table tr:hover td {
+  @apply bg-eventra-slate-50;
+}
+
+/* Stepper */
+.stepper {
+  @apply flex items-center gap-2;
+}
+
+.stepper-step {
+  @apply flex items-center gap-2;
+}
+
+.stepper-circle {
+  @apply flex items-center justify-center w-8 h-8 rounded-full text-body-sm font-medium transition-all duration-300;
+}
+
+.stepper-circle-active {
+  @apply bg-eventra-navy-900 text-white;
+}
+
+.stepper-circle-completed {
+  @apply bg-eventra-green-600 text-white;
+}
+
+.stepper-circle-pending {
+  @apply bg-eventra-slate-200 text-eventra-slate-500;
+}
+
+.stepper-line {
+  @apply h-1 bg-eventra-slate-200 flex-1 max-w-32 transition-colors duration-300;
+}
+
+.stepper-line-active {
+  @apply bg-eventra-navy-900;
+}
+
+/* Price Display */
+.price {
+  @apply font-display font-bold;
+}
+
+.price-lg {
+  @apply price text-heading-xl;
+}
+
+.price-md {
+  @apply price text-heading-md;
+}
+
+.price-sm {
+  @apply price text-heading-sm;
+}
+
+/* Avatar */
+.avatar {
+  @apply inline-flex items-center justify-center rounded-full bg-eventra-slate-100 text-eventra-navy-700 font-medium overflow-hidden;
+}
+
+.avatar-sm {
+  @apply avatar w-8 h-8 text-body-xs;
+}
+
+.avatar-md {
+  @apply avatar w-10 h-10 text-body-sm;
+}
+
+.avatar-lg {
+  @apply avatar w-14 h-14 text-body-md;
+}
+
+.avatar-xl {
+  @apply avatar w-20 h-20 text-body-lg;
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+  @apply absolute right-0 mt-2 w-56 bg-white rounded-xl border border-eventra-slate-200 shadow-elevated py-2 animate-slide-down;
+}
+
+.dropdown-item {
+  @apply flex items-center gap-3 px-4 py-2.5 text-body-sm text-eventra-navy-700 hover:bg-eventra-slate-50 transition-colors;
+}
+
+.dropdown-divider {
+  @apply h-px bg-eventra-slate-200 my-2;
+}
+
+/* Tab Styles */
+.tabs {
+  @apply flex gap-1 bg-eventra-slate-100 rounded-xl p-1;
+}
+
+.tab {
+  @apply px-4 py-2 rounded-lg text-body-sm font-medium text-eventra-slate-600 hover:text-eventra-navy-900 transition-all duration-200;
+}
+
+.tab-active {
+  @apply bg-white text-eventra-navy-900 shadow-card;
+}
+
+/* Accordion */
+.accordion {
+  @apply border border-eventra-slate-200 rounded-xl overflow-hidden;
+}
+
+.accordion-item {
+  @apply border-t border-eventra-slate-200 first:border-t-0;
+}
+
+.accordion-trigger {
+  @apply w-full px-6 py-4 flex items-center justify-between text-left text-body-md font-medium text-eventra-navy-900 hover:bg-eventra-slate-50 transition-colors;
+}
+
+.accordion-content {
+  @apply px-6 pb-4 text-body-sm text-eventra-slate-600 animate-slide-down;
+}
+
+/* Tooltip */
+.tooltip {
+  @apply absolute z-50 px-3 py-1.5 text-body-xs font-medium text-white bg-eventra-navy-900 rounded-lg shadow-lg animate-fade-in;
+}
+
+.tooltip::before {
+  @apply content-[''] absolute bottom-full left-1/2 -translate-x-1/2 border-5 border-transparent border-b-eventra-navy-900;
+}
+
+/* Progress Bar */
+.progress {
+  @apply h-2 bg-eventra-slate-200 rounded-full overflow-hidden;
+}
+
+.progress-bar {
+  @apply h-full bg-eventra-navy-900 rounded-full transition-all duration-500 ease-out;
+}
+
+/* Image Gallery Thumbnail */
+.gallery-thumb {
+  @apply relative w-20 h-20 rounded-lg overflow-hidden border-2 border-transparent cursor-pointer transition-all duration-200 hover:border-eventra-blue-400;
+}
+
+.gallery-thumb-active {
+  @apply border-eventra-navy-900;
+}
+
+/* Form Checkbox/Radio */
+.form-checkbox {
+  @apply w-5 h-5 rounded border-eventra-slate-300 text-eventra-navy-900 focus:ring-eventra-blue-500 focus:ring-2 focus:ring-offset-2 transition-colors;
+}
+
+.form-radio {
+  @apply w-5 h-5 border-eventra-slate-300 text-eventra-navy-900 focus:ring-eventra-blue-500 focus:ring-2 focus:ring-offset-2 transition-colors;
+}
+
+/* Select */
+.form-select {
+  @apply input appearance-none bg-[url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[right_12px_center] bg-no-repeat pr-12;
+}
+
+/* Tag */
+.tag {
+  @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-body-xs font-medium bg-eventra-slate-100 text-eventra-slate-700;
+}
+
+.tag-removable {
+  @apply tag hover:bg-eventra-slate-200;
+}
+
+.tag-removable button {
+  @apply p-0.5 rounded-full hover:bg-eventra-slate-300 transition-colors;
+}
+
+/* Alert */
+.alert {
+  @apply p-4 rounded-xl border flex items-start gap-3;
+}
+
+.alert-info {
+  @apply alert bg-eventra-blue-50 border-eventra-blue-200 text-eventra-blue-800;
+}
+
+.alert-success {
+  @apply alert bg-eventra-green-50 border-eventra-green-200 text-eventra-green-800;
+}
+
+.alert-warning {
+  @apply alert bg-eventra-amber-50 border-eventra-amber-200 text-eventra-amber-800;
+}
+
+.alert-danger {
+  @apply alert bg-eventra-red-50 border-eventra-red-200 text-eventra-red-800;
+}
+
+/* Timeline */
+.timeline {
+  @apply relative pl-6 border-l-2 border-eventra-slate-200;
+}
+
+.timeline-item {
+  @apply relative pb-8 last:pb-0;
+}
+
+.timeline-marker {
+  @apply absolute -left-6 top-1 w-10 h-10 rounded-full flex items-center justify-center text-body-xs font-medium border-2 border-white;
+}
+
+.timeline-marker-completed {
+  @apply bg-eventra-green-600 text-white border-eventra-green-600;
+}
+
+.timeline-marker-current {
+  @apply bg-eventra-navy-900 text-white border-eventra-navy-900 animate-pulse;
+}
+
+.timeline-marker-pending {
+  @apply bg-white text-eventra-slate-400 border-eventra-slate-300;
+}
+
+.timeline-content {
+  @apply ml-2;
+}
+
+.timeline-time {
+  @apply text-body-xs text-eventra-slate-500 mb-1;
+}
+
+.timeline-title {
+  @apply text-body-sm font-medium text-eventra-navy-900;
+}
+
+.timeline-description {
+  @apply text-body-sm text-eventra-slate-600 mt-1;
+}
