@@ -45,7 +45,7 @@ return new class extends Migration
             $table->foreignId('package_id')->constrained('travel_packages')->cascadeOnDelete();
             $table->unsignedInteger('day_number');
             $table->enum('service_type', ['hotel', 'flight', 'train', 'bus', 'venue', 'car', 'activity', 'transfer']);
-            $table->foreignId('service_id')->nullable()->constrained()->nullOnDelete(); // Polymorphic would be better but using nullable FK for simplicity
+            $table->unsignedBigInteger('service_id')->nullable()->index();
             $table->string('service_name');
             $table->json('service_details')->nullable(); // Specific configuration
             $table->time('start_time')->nullable();
