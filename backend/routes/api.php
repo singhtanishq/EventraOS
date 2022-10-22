@@ -6,51 +6,80 @@ use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\CustomerController;
+use App\Http\Controllers\Api\SavedTravelerController;
 use App\Http\Controllers\Api\AgentController;
 use App\Http\Controllers\Api\AdminController;
+use App\Http\Controllers\Api\PromotionController;
 
-// Public routes
-Route::post('/auth/register', [AuthController::class, 'register']);
-Route::post('/auth/login', [AuthController::class, 'login']);
-Route::post('/auth/forgot-password', [AuthController::class, 'forgotPassword']);
-Route::post('/auth/reset-password', [AuthController::class, 'resetPassword']);
-Route::post('/auth/verify-email', [AuthController::class, 'verifyEmail']);
-Route::post('/auth/refresh', [AuthController::class, 'refresh']);
+/*
+|--------------------------------------------------------------------------
+| Public Routes
+|--------------------------------------------------------------------------
+*/
 
-// Search routes (public)
-Route::get('/search/hotels', [SearchController::class, 'searchHotels']);
-Route::get('/search/flights', [SearchController::class, 'searchFlights']);
-Route::get('/search/trains', [SearchController::class, 'searchTrains']);
-Route::get('/search/buses', [SearchController::class, 'searchBuses']);
-Route::get('/search/venues', [SearchController::class, 'searchVenues']);
-Route::get('/search/cars', [SearchController::class, 'searchCars']);
-Route::get('/search/activities', [SearchController::class, 'searchActivities']);
-Route::get('/search/transfers', [SearchController::class, 'searchTransfers']);
-Route::get('/search/packages', [SearchController::class, 'searchPackages']);
-Route::get('/search/suggestions', [SearchController::class, 'getSuggestions']);
-Route::get('/search/popular', [SearchController::class, 'getPopularDestinations']);
+Route::prefix('auth')->group(function () {
+    Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:10,1');
+    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1');
+    Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->middleware('throttle:5,1');
+    Route::post('/reset-password', [AuthController::class, 'resetPassword'])->middleware('throttle:5,1');
+});
 
-// Hotel detail
+// Search (public, read-only, rate limited)
+Route::prefix('search')->middleware('throttle:60,1')->group(function () {
+    Route::get('/hotels', [SearchController::class, 'searchHotels']);
+    Route::get('/flights', [SearchController::class, 'searchFlights']);
+    Route::get('/trains', [SearchController::class, 'searchTrains']);
+    Route::get('/buses', [SearchController::class, 'searchBuses']);
+    Route::get('/venues', [SearchController::class, 'searchVenues']);
+    Route::get('/cars', [SearchController::class, 'searchCars']);
+    Route::get('/activities', [SearchController::class, 'searchActivities']);
+    Route::get('/transfers', [SearchController::class, 'searchTransfers']);
+    Route::get('/packages', [SearchController::class, 'searchPackages']);
+    Route::get('/suggestions', [SearchController::class, 'getSuggestions']);
+    Route::get('/popular', [SearchController::class, 'getPopularDestinations']);
+});
+
+// Inventory details (public)
 Route::get('/hotels/{hotel}', [SearchController::class, 'getHotelDetails']);
 Route::get('/flights/{flight}', [SearchController::class, 'getFlightDetails']);
 Route::get('/venues/{venue}', [SearchController::class, 'getVenueDetails']);
 
-// Protected routes
-Route::middleware('auth:sanctum')->group(function () {
-    // Auth
-    Route::get('/auth/me', [AuthController::class, 'me']);
-    Route::post('/auth/logout', [AuthController::class, 'logout']);
-    Route::put('/auth/profile', [AuthController::class, 'updateProfile']);
-    Route::post('/auth/change-password', [AuthController::class, 'changePassword']);
-    Route::post('/auth/2fa/enable', [AuthController::class, 'enable2FA']);
-    Route::post('/auth/2fa/verify', [AuthController::class, 'verify2FA']);
-    Route::post('/auth/2fa/disable', [AuthController::class, 'disable2FA']);
-    Route::get('/auth/sessions', [AuthController::class, 'getSessions']);
-    Route::delete('/auth/sessions/{session}', [AuthController::class, 'revokeSession']);
-    Route::delete('/auth/sessions', [AuthController::class, 'revokeAllSessions']);
+// Promotions
+Route::post('/promotions/validate', [PromotionController::class, 'validate'])->middleware('throttle:20,1');
 
-    // Bookings
-    Route::apiResource('bookings', BookingController::class)->only(['index', 'show', 'store']);
+// Payment methods (public catalog)
+Route::get('/payment-methods', [PaymentController::class, 'methods']);
+
+// Webhooks (signature-verified inside the controller)
+Route::post('/webhooks/payment/{provider}', [PaymentController::class, 'webhook']);
+
+/*
+|--------------------------------------------------------------------------
+| Authenticated Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware('auth:sanctum')->group(function () {
+
+    // Auth
+    Route::prefix('auth')->group(function () {
+        Route::get('/me', [AuthController::class, 'me']);
+        Route::post('/logout', [AuthController::class, 'logout']);
+        Route::put('/profile', [AuthController::class, 'updateProfile']);
+        Route::post('/change-password', [AuthController::class, 'changePassword']);
+        Route::post('/2fa/enable', [AuthController::class, 'enable2FA']);
+        Route::post('/2fa/verify', [AuthController::class, 'verify2FA']);
+        Route::post('/2fa/disable', [AuthController::class, 'disable2FA']);
+        Route::get('/sessions', [AuthController::class, 'getSessions']);
+        Route::delete('/sessions/{session}', [AuthController::class, 'revokeSession']);
+        Route::delete('/sessions', [AuthController::class, 'revokeAllSessions']);
+    });
+
+    // Bookings (any authenticated user owns/creates their own)
+    Route::get('/bookings', [BookingController::class, 'index']);
+    Route::post('/bookings', [BookingController::class, 'store'])->middleware('throttle:10,1');
+    Route::get('/bookings/reference/{reference}', [BookingController::class, 'showByReference']);
+    Route::get('/bookings/{booking}', [BookingController::class, 'show']);
     Route::post('/bookings/{booking}/hold', [BookingController::class, 'createHold']);
     Route::post('/bookings/{booking}/confirm', [BookingController::class, 'confirmBooking']);
     Route::post('/bookings/{booking}/cancel', [BookingController::class, 'cancelBooking']);
@@ -59,69 +88,74 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/bookings/{booking}/invoice', [BookingController::class, 'downloadInvoice']);
 
     // Payments
-    Route::post('/payments/initiate', [PaymentController::class, 'initiate']);
-    Route::post('/payments/{payment}/process', [PaymentController::class, 'process']);
-    Route::post('/payments/{payment}/retry', [PaymentController::class, 'retry']);
-    Route::post('/payments/{payment}/capture', [PaymentController::class, 'capture']);
-    Route::post('/payments/{payment}/refund', [PaymentController::class, 'refund']);
-    Route::get('/payments/{payment}/status', [PaymentController::class, 'status']);
-
-    // Customer
-    Route::get('/customer/profile', [CustomerController::class, 'profile']);
-    Route::put('/customer/profile', [CustomerController::class, 'updateProfile']);
-    Route::get('/customer/trips', [CustomerController::class, 'trips']);
-    Route::get('/customer/wallet', [CustomerController::class, 'wallet']);
-    Route::get('/customer/loyalty', [CustomerController::class, 'loyalty']);
-    Route::get('/customer/travelers', [CustomerController::class, 'travelers']);
-    Route::apiResource('customer/travelers', \App\Http\Controllers\Api\SavedTravelerController::class);
-    Route::get('/customer/favorites', [CustomerController::class, 'favorites']);
-    Route::post('/customer/favorites', [CustomerController::class, 'addFavorite']);
-    Route::delete('/customer/favorites/{favorite}', [CustomerController::class, 'removeFavorite']);
-    Route::get('/customer/reviews', [CustomerController::class, 'reviews']);
-    Route::post('/customer/reviews', [CustomerController::class, 'createReview']);
-    Route::get('/customer/support', [CustomerController::class, 'supportTickets']);
-    Route::post('/customer/support', [CustomerController::class, 'createSupportTicket']);
-    Route::get('/customer/notifications', [CustomerController::class, 'notifications']);
-    Route::put('/customer/notifications/{notification}/read', [CustomerController::class, 'markNotificationRead']);
-
-    // Agent routes
-    Route::middleware('role:agent')->group(function () {
-        Route::get('/agent/dashboard', [AgentController::class, 'dashboard']);
-        Route::get('/agent/customers', [AgentController::class, 'customers']);
-        Route::post('/agent/customers', [AgentController::class, 'createCustomer']);
-        Route::get('/agent/bookings', [AgentController::class, 'bookings']);
-        Route::post('/agent/bookings', [AgentController::class, 'createBooking']);
-        Route::get('/agent/quotes', [AgentController::class, 'quotes']);
-        Route::post('/agent/quotes', [AgentController::class, 'createQuote']);
-        Route::get('/agent/commissions', [AgentController::class, 'commissions']);
-        Route::get('/agent/tasks', [AgentController::class, 'tasks']);
-        Route::post('/agent/tasks', [AgentController::class, 'createTask']);
-        Route::put('/agent/tasks/{task}', [AgentController::class, 'updateTask']);
-        Route::get('/agent/support', [AgentController::class, 'support']);
+    Route::prefix('payments')->middleware('throttle:15,1')->group(function () {
+        Route::post('/initiate', [PaymentController::class, 'initiate']);
+        Route::post('/{payment}/process', [PaymentController::class, 'process']);
+        Route::post('/{payment}/retry', [PaymentController::class, 'retry']);
+        Route::get('/{payment}/status', [PaymentController::class, 'status']);
     });
 
-    // Admin routes
-    Route::middleware('role:admin')->group(function () {
-        Route::get('/admin/dashboard', [AdminController::class, 'dashboard']);
-        Route::get('/admin/system-health', [AdminController::class, 'systemHealth']);
-        
-        Route::apiResource('admin/customers', \App\Http\Controllers\Api\Admin\CustomerController::class);
-        Route::apiResource('admin/agents', \App\Http\Controllers\Api\Admin\AgentController::class);
-        Route::apiResource('admin/bookings', \App\Http\Controllers\Api\Admin\BookingController::class);
-        Route::apiResource('admin/suppliers', \App\Http\Controllers\Api\Admin\SupplierController::class);
-        Route::apiResource('admin/venues', \App\Http\Controllers\Api\Admin\VenueController::class);
-        Route::apiResource('admin/hotels', \App\Http\Controllers\Api\Admin\HotelController::class);
-        Route::apiResource('admin/promotions', \App\Http\Controllers\Api\Admin\PromotionController::class);
-        Route::apiResource('admin/payments', \App\Http\Controllers\Api\Admin\PaymentController::class);
-        Route::apiResource('admin/refunds', \App\Http\Controllers\Api\Admin\RefundController::class);
-        Route::apiResource('admin/commissions', \App\Http\Controllers\Api\Admin\CommissionController::class);
-        Route::get('/admin/reports', [AdminController::class, 'reports']);
-        Route::get('/admin/audit-logs', [AdminController::class, 'auditLogs']);
-        Route::get('/admin/settings', [AdminController::class, 'settings']);
-        Route::put('/admin/settings', [AdminController::class, 'updateSettings']);
+    // Customer dashboard
+    Route::prefix('customer')->group(function () {
+        Route::get('/dashboard', [CustomerController::class, 'dashboard']);
+        Route::get('/profile', [CustomerController::class, 'profile']);
+        Route::put('/profile', [CustomerController::class, 'updateProfile']);
+        Route::get('/trips', [CustomerController::class, 'trips']);
+        Route::get('/wallet', [CustomerController::class, 'wallet']);
+        Route::get('/loyalty', [CustomerController::class, 'loyalty']);
+        Route::get('/coupons', [CustomerController::class, 'coupons']);
+        Route::get('/favorites', [CustomerController::class, 'favorites']);
+        Route::post('/favorites', [CustomerController::class, 'addFavorite']);
+        Route::delete('/favorites/{favorite}', [CustomerController::class, 'removeFavorite']);
+        Route::get('/reviews', [CustomerController::class, 'reviews']);
+        Route::post('/reviews', [CustomerController::class, 'createReview']);
+        Route::get('/support', [CustomerController::class, 'supportTickets']);
+        Route::post('/support', [CustomerController::class, 'createSupportTicket']);
+        Route::get('/notifications', [CustomerController::class, 'notifications']);
+        Route::put('/notifications/read-all', [CustomerController::class, 'markAllNotificationsRead']);
+        Route::put('/notifications/{notification}/read', [CustomerController::class, 'markNotificationRead']);
+        Route::get('/security', [CustomerController::class, 'security']);
+    });
+
+    // Saved travelers
+    Route::apiResource('customer/travelers', SavedTravelerController::class)
+        ->only(['index', 'store', 'show', 'update', 'destroy']);
+
+    // Agent routes (role:agent)
+    Route::middleware('role:agent')->prefix('agent')->group(function () {
+        Route::get('/dashboard', [AgentController::class, 'dashboard']);
+        Route::get('/customers', [AgentController::class, 'customers']);
+        Route::post('/customers', [AgentController::class, 'createCustomer']);
+        Route::get('/bookings', [AgentController::class, 'bookings']);
+        Route::post('/bookings', [AgentController::class, 'createBooking']);
+        Route::get('/quotes', [AgentController::class, 'quotes']);
+        Route::post('/quotes', [AgentController::class, 'createQuote']);
+        Route::get('/commissions', [AgentController::class, 'commissions']);
+        Route::get('/tasks', [AgentController::class, 'tasks']);
+        Route::post('/tasks', [AgentController::class, 'createTask']);
+        Route::put('/tasks/{task}', [AgentController::class, 'updateTask']);
+        Route::get('/support', [AgentController::class, 'support']);
+    });
+
+    // Admin routes (role:admin)
+    Route::middleware('role:admin')->prefix('admin')->group(function () {
+        Route::get('/dashboard', [AdminController::class, 'dashboard']);
+        Route::get('/system-health', [AdminController::class, 'systemHealth']);
+        Route::get('/reports', [AdminController::class, 'reports']);
+        Route::get('/audit-logs', [AdminController::class, 'auditLogs']);
+        Route::get('/settings', [AdminController::class, 'getSettings']);
+        Route::put('/settings', [AdminController::class, 'updateSettings']);
+
+        // Resource management
+        Route::apiResource('customers', \App\Http\Controllers\Api\Admin\CustomerController::class)->only(['index', 'show', 'update', 'destroy']);
+        Route::apiResource('agents', \App\Http\Controllers\Api\Admin\AgentController::class)->only(['index', 'show', 'store', 'update', 'destroy']);
+        Route::apiResource('bookings', \App\Http\Controllers\Api\Admin\BookingController::class)->only(['index', 'show', 'update']);
+        Route::apiResource('suppliers', \App\Http\Controllers\Api\Admin\SupplierController::class);
+        Route::apiResource('venues', \App\Http\Controllers\Api\Admin\VenueController::class);
+        Route::apiResource('hotels', \App\Http\Controllers\Api\Admin\HotelController::class);
+        Route::apiResource('promotions', \App\Http\Controllers\Api\Admin\PromotionController::class);
+        Route::apiResource('payments', \App\Http\Controllers\Api\Admin\PaymentController::class)->only(['index', 'show']);
+        Route::apiResource('refunds', \App\Http\Controllers\Api\Admin\RefundController::class)->only(['index', 'show', 'update']);
+        Route::apiResource('commissions', \App\Http\Controllers\Api\Admin\CommissionController::class)->only(['index', 'show', 'update']);
     });
 });
-
-// Webhook routes
-Route::post('/webhooks/payment/{provider}', [PaymentController::class, 'webhook']);
-Route::post('/webhooks/provider/{provider}', [BookingController::class, 'providerWebhook']);
