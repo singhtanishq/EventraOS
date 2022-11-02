@@ -37,7 +37,7 @@ class AgentController extends Controller
             'commission_type' => $a->commission_type,
             'monthly_target' => (float) $a->monthly_target,
             'status' => $a->status,
-            'total_customers' => CustomerCount($a),
+            'total_customers' => \App\Models\Customer::where('assigned_agent_id', $a->id)->count(),
             'total_bookings' => $a->bookings()->count(),
             'total_commission' => (float) $a->commissions()->sum('commission_amount'),
             'created_at' => $a->created_at->toISOString(),
