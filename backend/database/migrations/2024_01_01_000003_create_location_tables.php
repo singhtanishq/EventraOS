@@ -74,7 +74,7 @@ return new class extends Migration
             $table->string('icao_code', 4)->nullable()->unique(); // ICAO code
             $table->decimal('latitude', 10, 7);
             $table->decimal('longitude', 10, 7);
-            $table->string('timezone');
+            $table->string('timezone')->nullable();
             $table->string('terminal_info')->nullable();
             $table->boolean('is_international')->default(false);
             $table->boolean('is_active')->default(true);
@@ -92,7 +92,7 @@ return new class extends Migration
             $table->string('type')->default('train'); // train, bus, metro
             $table->decimal('latitude', 10, 7);
             $table->decimal('longitude', 10, 7);
-            $table->string('timezone');
+            $table->string('timezone')->nullable();
             $table->json('platforms')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
