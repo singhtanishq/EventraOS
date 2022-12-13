@@ -7,13 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
 
 class Admin extends Model
 {
-    use HasFactory, LogsActivity, SoftDeletes;
+    use HasFactory;
 
     protected $fillable = [
         'uuid',
@@ -53,14 +50,6 @@ class Admin extends Model
                 $admin->admin_number = 'ADM-' . strtoupper(\Illuminate\Support\Str::random(8));
             }
         });
-    }
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logOnly(['admin_number', 'department', 'level', 'can_manage_admins', 'can_manage_finances'])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
     }
 
     public function user(): BelongsTo
