@@ -6,13 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
 
 class Booking extends Model
 {
-    use HasFactory, LogsActivity, SoftDeletes;
+    use HasFactory;
 
     protected $fillable = [
         'uuid',
@@ -129,14 +126,6 @@ class Booking extends Model
         });
     }
 
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logOnly(['booking_reference', 'status', 'payment_status', 'grand_total', 'amount_paid'])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
-    }
-
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
@@ -200,6 +189,11 @@ class Booking extends Model
     public function commissions(): HasMany
     {
         return $this->hasMany(Commission::class);
+    }
+
+    public function reviews(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\Review::class);
     }
 
     public function supportTickets(): HasMany
