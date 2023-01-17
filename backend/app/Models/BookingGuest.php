@@ -5,13 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
 
 class BookingGuest extends Model
 {
-    use HasFactory, LogsActivity, SoftDeletes;
+    protected $table = 'booking_guests';
+
+    use HasFactory;
 
     protected $fillable = [
         'booking_id',
@@ -44,14 +43,6 @@ class BookingGuest extends Model
         'is_primary' => 'boolean',
         'is_lead_guest' => 'boolean',
     ];
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logOnly(['first_name', 'last_name', 'email', 'passport_number', 'is_primary'])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
-    }
 
     public function booking(): BelongsTo
     {
