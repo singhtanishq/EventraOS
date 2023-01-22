@@ -5,13 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
 
 class BookingHold extends Model
 {
-    use HasFactory, LogsActivity, SoftDeletes;
+    protected $table = 'booking_holds';
+
+    use HasFactory;
 
     protected $fillable = [
         'booking_id',
@@ -34,14 +33,6 @@ class BookingHold extends Model
     public static array $statuses = [
         'active', 'expired', 'confirmed', 'released', 'failed'
     ];
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logOnly(['provider_hold_reference', 'expires_at', 'status'])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
-    }
 
     public function booking(): BelongsTo
     {
