@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Cancellation extends Model
 {
+    protected $table = 'cancellations';
+
     protected $fillable = [
         'uuid', 'cancellation_reference', 'booking_id', 'booking_item_id',
         'customer_id', 'requested_by', 'status', 'cancellation_type', 'reason',
