@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class FlightInventory extends Model
 {
+    protected $table = 'flight_inventory';
+
     protected $fillable = [
         'flight_id', 'fare_id', 'date', 'total_seats', 'available_seats',
         'booked_seats', 'blocked_seats', 'base_price', 'sell_price', 'currency',
