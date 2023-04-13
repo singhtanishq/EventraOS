@@ -5,13 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
 
 class HotelInventory extends Model
 {
-    use HasFactory, LogsActivity, SoftDeletes;
+    protected $table = 'hotel_inventory';
+
+    use HasFactory;
 
     protected $fillable = [
         'hotel_id',
@@ -40,14 +39,6 @@ class HotelInventory extends Model
         'is_closed' => 'boolean',
         'restrictions' => 'array',
     ];
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logOnly(['date', 'available_rooms', 'sell_price', 'is_closed'])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
-    }
 
     public function hotel(): BelongsTo
     {
