@@ -6,13 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
 
 class HotelRoomType extends Model
 {
-    use HasFactory, LogsActivity, SoftDeletes;
+    protected $table = 'hotel_room_types';
+
+    use HasFactory;
 
     protected $fillable = [
         'hotel_id',
@@ -59,14 +58,6 @@ class HotelRoomType extends Model
         });
     }
 
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logOnly(['name', 'max_occupancy', 'quantity', 'is_active'])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
-    }
-
     public function hotel(): BelongsTo
     {
         return $this->belongsTo(Hotel::class);
@@ -79,12 +70,12 @@ class HotelRoomType extends Model
 
     public function rates(): HasMany
     {
-        return $this->hasMany(HotelRate::class)->where('is_active', true);
+        return $this->hasMany(HotelRate::class, 'room_type_id')->where('is_active', true);
     }
 
     public function inventory(): HasMany
     {
-        return $this->hasMany(HotelInventory::class);
+        return $this->hasMany(HotelInventory::class, 'room_type_id');
     }
 
     public function bookingItems(): HasMany
