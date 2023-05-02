@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class LoyaltyTransaction extends Model
 {
+    protected $table = 'loyalty_transactions';
+
     protected $fillable = [
         'uuid', 'transaction_reference', 'loyalty_account_id', 'type', 'status',
         'points', 'balance_before', 'balance_after', 'description',
