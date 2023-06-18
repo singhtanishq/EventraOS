@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class SavedTraveler extends Model
 {
+    protected $table = 'saved_travelers';
+
     protected $fillable = [
         'customer_id', 'uuid', 'title', 'first_name', 'middle_name', 'last_name',
         'date_of_birth', 'gender', 'nationality', 'passport_number',
