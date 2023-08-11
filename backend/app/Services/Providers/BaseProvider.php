@@ -2,7 +2,6 @@
 
 namespace App\Services\Providers;
 
-use App\Contracts\ProviderInterface;
 use App\Models\Provider;
 use App\Services\Providers\DTO\{
     SearchResultCollection,
@@ -17,7 +16,7 @@ use App\Services\Providers\DTO\{
 };
 use Illuminate\Support\Facades\Log;
 
-abstract class BaseProvider implements ProviderInterface
+abstract class BaseProvider
 {
     protected Provider $provider;
     protected array $config = [];
