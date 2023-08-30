@@ -41,7 +41,7 @@ class ProviderManager
         }
     }
 
-    public function getProvider(string $type, string $code = null): ?BaseProvider
+    public function getProvider(string $type, ?string $code = null): ?BaseProvider
     {
         $key = $type . '_' . ($code ?? 'default');
 
@@ -50,11 +50,15 @@ class ProviderManager
         }
 
         $providers = $this->providers[$type] ?? [];
-        
+
+        if (empty($providers)) {
+            return null;
+        }
+
         if ($code) {
-            $provider = $providers->firstWhere('code', $code);
+            $provider = collect($providers)->firstWhere('code', $code);
         } else {
-            $provider = $providers->firstWhere('is_default', true) ?? $providers->first();
+            $provider = collect($providers)->firstWhere('is_default', true) ?? $providers[0];
         }
 
         if (!$provider) {
@@ -69,9 +73,10 @@ class ProviderManager
 
     public function getProviders(string $type): array
     {
-        return ($this->providers[$type] ?? [])->map(function ($provider) {
-            return $this->createProviderInstance($provider);
-        })->toArray();
+        return array_map(
+            fn ($provider) => $this->createProviderInstance($provider),
+            $this->providers[$type] ?? []
+        );
     }
 
     protected function createProviderInstance(Provider $provider): BaseProvider
