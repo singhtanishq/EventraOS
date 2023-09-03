@@ -5,6 +5,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Access\AuthorizationException;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Spatie\Permission\Middleware\PermissionMiddleware;
@@ -32,6 +33,9 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Trim all string input except credential fields
         $middleware->trimStrings(except: ['password', 'password_confirmation', 'current_password']);
+
+        // Don't redirect unauthenticated API requests to login
+        $middleware->redirectGuestsTo(fn (Request $request) => null);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
@@ -44,6 +48,15 @@ return Application::configure(basePath: dirname(__DIR__))
                     'success' => false,
                     'message' => 'Unauthenticated.',
                 ], 401);
+            }
+        });
+
+        $exceptions->render(function (UnauthorizedException $e, Request $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'You do not have permission to perform this action.',
+                ], 403);
             }
         });
 
