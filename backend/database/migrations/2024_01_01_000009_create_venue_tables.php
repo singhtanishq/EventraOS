@@ -41,7 +41,7 @@ return new class extends Migration
             $table->json('images')->nullable();
             $table->json('floor_plans')->nullable();
             $table->json('policies')->nullable(); // Decoration, vendor, noise, alcohol, etc.
-            $table->string('timezone');
+            $table->string('timezone')->nullable();
             $table->boolean('allows_external_catering')->default(false);
             $table->boolean('allows_external_decor')->default(false);
             $table->boolean('allows_alcohol')->default(false);
@@ -54,6 +54,7 @@ return new class extends Migration
             $table->boolean('is_demo')->default(false);
             $table->integer('sort_order')->default(0);
             $table->json('metadata')->nullable();
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['city_id', 'is_active']);
@@ -63,7 +64,7 @@ return new class extends Migration
 
         Schema::create('venue_rooms', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('venue_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('venue_id')->constrained('venues')->cascadeOnDelete();
             $table->uuid('uuid')->unique();
             $table->foreignId('provider_id')->nullable()->constrained()->nullOnDelete();
             $table->string('name');
@@ -86,6 +87,7 @@ return new class extends Migration
             $table->json('images')->nullable();
             $table->boolean('is_active')->default(true);
             $table->integer('sort_order')->default(0);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['venue_id', 'is_active']);
@@ -93,7 +95,7 @@ return new class extends Migration
 
         Schema::create('venue_packages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('venue_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('venue_id')->constrained('venues')->cascadeOnDelete();
             $table->uuid('uuid')->unique();
             $table->foreignId('provider_id')->nullable()->constrained()->nullOnDelete();
             $table->string('name');
@@ -113,6 +115,7 @@ return new class extends Migration
             $table->json('av_options')->nullable();
             $table->boolean('is_active')->default(true);
             $table->integer('sort_order')->default(0);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['venue_id', 'type', 'is_active']);
@@ -120,7 +123,7 @@ return new class extends Migration
 
         Schema::create('venue_addons', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('venue_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('venue_id')->constrained('venues')->cascadeOnDelete();
             $table->uuid('uuid')->unique();
             $table->foreignId('provider_id')->nullable()->constrained()->nullOnDelete();
             $table->string('name');
@@ -137,6 +140,7 @@ return new class extends Migration
             $table->boolean('is_required')->default(false);
             $table->boolean('is_active')->default(true);
             $table->integer('sort_order')->default(0);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['venue_id', 'category', 'is_active']);
@@ -144,7 +148,7 @@ return new class extends Migration
 
         Schema::create('venue_availability', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('venue_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('venue_id')->constrained('venues')->cascadeOnDelete();
             $table->foreignId('venue_room_id')->nullable()->constrained()->nullOnDelete();
             $table->date('date');
             $table->time('start_time')->nullable();
@@ -153,6 +157,7 @@ return new class extends Migration
             $table->unsignedBigInteger('booking_id')->nullable()->index();
             $table->json('event_details')->nullable(); // Event type, guest count, etc.
             $table->decimal('price_override', 15, 4)->nullable();
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['venue_id', 'date', 'status']);
@@ -162,11 +167,12 @@ return new class extends Migration
 
         Schema::create('venue_blackout_dates', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('venue_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('venue_id')->constrained('venues')->cascadeOnDelete();
             $table->date('date');
             $table->string('reason')->nullable();
             $table->boolean('is_recurring')->default(false);
             $table->json('recurrence_rule')->nullable(); // For recurring blackout dates
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['venue_id', 'date']);
