@@ -35,6 +35,7 @@ return new class extends Migration
             $table->unsignedBigInteger('assigned_agent_id')->nullable()->index();
             $table->boolean('is_vip')->default(false);
             $table->json('risk_flags')->nullable();
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index('customer_number');
@@ -89,6 +90,7 @@ return new class extends Migration
             $table->foreignId('manager_id')->nullable()->constrained('agents')->nullOnDelete();
             $table->json('permissions')->nullable(); // Additional permissions
             $table->json('metadata')->nullable();
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index('agent_number');
@@ -111,6 +113,7 @@ return new class extends Migration
             $table->boolean('can_manage_system')->default(false);
             $table->timestamp('last_active_at')->nullable();
             $table->json('metadata')->nullable();
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index('admin_number');
