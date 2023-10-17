@@ -20,7 +20,7 @@ return new class extends Migration
             ]);
             $table->decimal('value', 15, 4); // Percentage or fixed amount
             $table->string('currency', 3)->default('INR');
-            $table->enum('applicable_to', ['all', 'hotels', 'flights', 'trains', 'buses', 'venues', 'cars', 'activities', 'transfers', 'packages']);
+            $table->string('applicable_to')->default('all');
             $table->json('service_restrictions')->nullable(); // Specific services, categories, providers
             $table->json('destination_restrictions')->nullable(); // Countries, cities
             $table->json('customer_restrictions')->nullable(); // New, returning, vip, agent-booked
