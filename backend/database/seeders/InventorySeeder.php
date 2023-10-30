@@ -50,15 +50,19 @@ class InventorySeeder extends Seeder
 
     public function run(): void
     {
-        $this->demoProvider = Provider::create([
-            'name' => 'EventraOS Demo Inventory',
-            'code' => 'demo_inventory',
-            'type' => 'hotel',
-            'mode' => 'demo',
-            'status' => 'active',
-            'is_default' => true,
-            'priority' => 100,
-        ]);
+        $types = ['hotel', 'flight', 'train', 'bus', 'venue', 'car', 'activity', 'transfer', 'package'];
+        foreach ($types as $type) {
+            Provider::create([
+                'name' => "EventraOS Demo {$type}",
+                'code' => "demo_{$type}",
+                'type' => $type,
+                'mode' => 'demo',
+                'status' => 'active',
+                'is_default' => true,
+                'priority' => 100,
+            ]);
+        }
+        $this->demoProvider = Provider::where('type', 'hotel')->where('mode', 'demo')->first();
 
         $this->cityIds = \App\Models\City::pluck('id', 'name')->toArray();
 
