@@ -19,7 +19,7 @@ class PromotionSeeder extends Seeder
         ];
 
         foreach ($promotions as $data) {
-            Promotion::create($data + [
+            Promotion::create(collect($data)->put('applicable_to', $data['applicable_to'] ?? 'all')->all() + [
                 'currency' => 'INR',
                 'valid_from' => now()->subDays(7),
                 'valid_to' => now()->addMonths(6),
