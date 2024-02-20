@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CarInventory extends Model
 {
-    protected $table = 'car_inventory';
+    protected $table = 'car_inventories';
 
     protected $fillable = ['car_id', 'rate_id', 'date', 'status', 'booking_id', 'price_override'];
     protected $casts = ['date' => 'date', 'price_override' => 'decimal:4'];
