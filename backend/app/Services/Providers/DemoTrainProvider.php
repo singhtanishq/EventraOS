@@ -137,36 +137,36 @@ class DemoTrainProvider extends BaseProvider
 
     public function getDetails(string $itemId, array $options = []): ?\App\Services\Providers\DTO\ProviderItemDetails
     {
-        $train = \App\Models\TrainRoute::with(['operator', 'fares.inventory', 'originStation', 'destinationStation'])->find($itemId);
+        $train = \App\Models\TrainRoute::with(['operator', 'fares.inventory', 'originStation', 'destinationStation', 'segments'])->find($itemId);
         if (! $train) return null;
 
         return new \App\Services\Providers\DTO\ProviderItemDetails(
             id: (string) $itemId,
-            name: $this->name,
-            description: $this->description,
-            images: $this->images ?? [],
+            name: $train->train_name,
+            description: $train->train_name . ' - ' . ($train->operator->name ?? ''),
+            images: [$train->operator->logo ?? ''],
             location: [
                 'origin' => [
-                    'station' => $this->originStation->name ?? '',
-                    'code' => $this->originStation->code ?? '',
-                    'city' => $this->originStation->city->name ?? '',
-                    'timezone' => $this->departure_timezone,
+                    'station' => $train->originStation->name ?? '',
+                    'code' => $train->originStation->code ?? '',
+                    'city' => $train->originStation->city->name ?? '',
+                    'timezone' => $train->departure_timezone,
                 ],
                 'destination' => [
-                    'station' => $this->arrivalStation->name ?? '',
-                    'code' => $this->arrivalStation->code ?? '',
-                    'city' => $this->arrivalStation->city->name ?? '',
-                    'timezone' => $this->arrival_timezone,
+                    'station' => $train->destinationStation->name ?? '',
+                    'code' => $train->destinationStation->code ?? '',
+                    'city' => $train->destinationStation->city->name ?? '',
+                    'timezone' => $train->arrival_timezone,
                 ],
             ],
             amenities: [
-                'stops' => $this->stops,
-                'duration' => $this->duration_minutes,
-                'train_type' => $this->train_type,
+                'stops' => $train->stops,
+                'duration' => $train->duration_minutes,
+                'train_type' => $train->train_type,
             ],
             pricing: [
                 'currency' => 'INR',
-                'fare_options' => $this->fares->map(function ($f) {
+                'fare_options' => $train->fares->map(function ($f) {
                     return [
                         'fare_id' => $f->id,
                         'name' => $f->name,
@@ -191,22 +191,22 @@ class DemoTrainProvider extends BaseProvider
                     ])->toArray(),
             ],
             policies: [
-                'cancellation' => $this->fare_rules ?? [],
-                'change' => $this->fare_rules ?? [],
+                'cancellation' => $train->fare_rules ?? [],
+                'change' => $train->fare_rules ?? [],
             ],
             availability: [
-                'departure_date' => $this->departure_date->toDateString(),
-                'departure_time' => $this->departure_time,
-                'arrival_time' => $this->arrival_time,
-                'duration_minutes' => $this->duration_minutes,
-                'stops' => $this->stops,
+                'departure_date' => $train->departure_date->toDateString(),
+                'departure_time' => $train->departure_time,
+                'arrival_time' => $train->arrival_time,
+                'duration_minutes' => $train->duration_minutes,
+                'stops' => $train->stops,
             ],
             metadata: [
-                'train_number' => $this->flight_number ?? $this->train_number,
-                'airline' => $this->airline->name ?? $this->operator?->name,
-                'airline_code' => $this->airline->code ?? $this->operator?->code,
-                'stops' => $this->stops,
-                'segments' => $this->segments->toArray(),
+                'train_number' => $train->train_number,
+                'operator' => $train->operator->name ?? '',
+                'operator_code' => $train->operator->code ?? '',
+                'stops' => $train->stops,
+                'segments' => $train->segments->toArray(),
             ],
             rating: 0,
             reviewCount: 0,
