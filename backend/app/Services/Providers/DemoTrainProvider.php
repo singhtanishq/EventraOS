@@ -167,7 +167,7 @@ class DemoTrainProvider extends BaseProvider
             pricing: [
                 'currency' => 'INR',
                 'fare_options' => $train->fares->map(function ($f) {
-                    return [
+                    $fareData = [
                         'fare_id' => $f->id,
                         'name' => $f->name,
                         'cabin_class' => $f->cabin_class,
@@ -188,7 +188,9 @@ class DemoTrainProvider extends BaseProvider
                             'available' => $f->inventory()->where('available_seats', '>', 0)->exists(),
                             'seats_available' => $f->inventory()->where('available_seats', '>', 0)->sum('available_seats'),
                         ],
-                    ])->toArray(),
+                    ];
+                    return $fareData;
+                })->toArray(),
             ],
             policies: [
                 'cancellation' => $train->fare_rules ?? [],
