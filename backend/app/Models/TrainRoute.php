@@ -30,4 +30,5 @@ class TrainRoute extends Model
     public function destinationStation(): BelongsTo { return $this->belongsTo(Station::class, 'destination_station_id'); }
     public function classes(): HasMany { return $this->hasMany(TrainClass::class); }
     public function fares(): HasMany { return $this->hasMany(TrainFare::class); }
+    public function inventory(): HasMany { return $this->hasMany(TrainInventory::class); }
 }
