@@ -513,6 +513,21 @@ class InventorySeeder extends Seeder
                     'is_active' => true,
                 ]);
             }
+
+            // Create VenueAvailability for this venue (next 180 days)
+            $dates = collect(range(0, 180))->map(fn ($i) => Carbon::today()->addDays($i));
+            foreach ($dates as $date) {
+                // 80% chance of availability
+                if (rand(1, 10) <= 8) {
+                    VenueAvailability::create([
+                        'venue_id' => $venue->id,
+                        'provider_id' => $this->demoProvider->id,
+                        'date' => $date->toDateString(),
+                        'status' => 'available',
+                        'price_override' => null,
+                    ]);
+                }
+            }
         }
     }
 
