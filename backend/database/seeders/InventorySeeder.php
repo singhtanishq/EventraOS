@@ -37,6 +37,8 @@ use App\Models\TransferVehicleType;
 use App\Models\Venue;
 use App\Models\VenuePackage;
 use App\Models\VenueAddon;
+use App\Models\VenueAvailability;
+use App\Models\TransferInventory;
 use App\Models\Provider;
 use App\Models\TravelPackage;
 use App\Models\PackagePricing;
