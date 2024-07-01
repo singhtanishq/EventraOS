@@ -15,4 +15,5 @@ class TrainInventory extends Model
 
     public function trainRoute(): BelongsTo { return $this->belongsTo(TrainRoute::class); }
     public function trainClass(): BelongsTo { return $this->belongsTo(TrainClass::class, 'class_id'); }
+    public function fare(): BelongsTo { return $this->belongsTo(TrainFare::class, 'fare_id'); }
 }
