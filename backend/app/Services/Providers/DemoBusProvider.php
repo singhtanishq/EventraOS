@@ -132,10 +132,10 @@ class DemoBusProvider extends BaseProvider
 
     public function getDetails(string $itemId, array $options = []): ?\App\Services\Providers\DTO\ProviderItemDetails
     {
-        $bus = \App\Models\BusRoute::with(['operator', 'busTypes.fares.inventory'])->find($itemId);
+        $bus = \App\Models\BusRoute::with(['operator', 'types.fares.inventory'])->find($itemId);
         if (! $bus) return null;
 
-        $fare = $bus->busTypes->flatMap->fares->firstWhere('is_active', true);
+        $fare = $bus->types->flatMap->fares->firstWhere('is_active', true);
         $inventory = $fare?->inventory()->where('available_seats', '>', 0)->first();
 
         return new \App\Services\Providers\DTO\ProviderItemDetails(
