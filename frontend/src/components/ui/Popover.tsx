@@ -1,8 +1,6 @@
 import { forwardRef, ReactNode, useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { createPortal } from 'react-dom'
 import { cn } from '@/lib/utils'
-import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp, MoreHorizontal, X, Check, Star, Heart, Share2, Download, MoreVertical, Flag, Calendar, MapPin, Clock, Users, Building2, Plane, Train, Bus, Car, Sparkles, Ship, MapPin as MapPinIcon, Ticket, Shield, AlertCircle, CheckCircle2, AlertTriangle, Volume2, Mic, MicOff, Settings, Home, Search, Bell, BellOff, User, LogOut, ChevronDown as ChevronDownIcon, ChevronUp as ChevronUpIcon, Menu, X as XIcon } from 'lucide-react'
 
 interface PopoverProps {
   trigger: React.ReactElement
@@ -97,12 +95,6 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(
       }
     }
 
-    const handleContentKeyDown = (e: React.KeyboardEvent) => {
-      if (e.key === 'Escape' && closeOnEscape) {
-        setIsOpen(false)
-      }
-    }
-
     const triggerWithProps = React.cloneElement(trigger, {
       ref: triggerRef,
       onClick: handleTriggerClick,
@@ -131,17 +123,6 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(
       ...positionStyles[position],
       ...alignStyles[align],
     }
-
-    const triggerWithProps = React.cloneElement(trigger, {
-      ref: triggerRef,
-      onClick: handleTriggerClick,
-      onMouseEnter: triggerType === 'hover' ? handleTriggerHover : undefined,
-      onMouseLeave: triggerType === 'hover' ? handleTriggerLeave : undefined,
-      onKeyDown: handleTriggerKeyDown,
-      'aria-haspopup': 'dialog',
-      'aria-expanded': isOpen,
-      'aria-controls': isOpen ? 'popover-content' : undefined,
-    })
 
     return (
       <div
@@ -313,7 +294,6 @@ export function ContextMenu({
             zIndex: 50,
           }}
           role="menu"
-          ref={menuRef}
           onKeyDown={(e) => {
             if (e.key === 'Escape') handleClose()
           }}
@@ -335,47 +315,15 @@ export function ContextMenu({
                   item.disabled && 'opacity-50 cursor-not-allowed',
                   item.danger ? 'text-eventra-red-600 hover:bg-eventra-red-50' : 'text-eventra-navy-900 hover:bg-eventra-slate-100'
                 )}
-                onClick={() => {
-                  item.onClick()
-                  handleClose()
-                }}
                 role="menuitem"
               >
                 {item.icon && <span className="w-5 h-5 flex-shrink-0">{item.icon}</span>}
                 <span className="flex-1 text-body-sm">{item.label}</span>
               </button>
-            ))}
+            ))
+          ))}
         </motion.div>
       </AnimatePresence>
     </>
   )
 }
-
-interface PopoverProps {
-  trigger: React.ReactElement
-  content: React.ReactNode
-  position?: 'top' | 'bottom' | 'left' | 'right'
-  align?: 'start' | 'center' | 'end'
-  offset?: number
-  triggerType?: 'click' | 'hover' | 'focus'
-  closeOnClickOutside?: boolean
-  closeOnEscape?: boolean
-  className?: string
-  contentClassName?: string
-  matchTriggerWidth?: boolean
-}
-
-interface ContextMenuItem {
-  label: React.ReactNode
-  onClick: () => void
-  icon?: React.ReactNode
-  disabled?: boolean
-  danger?: boolean
-  divider?: boolean
-}
-
-import { useState, useRef, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { createPortal } from 'react-dom'
-import { cn } from '@/lib/utils'
-import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp, MoreHorizontal, X, Check, Star, Heart, Share2, Download, MoreVertical, Filter as FilterIcon, Download, Eye, UserPlus, UserCheck, UserX, UserMinus, Briefcase, FileText, DollarSign, Target, ClipboardList, AlertTriangle, Clock, RotateCcw, Shield, PlusCircle, MinusCircle, Copy, Share2, Send, Paperclip, MoreVertical, Bell, BellOff, Check, X as XIcon, Lock, Unlock, Eye, EyeOff, Fingerprint, Smartphone, Monitor, Globe, Key, RotateCcw, LogOut, AlertTriangle, LockOpen, HardDrive, Database, Server, ShieldCheck, ShieldAlert, UserCheck, UserX, Activity, LayoutDashboard, Suitcase, TrendingUp, BarChart3, PieChart, Award, Trophy, Crown, Medal, Settings, Building, UserCog, TicketPercent, RotateCcw as RotateCcwIcon, CreditCard as CreditCardIcon, BarChart3 as BarChart3Icon, Activity as ActivityIcon, FileText as FileTextIcon, ArrowRight, ArrowLeft, RefreshCw, UserCog, Building, RotateCcw as RotateCcwIcon2, Cog, ShieldCheck, BookOpen, Scale, Gavel, Archive, Globe, Wifi, Utensils, Car as CarIcon, Hotel, Music, MapPin as MapPinIcon2, Plane as PlaneIcon2, RotateCcw as RotateCcwIcon3, RefreshCw, Layers, FileText as FileTextIcon2, CheckCircle2, X, AlertCircle, Info, HelpCircle, ExternalLink, ChevronsRight, ChevronsLeft, ChevronUp as ChevronUpIcon, ChevronDown as ChevronDownIcon } from 'lucide-react'
