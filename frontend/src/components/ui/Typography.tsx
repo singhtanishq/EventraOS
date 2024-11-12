@@ -161,18 +161,21 @@ export const Link = forwardRef<HTMLAnchorElement, React.AnchorHTMLAttributes<HTM
 Link.displayName = 'Link'
 
 export const List = forwardRef<HTMLUListElement, React.HTMLAttributes<HTMLUListElement>>(
-  ({ className, ordered = false, spaced = true, ...props }, ref) => (
-    <(ordered ? 'ol' : 'ul')
-      ref={ref}
-      className={cn(
-        'list-disc list-inside space-y-2',
-        ordered && 'list-decimal',
-        spaced && 'space-y-3',
-        className
-      )}
-      {...props}
-    />
-  )
+  ({ className, ordered = false, spaced = true, ...props }, ref) => {
+    const Tag = ordered ? 'ol' : 'ul'
+    return (
+      <Tag
+        ref={ref}
+        className={cn(
+          'list-disc list-inside space-y-2',
+          ordered && 'list-decimal',
+          spaced && 'space-y-3',
+          className
+        )}
+        {...props}
+      />
+    )
+  }
 )
 List.displayName = 'List'
 
