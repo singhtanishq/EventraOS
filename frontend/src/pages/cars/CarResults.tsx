@@ -336,8 +336,9 @@ export function CarResults() {
                       </div>
                     )}
                   </>
-                )}
               )}
+            </> 
+            )}
           </main>
         </div>
       </div>
