@@ -496,7 +496,7 @@ function ActivityFilters({ filters, onChange, onClearAll }: { filters: Partial<S
         <div>
           <label className="label">Category</label>
           <div className="space-y-2">
-            ['Sightseeing', 'Adventure', 'Cultural', 'Food & Drink', 'Nature & Wildlife', 'Water Sports', 'Wellness', 'Nightlife'].map((cat) => (
+            {(['Sightseeing', 'Adventure', 'Cultural', 'Food & Drink', 'Nature & Wildlife', 'Water Sports', 'Wellness', 'Nightlife'] as const).map((cat) => (
               <label key={cat} className="flex items-center gap-3 cursor-pointer">
                 <input
                   type="checkbox"
@@ -506,7 +506,7 @@ function ActivityFilters({ filters, onChange, onClearAll }: { filters: Partial<S
                 />
                 <span className="text-body-sm text-eventra-navy-700">{cat}</span>
               </label>
-            ))
+            ))}
           </div>
         </div>
 
