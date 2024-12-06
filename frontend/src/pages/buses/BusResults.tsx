@@ -496,7 +496,7 @@ function BusFilters({ filters, onChange, onClearAll }: { filters: Partial<Search
         <div>
           <label className="label">Bus Type</label>
           <div className="space-y-2">
-            ['AC Sleeper', 'Non-AC Sleeper', 'AC Seater', 'Non-AC Seater', 'Volvo', 'Mercedes', 'Scania'].map((type) => (
+            {(['AC Sleeper', 'Non-AC Sleeper', 'AC Seater', 'Non-AC Seater', 'Volvo', 'Mercedes', 'Scania'] as const).map((type) => (
               <label key={type} className="flex items-center gap-3 cursor-pointer">
                 <input
                   type="checkbox"
@@ -506,7 +506,7 @@ function BusFilters({ filters, onChange, onClearAll }: { filters: Partial<Search
                 />
                 <span className="text-body-sm text-eventra-navy-700">{type}</span>
               </label>
-            ))
+            ))}
           </div>
         </div>
 
