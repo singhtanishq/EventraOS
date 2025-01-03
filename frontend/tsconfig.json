@@ -30,20 +30,22 @@
       "@store/*": ["src/store/*"]
     }
   },
-  "include": ["src"],
-  "exclude": [
-    "src/pages/admin",
-    "src/pages/agent",
-    "src/pages/customer",
-    "src/pages/checkout",
-    "src/pages/flights/FlightDetail.tsx",
-    "src/pages/flights/FlightResults.tsx",
-    "src/pages/hotels/HotelResults.tsx",
-    "src/pages/packages/PackageResults.tsx",
-    "src/pages/trains/TrainResults.tsx",
-    "src/pages/transfers/TransferResults.tsx",
-    "src/pages/venues/VenueResults.tsx",
-    "src/store/cart.test.ts"
+  "include": [
+    "src/main.tsx",
+    "src/App.tsx",
+    "src/vite-env.d.ts",
+    "src/components/**/*",
+    "src/hooks/**/*",
+    "src/lib/**/*",
+    "src/layouts/**/*",
+    "src/store/**/*",
+    "src/types/**/*",
+    "src/pages/activities/**/*",
+    "src/pages/buses/**/*",
+    "src/pages/cars/**/*",
+    "src/pages/auth/**/*",
+    "src/pages/common/**/*",
+    "src/pages/public/**/*"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
