@@ -1,4 +1,4 @@
-import { Suspense, lazy } from 'react'
+import { Suspense, lazy, useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuthStore } from '@/store/auth'
 import { useCartStore } from '@/store/cart'
@@ -19,11 +19,12 @@ const Login = lazy(() => import('@/pages/auth/Login').then((m) => ({ default: m.
 const Register = lazy(() => import('@/pages/auth/Register').then((m) => ({ default: m.Register })))
 
 function App() {
-  const { isAuthenticated, initializeAuth } = useAuthStore()
-  const { loadCart } = useCartStore()
+  const { isAuthenticated } = useAuthStore()
 
-  initializeAuth()
-  loadCart()
+  // Initialize auth state from localStorage
+  useEffect(() => {
+    useAuthStore.getState().setLoading(false)
+  }, [])
 
   return (
     <div className="min-h-screen bg-white">
