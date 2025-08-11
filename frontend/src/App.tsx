@@ -1,10 +1,7 @@
 import { Suspense, lazy, useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuthStore } from '@/store/auth'
-import { useCartStore } from '@/store/cart'
 import { Toaster } from 'react-hot-toast'
-import Layout from '@/layouts/Layout'
-import AuthLayout from '@/layouts/AuthLayout'
 import LoadingScreen from '@/components/ui/LoadingScreen'
 
 // Public Pages
@@ -32,16 +29,14 @@ function App() {
       <Suspense fallback={<LoadingScreen />}>
         <Routes>
           {/* Public Routes */}
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="search" element={<SearchPage />} />
-            <Route path="buses" element={<BusResults />} />
-            <Route path="cars" element={<CarResults />} />
-            <Route path="activities" element={<ActivityResults />} />
-            <Route path="login" element={<AuthLayout><Login /></AuthLayout>} />
-            <Route path="register" element={<AuthLayout><Register /></AuthLayout>} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Route>
+          <Route path="/" element={<Home />} />
+          <Route path="search" element={<SearchPage />} />
+          <Route path="buses" element={<BusResults />} />
+          <Route path="cars" element={<CarResults />} />
+          <Route path="activities" element={<ActivityResults />} />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>
     </div>
