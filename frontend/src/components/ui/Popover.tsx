@@ -179,7 +179,7 @@ export function PopoverTrigger({
 }: Omit<PopoverProps, 'trigger'> & { children: React.ReactNode }) {
   return (
     <Popover
-      trigger={children}
+      trigger={children as React.ReactElement}
       content={content}
       position={position}
       triggerType={triggerType}
@@ -242,7 +242,7 @@ export function ContextMenu({
   const [position, setPosition] = useState<{ x: number; y: number } | null>(null)
   const menuRef = useRef<HTMLDivElement>(null)
 
-  const handleContextMenu = (e: React.ContextMenuEvent) => {
+  const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault()
     setPosition({ x: e.clientX, y: e.clientY })
   }
@@ -321,7 +321,7 @@ export function ContextMenu({
                 <span className="flex-1 text-body-sm">{item.label}</span>
               </button>
             ))
-          )}
+          ))}
         </motion.div>
       </AnimatePresence>
     </>
