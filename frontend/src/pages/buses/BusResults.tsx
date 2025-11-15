@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
-import { ChevronLeft, ChevronRight, SlidersHorizontal, MapPin, Bus, Clock, Shield, CheckCircle2, Bed, Seat, Calendar } from 'lucide-react'
+import { ChevronLeft, ChevronRight, SlidersHorizontal, MapPin, Bus, Clock, Shield, CheckCircle2, Bed, Armchair, Calendar } from 'lucide-react'
 import { api } from '@/lib/api'
 import { formatCurrency, formatDate, cn, debounce } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
@@ -160,7 +160,7 @@ export function BusResults() {
 
   const getBusTypeIcon = (berthType: string, isAc: boolean) => {
     if (berthType === 'sleeper') return <Bed className="w-4 h-4" />
-    if (berthType === 'semi_sleeper') return <Seat className="w-4 h-4" />
+    if (berthType === 'semi_sleeper') return <Armchair className="w-4 h-4" />
     return <Bus className="w-4 h-4" />
   }
 
