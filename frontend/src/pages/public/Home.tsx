@@ -48,6 +48,33 @@ const features = [
   { icon: Clock, title: '24/7 Support', description: 'Round-the-clock customer service via chat, email, and phone.' },
 ]
 
+const colorText = {
+  blue: 'text-eventra-blue-400',
+  cyan: 'text-eventra-cyan-400',
+  teal: 'text-eventra-teal-400',
+  amber: 'text-eventra-amber-400',
+  red: 'text-eventra-red-400',
+  green: 'text-eventra-green-400',
+}
+
+const colorBgLight = {
+  blue: 'bg-eventra-blue-100',
+  cyan: 'bg-eventra-cyan-100',
+  teal: 'bg-eventra-teal-100',
+  amber: 'bg-eventra-amber-100',
+  red: 'bg-eventra-red-100',
+  green: 'bg-eventra-green-100',
+}
+
+const colorTextDark = {
+  blue: 'text-eventra-blue-600',
+  cyan: 'text-eventra-cyan-600',
+  teal: 'text-eventra-teal-600',
+  amber: 'text-eventra-amber-600',
+  red: 'text-eventra-red-600',
+  green: 'text-eventra-green-600',
+}
+
 const stats = [
   { value: '2M+', label: 'Happy Travelers' },
   { value: '10K+', label: 'Hotels Worldwide' },
@@ -122,7 +149,7 @@ export function Home() {
                           'text-eventra-slate-400 hover:text-white'
                         )}
                       >
-                        <service.icon className={cn('w-5 h-5', `text-${service.color}-400`)} />
+                        <service.icon className={cn('w-5 h-5', colorText[service.color as keyof typeof colorText])} />
                         <span className="text-body-xs font-medium hidden sm:block">{service.name}</span>
                       </Link>
                     ))}
