@@ -452,5 +452,3 @@ function MoreServicesDropdown({ services }: { services: typeof services }) {
     </div>
   )
 }
-
-import { useState, useRef, useEffect } from 'react'
