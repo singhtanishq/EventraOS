@@ -60,7 +60,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
           {rightIcon && (
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-eventra-slate-400 pointer-events-none">
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-eventra-slate-400">
               {rightIcon}
             </div>
           )}
@@ -200,7 +200,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
 
 Select.displayName = 'Select'
 
-export const Checkbox = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement> & { label: string; description?: string }>(
+export const Checkbox = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement> & { label: React.ReactNode; description?: string }>(
   ({ className, label, description, id, ...props }, ref) => {
     const checkboxId = id || `checkbox-${Math.random().toString(36).substr(2, 9)}`
 
