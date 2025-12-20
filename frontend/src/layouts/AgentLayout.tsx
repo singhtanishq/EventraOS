@@ -1,4 +1,4 @@
-import { Outlet, NavLink, useLocation } from 'react-router-dom'
+import { Outlet, NavLink, Link, useLocation } from 'react-router-dom'
 import { useAuthStore } from '@/store/auth'
 import { cn } from '@/lib/utils'
 import {
@@ -23,7 +23,6 @@ import {
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useRef, useEffect } from 'react'
-import Link from 'react-router-dom'
 
 const agentNav = [
   { name: 'Dashboard', href: '/agent/dashboard', icon: LayoutDashboard },
