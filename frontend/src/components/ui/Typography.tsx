@@ -204,19 +204,19 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
 )
 Link.displayName = 'Link'
 
-interface ListProps extends React.HTMLAttributes<React.ElementType> {
+interface ListProps extends Omit<React.HTMLAttributes<HTMLElement>, 'ref'> {
   ordered?: boolean
   spaced?: boolean
 }
 
-export const List = forwardRef<React.ElementRef<'ul'>, ListProps>(
+export const List = forwardRef<HTMLUListElement, ListProps>(
   ({ className, ordered = false, spaced = true, children, ...props }, ref) => {
     if (ordered) {
       return (
         <ol
           ref={ref as never}
           className={cn('list-decimal list-inside', spaced && 'space-y-3', className)}
-          {...props}
+          {...(props as React.HTMLAttributes<HTMLOListElement>)}
         >
           {children}
         </ol>
