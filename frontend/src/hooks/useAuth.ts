@@ -1,6 +1,11 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useAuthStore } from '@/store/auth'
+import { useAuthStore, type User } from '@/store/auth'
 import { api } from '@/lib/api'
+
+interface AuthPayload {
+  user: User
+  token: string
+}
 
 export function useAuth() {
   const { user, isAuthenticated, isLoading, setAuth, logout: storeLogout, setUser, setLoading } = useAuthStore()
@@ -11,7 +16,7 @@ export function useAuth() {
       const token = localStorage.getItem('eventraos-auth')
       if (token) {
         try {
-          const { data } = await api.get('/auth/me')
+          const { data } = await api.get<{ data: AuthPayload }>('/auth/me')
           if (data.user) {
             setAuth(data.user, data.token)
           } else {
@@ -29,7 +34,7 @@ export function useAuth() {
   const login = useCallback(async (email: string, password: string, remember = false) => {
     setError(null)
     try {
-      const { data } = await api.post('/auth/login', { email, password, remember })
+      const { data } = await api.post<{ data: AuthPayload }>('/auth/login', { email, password, remember })
       if (data.user && data.token) {
         setAuth(data.user, data.token)
         return { success: true, message: 'Welcome back!' }
@@ -51,7 +56,7 @@ export function useAuth() {
   }) => {
     setError(null)
     try {
-      const response = await api.post('/auth/register', data)
+      const response = await api.post<{ data: AuthPayload }>('/auth/register', data)
       if (response.data.user && response.data.token) {
         setAuth(response.data.user, response.data.token)
         return { success: true, message: 'Account created successfully!' }
