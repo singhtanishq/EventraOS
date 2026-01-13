@@ -121,9 +121,9 @@ export function useAuth() {
     preferences: any
   }>) => {
     try {
-      const { data } = await api.put('/auth/profile', data)
-      if (data.user) {
-        setUser(data.user)
+      const response = await api.put<{ data: { user: User } }>('/auth/profile', data)
+      if (response.data.user) {
+        setUser(response.data.user)
       }
       return { success: true, message: 'Profile updated successfully' }
     } catch (err: any) {
