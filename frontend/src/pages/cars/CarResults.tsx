@@ -23,6 +23,9 @@ interface SearchParams {
   with_driver?: string
   page?: number
   per_page?: number
+  price_min?: string
+  price_max?: string
+
 }
 
 interface CarResult {
@@ -77,7 +80,7 @@ export function CarResults() {
     const initialFilters: Partial<SearchParams> = {}
     searchParams.forEach((value, key) => {
       if (key !== 'page' && key !== 'per_page') {
-        initialFilters[key as keyof SearchParams] = value
+        (initialFilters as Record<string, string>)[key] = value
       }
     })
     setFilters(initialFilters)
@@ -93,7 +96,7 @@ export function CarResults() {
   const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ['cars', queryParams],
     queryFn: async () => {
-      const response = await api.get('/search/cars', { params: queryParams })
+      const response = await api.get<any>('/search/cars', { params: queryParams })
       return response.data
     },
     placeholderData: (previousData) => previousData,
