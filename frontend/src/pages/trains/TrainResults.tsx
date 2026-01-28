@@ -21,6 +21,9 @@ interface SearchParams {
   quota?: string
   page?: number
   per_page?: number
+  price_min?: string
+  price_max?: string
+
 }
 
 interface TrainResult {
@@ -95,7 +98,7 @@ export function TrainResults() {
     const initialFilters: Partial<SearchParams> = {}
     searchParams.forEach((value, key) => {
       if (key !== 'page' && key !== 'per_page') {
-        initialFilters[key as keyof SearchParams] = value
+        (initialFilters as Record<string, string>)[key] = value
       }
     })
     setFilters(initialFilters)
