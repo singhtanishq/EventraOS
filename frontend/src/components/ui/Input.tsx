@@ -200,8 +200,8 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
 
 Select.displayName = 'Select'
 
-export const Checkbox = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement> & { label: React.ReactNode; description?: string }>(
-  ({ className, label, description, id, ...props }, ref) => {
+export const Checkbox = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement> & { label: React.ReactNode; description?: string; error?: string }>(
+  ({ className, label, description, error, id, ...props }, ref) => {
     const checkboxId = id || `checkbox-${Math.random().toString(36).substr(2, 9)}`
 
     return (
@@ -211,6 +211,7 @@ export const Checkbox = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInp
           type="checkbox"
           id={checkboxId}
           className="form-checkbox mt-0.5"
+          aria-invalid={error ? 'true' : 'false'}
           {...props}
         />
         <div className="flex-1">
@@ -220,6 +221,9 @@ export const Checkbox = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInp
               <p className="text-body-xs text-eventra-slate-500 mt-0.5">{description}</p>
             )}
           </label>
+          {error && (
+            <p className="form-error mt-1" role="alert">{error}</p>
+          )}
         </div>
       </div>
     )
