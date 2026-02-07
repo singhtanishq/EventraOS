@@ -419,7 +419,7 @@ function CarFilters({ filters, onChange, onClearAll }: { filters: Partial<Search
 
   const handlePriceChange = debounce((range: number[]) => {
     setPriceRange(range)
-    onChange({ price_min: range[0], price_max: range[1] })
+    onChange({ price_min: String(range[0]), price_max: String(range[1]) })
   }, 500)
 
   const toggleCategory = (cat: string) => {
