@@ -27,7 +27,16 @@ import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 
-const services = [
+interface HomeService {
+  id: string
+  name: string
+  icon: typeof Building2
+  description: string
+  href: string
+  color: string
+}
+
+const services: HomeService[] = [
   { id: 'hotels', name: 'Hotels', icon: Building2, description: '10,000+ properties worldwide', href: '/hotels', color: 'blue' },
   { id: 'flights', name: 'Flights', icon: Plane, description: '500+ airlines, best fares', href: '/flights', color: 'cyan' },
   { id: 'trains', name: 'Trains', icon: Train, description: 'Extensive rail network', href: '/trains', color: 'teal' },
