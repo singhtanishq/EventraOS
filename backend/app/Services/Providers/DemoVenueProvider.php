@@ -108,39 +108,59 @@ class DemoVenueProvider extends BaseProvider
     // ... keep other methods unchanged
     public function getDetails(string $itemId, array $options = []): ?\App\Services\Providers\DTO\ProviderItemDetails
     {
-        $venue = Venue::with(['city', 'packages', 'rooms', 'addons'])->find($itemId);
+        $venue = Venue::with(['city.country', 'packages', 'rooms', 'addons'])->find($itemId);
         if (! $venue) return null;
 
         return new \App\Services\Providers\DTO\ProviderItemDetails(
             id: (string) $itemId,
-            name: $this->getCode() . '_' . $itemId,
-            description: $this->name,
-            images: $this->images ?? [],
+            name: $venue->name,
+            description: $venue->description ?? $venue->name,
+            images: $venue->images ?? [],
             location: [
-                'address' => $this->address,
-                'city' => $this->city->name ?? '',
-                'country' => $this->city->country->name ?? '',
-                'latitude' => $this->latitude,
-                'longitude' => $this->longitude,
+                'address' => $venue->address,
+                'city' => $venue->city->name ?? '',
+                'country' => $venue->city->country->name ?? '',
+                'latitude' => $venue->latitude,
+                'longitude' => $venue->longitude,
             ],
-            amenities: $this->amenities ?? [],
+            amenities: $venue->amenities ?? [],
             pricing: [
                 'currency' => 'INR',
-                'packages' => $this->packages->map(fn ($p) => [
+                'packages' => $venue->packages->map(fn ($p) => [
                     'id' => $p->id,
                     'name' => $p->name,
                     'price' => $p->price_per_guest ?? $p->fixed_price ?? ($p->price_per_hour * 24),
                     'currency' => $p->currency,
                 ])->toArray(),
+                'rooms' => $venue->rooms->map(fn ($r) => [
+                    'id' => $r->id,
+                    'name' => $r->name,
+                    'capacity' => $r->capacity ?? null,
+                ])->toArray(),
+                'addons' => $venue->addons->map(fn ($a) => [
+                    'id' => $a->id,
+                    'name' => $a->name,
+                    'price' => $a->price ?? null,
+                ])->toArray(),
             ],
-            policies: $this->policies ?? [],
+            policies: $venue->policies ?? [],
             availability: [
-                'check_in' => $this->check_in_out['check_in'] ?? '14:00',
-                'check_out' => $this->check_in_out['check_out'] ?? '11:00',
+                'check_in' => $venue->earliest_event_time ?? '14:00',
+                'check_out' => $venue->latest_event_time ?? '23:00',
             ],
             metadata: [
-                'capacity' => $this->total_capacity,
-                'venue_types' => $this->venue_types,
+                'capacity' => $venue->total_capacity,
+                'venue_types' => $venue->venue_types,
+                'rating' => $venue->rating,
+                'review_count' => $venue->review_count,
+                'phone' => $venue->phone,
+                'email' => $venue->email,
+                'website' => $venue->website,
+                'landmark' => $venue->landmark,
+                'has_parking' => $venue->has_parking,
+                'has_catering' => $venue->has_catering,
+                'has_av' => $venue->has_av,
+                'floor_plans' => $venue->floor_plans,
             ],
         );
     }
