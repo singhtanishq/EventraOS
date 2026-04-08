@@ -14,6 +14,7 @@ use App\Models\CarCategory;
 use App\Models\CarRentalCompany;
 use App\Models\Car;
 use App\Models\CarRate;
+use App\Models\CarInventory;
 use App\Models\Activity;
 use App\Models\ActivityCategory;
 use App\Models\ActivityPricing;
