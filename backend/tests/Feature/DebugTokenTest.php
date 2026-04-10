@@ -1,0 +1,32 @@
+<?php
+
+namespace Tests\Feature;
+
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+class DebugTokenTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function test_debug_token_resolution(): void
+    {
+        $this->artisan('db:seed', ['--force' => true]);
+
+        $r1 = $this->postJson('/api/auth/login', ['email' => 'customer@demo.com', 'password' => 'password']);
+        $t1 = $r1->json('data.token');
+        fwrite(STDERR, "\ncustomer login token: {$t1}\n");
+        fwrite(STDERR, "me says: " . $this->getJson('/api/auth/me', ['Authorization' => "Bearer {$t1}"])->json('data.user.email') . "\n");
+
+        $r2 = $this->postJson('/api/auth/login', ['email' => 'admin@demo.com', 'password' => 'password']);
+        $t2 = $r2->json('data.token');
+        fwrite(STDERR, "admin login token: {$t2}\n");
+        fwrite(STDERR, "me says: " . $this->getJson('/api/auth/me', ['Authorization' => "Bearer {$t2}"])->json('data.user.email') . "\n");
+
+        $user = User::where('email', 'customer@demo.com')->first();
+        fwrite(STDERR, "customer user id: {$user->id}, tokens: " . $user->tokens()->count() . "\n");
+
+        $this->assertTrue(true);
+    }
+}
