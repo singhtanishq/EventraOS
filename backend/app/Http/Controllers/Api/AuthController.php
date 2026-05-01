@@ -104,10 +104,10 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $user = Auth::user();
+        $user = Auth::guard('web')->user();
 
         if (!$user->is_active) {
-            Auth::logout();
+            Auth::guard('web')->logout();
             return response()->json([
                 'success' => false,
                 'message' => 'Your account has been deactivated. Please contact support.',
