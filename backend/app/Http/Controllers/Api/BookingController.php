@@ -160,6 +160,46 @@ class BookingController extends Controller
         ]);
     }
 
+    public function showByReference(Request $request, string $reference)
+    {
+        $booking = Booking::where('booking_reference', $reference)->first();
+
+        if (!$booking) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Booking not found',
+            ], 404);
+        }
+
+        $user = $request->user();
+
+        // Check authorization
+        if ($user->hasRole('customer') && $booking->customer_id !== $user->customer?->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized',
+            ], 403);
+        }
+
+        $booking->load([
+            'items.provider',
+            'items.guests',
+            'items.holds',
+            'payments.paymentMethod',
+            'refunds',
+            'cancellations',
+            'reschedules',
+            'invoices',
+            'customer.user',
+            'agent.user',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'data' => $booking,
+        ]);
+    }
+
     public function createHold(Request $request, Booking $booking)
     {
         $user = $request->user();
