@@ -161,7 +161,7 @@ class ApiSmokeTest extends TestCase
             'payment_method_id' => 1,
         ], $token);
 
-        $initiate->assertStatus(200)->assertJsonPath('success', true);
+        $initiate->assertStatus(201)->assertJsonPath('success', true);
         $paymentId = $initiate->json('data.id');
 
         $process = $this->postAuthed("/api/payments/{$paymentId}/process", [], $token);
