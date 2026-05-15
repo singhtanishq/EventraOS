@@ -495,6 +495,13 @@ export default function Layout() {
 
 // Search Modal Component
 function SearchModal({ onClose }: { onClose: () => void }) {
+  const navigate = useNavigate()
+
+  const go = (path: string, params: Record<string, string>) => {
+    const search = new URLSearchParams(Object.entries(params).filter(([, v]) => v))
+    navigate(`${path}${search.toString() ? `?${search.toString()}` : ''}`)
+    onClose()
+  }
   const [activeTab, setActiveTab] = useState<'hotels' | 'flights' | 'venues'>('hotels')
   const tabs = [
     { id: 'hotels', label: 'Hotels', icon: Building2 },
@@ -555,18 +562,27 @@ function SearchModal({ onClose }: { onClose: () => void }) {
         </div>
 
         <div className="p-4">
-          {activeTab === 'hotels' && <HotelSearchForm onClose={onClose} />}
-          {activeTab === 'flights' && <FlightSearchForm onClose={onClose} />}
-          {activeTab === 'venues' && <VenueSearchForm onClose={onClose} />}
+          {activeTab === 'hotels' && <HotelSearchForm go={go} />}
+          {activeTab === 'flights' && <FlightSearchForm go={go} />}
+          {activeTab === 'venues' && <VenueSearchForm go={go} />}
         </div>
       </motion.div>
     </motion.div>
   )
 }
 
-function HotelSearchForm({ onClose }: { onClose: () => void }) {
+function HotelSearchForm({ go }: { go: (path: string, params: Record<string, string>) => void }) {
+  const today = new Date().toISOString().split('T')[0]
   return (
-    <form onSubmit={(e) => { e.preventDefault(); onClose(); window.location.href = '/buses'; }} className="space-y-4">
+    <form onSubmit={(e) => {
+      e.preventDefault()
+      const f = e.currentTarget
+      go('/hotels', {
+        destination: (f.elements.namedItem('hotel-destination') as HTMLInputElement).value,
+        check_in: (f.elements.namedItem('hotel-checkin') as HTMLInputElement).value,
+        check_out: (f.elements.namedItem('hotel-checkout') as HTMLInputElement).value,
+      })
+    }} className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="hotel-destination" className="label">Destination</label>
@@ -574,7 +590,7 @@ function HotelSearchForm({ onClose }: { onClose: () => void }) {
         </div>
         <div>
           <label htmlFor="hotel-checkin" className="label">Check-in</label>
-          <input type="date" id="hotel-checkin" className="input" required />
+          <input type="date" id="hotel-checkin" className="input" min={today} defaultValue={today} required />
         </div>
         <div>
           <label htmlFor="hotel-checkout" className="label">Check-out</label>
@@ -596,9 +612,18 @@ function HotelSearchForm({ onClose }: { onClose: () => void }) {
   )
 }
 
-function FlightSearchForm({ onClose }: { onClose: () => void }) {
+function FlightSearchForm({ go }: { go: (path: string, params: Record<string, string>) => void }) {
+  const today = new Date().toISOString().split('T')[0]
   return (
-    <form onSubmit={(e) => { e.preventDefault(); onClose(); window.location.href = '/buses'; }} className="space-y-4">
+    <form onSubmit={(e) => {
+      e.preventDefault()
+      const f = e.currentTarget
+      go('/flights', {
+        origin: (f.elements.namedItem('flight-origin') as HTMLInputElement).value,
+        destination: (f.elements.namedItem('flight-destination') as HTMLInputElement).value,
+        departure_date: (f.elements.namedItem('flight-departure') as HTMLInputElement).value,
+      })
+    }} className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="flight-origin" className="label">From</label>
@@ -610,7 +635,7 @@ function FlightSearchForm({ onClose }: { onClose: () => void }) {
         </div>
         <div>
           <label htmlFor="flight-departure" className="label">Departure</label>
-          <input type="date" id="flight-departure" className="input" required />
+          <input type="date" id="flight-departure" className="input" min={today} defaultValue={today} required />
         </div>
         <div>
           <label htmlFor="flight-return" className="label">Return (Optional)</label>
@@ -632,9 +657,17 @@ function FlightSearchForm({ onClose }: { onClose: () => void }) {
   )
 }
 
-function VenueSearchForm({ onClose }: { onClose: () => void }) {
+function VenueSearchForm({ go }: { go: (path: string, params: Record<string, string>) => void }) {
+  const today = new Date().toISOString().split('T')[0]
   return (
-    <form onSubmit={(e) => { e.preventDefault(); onClose(); window.location.href = '/buses'; }} className="space-y-4">
+    <form onSubmit={(e) => {
+      e.preventDefault()
+      const f = e.currentTarget
+      go('/venues', {
+        city: (f.elements.namedItem('venue-city') as HTMLInputElement).value,
+        event_date: (f.elements.namedItem('venue-date') as HTMLInputElement).value,
+      })
+    }} className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="venue-city" className="label">City</label>
@@ -652,7 +685,7 @@ function VenueSearchForm({ onClose }: { onClose: () => void }) {
         </div>
         <div>
           <label htmlFor="venue-date" className="label">Event Date</label>
-          <input type="date" id="venue-date" className="input" required />
+          <input type="date" id="venue-date" className="input" min={today} defaultValue={today} required />
         </div>
         <div>
           <label htmlFor="venue-guests" className="label">Guest Count</label>
