@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
-import { DollarSign, Clock, CheckCircle2, Search, Eye, Download, RefreshCw, Calendar, Landmark, Percent, Receipt } from 'lucide-react'
+import { DollarSign, Clock, CheckCircle2, Search, Eye, Download, RefreshCw, Calendar, Landmark } from 'lucide-react'
 import { api } from '@/lib/api'
 import { formatCurrency, formatDate, cn } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
