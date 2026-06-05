@@ -50,7 +50,6 @@ export default defineConfig({
                     forms: ['react-hook-form', '@hookform/resolvers', 'zod'],
                     ui: ['lucide-react', 'framer-motion', '@headlessui/react'],
                     utils: ['date-fns', 'clsx', 'tailwind-merge'],
-                    icons: ['lucide-react'],
                     pdf: ['jspdf', 'html2canvas'],
                 },
                 chunkFileNames: 'assets/js/[name]-[hash].js',
