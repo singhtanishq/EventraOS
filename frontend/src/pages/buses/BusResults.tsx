@@ -101,7 +101,7 @@ export function BusResults() {
     queryKey: ['buses', queryParams],
     queryFn: async () => {
       const response = await api.get<any>('/search/buses', { params: queryParams })
-      return response.data
+      return response
     },
     placeholderData: (previousData) => previousData,
   })
