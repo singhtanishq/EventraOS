@@ -95,7 +95,7 @@ export function SearchPage() {
             </div>
             <h1 className="text-heading-2xl lg:text-heading-3xl font-display font-bold mb-6">
               Find Your Perfect{' '}
-              <span className="text-eventra-gold-400">Travel Experience</span>
+              <span className="text-eventra-cyan-400">Travel Experience</span>
             </h1>
             <p className="text-lg lg:text-xl text-eventra-slate-300 mb-8 max-w-2xl mx-auto">
               Search hotels, flights, trains, buses, cars, activities, venues, transfers, and packages — all in one place.
@@ -300,7 +300,7 @@ export function SearchPage() {
             Join millions of travelers who trust EventraOS for their travel needs. Search, compare, and book with confidence.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="btn-lg bg-eventra-gold-400 hover:bg-eventra-gold-500 text-eventra-navy-900 w-full sm:w-auto" onClick={() => navigate('/search')}>
+            <Button size="lg" className="btn-lg bg-eventra-cyan-500 hover:bg-eventra-cyan-600 text-eventra-navy-900 w-full sm:w-auto" onClick={() => navigate('/search')}>
               <Search className="w-5 h-5 mr-2" />
               Start Searching
             </Button>
