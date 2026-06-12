@@ -414,11 +414,11 @@ function PackageResultCard({ pkg, onSelect }: { pkg: PackageResult; onSelect: ()
           ))}
         </p>
         <div className="flex flex-wrap gap-2 mb-3">
-          {metadata.highlights.slice(0, 3).map((highlight) => (
+          {(metadata.highlights || []).slice(0, 3).map((highlight) => (
             <span key={highlight} className="tag text-body-xs px-2 py-0.5">{highlight}</span>
           ))}
-          {metadata.highlights.length > 3 && (
-            <span className="tag text-body-xs px-2 py-0.5 text-eventra-slate-500">+{metadata.highlights.length - 3} more</span>
+          {(metadata.highlights || []).length > 3 && (
+            <span className="tag text-body-xs px-2 py-0.5 text-eventra-slate-500">+{(metadata.highlights || []).length - 3} more</span>
           )}
         </div>
         <div className="flex flex-wrap gap-1.5 mb-4">
