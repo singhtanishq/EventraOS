@@ -417,11 +417,11 @@ function VenueResultCard({ venue, onSelect }: { venue: VenueResult; onSelect: ()
           {venue.location.city}, {venue.location.country}
         </p>
         <div className="flex flex-wrap gap-1.5 mb-4 mt-2">
-          {venue.metadata.venue_types.slice(0, 3).map((type) => (
+          {(venue.metadata.venue_types || []).slice(0, 3).map((type) => (
             <span key={type} className="tag text-body-xs px-2 py-0.5">{type}</span>
           ))}
-          {venue.metadata.venue_types.length > 3 && (
-            <span className="tag text-body-xs px-2 py-0.5 text-eventra-slate-500">+{venue.metadata.venue_types.length - 3} more</span>
+          {(venue.metadata.venue_types || []).length > 3 && (
+            <span className="tag text-body-xs px-2 py-0.5 text-eventra-slate-500">+{(venue.metadata.venue_types || []).length - 3} more</span>
           )}
         </div>
         <div className="mt-auto pt-4 border-t border-eventra-slate-200 flex items-center justify-between">
@@ -471,11 +471,11 @@ function VenueListCard({ venue, onSelect }: { venue: VenueResult; onSelect: () =
           </div>
         </div>
         <div className="flex flex-wrap gap-1.5 mb-4">
-          {venue.metadata.venue_types.slice(0, 3).map((type) => (
+          {(venue.metadata.venue_types || []).slice(0, 3).map((type) => (
             <span key={type} className="tag text-body-xs px-2 py-0.5">{type}</span>
           ))}
-          {venue.metadata.venue_types.length > 3 && (
-            <span className="tag text-body-xs px-2 py-0.5 text-eventra-slate-500">+{venue.metadata.venue_types.length - 3} more</span>
+          {(venue.metadata.venue_types || []).length > 3 && (
+            <span className="tag text-body-xs px-2 py-0.5 text-eventra-slate-500">+{(venue.metadata.venue_types || []).length - 3} more</span>
           )}
         </div>
         <div className="mt-auto flex items-center justify-between pt-4 border-t border-eventra-slate-200">
