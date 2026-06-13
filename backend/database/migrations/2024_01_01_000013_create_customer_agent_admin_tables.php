@@ -32,13 +32,12 @@ return new class extends Migration
             $table->unsignedInteger('cancelled_booking_count')->default(0);
             $table->timestamp('first_booking_at')->nullable();
             $table->timestamp('last_booking_at')->nullable();
-            $table->foreignId('assigned_agent_id')->nullable()->constrained('agents')->nullOnDelete();
+            $table->unsignedBigInteger('assigned_agent_id')->nullable()->index();
             $table->boolean('is_vip')->default(false);
             $table->json('risk_flags')->nullable();
             $table->timestamps();
 
             $table->index('customer_number');
-            $table->index('assigned_agent_id');
         });
 
         Schema::create('saved_travelers', function (Blueprint $table) {

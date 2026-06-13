@@ -150,7 +150,7 @@ return new class extends Migration
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();
             $table->enum('status', ['available', 'booked', 'blocked', 'maintenance'])->default('available');
-            $table->foreignId('booking_id')->nullable()->constrained('bookings')->nullOnDelete();
+            $table->unsignedBigInteger('booking_id')->nullable()->index();
             $table->json('event_details')->nullable(); // Event type, guest count, etc.
             $table->decimal('price_override', 15, 4)->nullable();
             $table->timestamps();

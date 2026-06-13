@@ -17,7 +17,7 @@ return new class extends Migration
             $table->index('booking_reference', 'bookings_reference_idx');
             $table->index(['hold_expires_at', 'status'], 'bookings_hold_expires_status_idx');
             $table->index(['confirmed_at', 'status'], 'bookings_confirmed_status_idx');
-            $table->fullText(['booking_reference', 'customer_name']);
+            $table->fullText(['booking_reference']);
         });
 
         // Booking items indexes

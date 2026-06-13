@@ -92,7 +92,7 @@ return new class extends Migration
             $table->foreignId('rate_id')->constrained('car_rates')->cascadeOnDelete();
             $table->date('date');
             $table->enum('status', ['available', 'booked', 'maintenance', 'unavailable'])->default('available');
-            $table->foreignId('booking_id')->nullable()->constrained('bookings')->nullOnDelete();
+            $table->unsignedBigInteger('booking_id')->nullable()->index();
             $table->decimal('price_override', 15, 4)->nullable();
             $table->timestamps();
 
