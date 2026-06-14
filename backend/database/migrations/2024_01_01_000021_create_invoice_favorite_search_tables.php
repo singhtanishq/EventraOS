@@ -116,7 +116,7 @@ return new class extends Migration
             $table->json('metadata')->nullable();
             $table->timestamps();
 
-            $table->index(['documentable_type', 'documentable_id']);
+
             $table->index(['document_type', 'created_at']);
         });
 
