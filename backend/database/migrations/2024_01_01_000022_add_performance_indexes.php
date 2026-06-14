@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -17,7 +18,9 @@ return new class extends Migration
             $table->index('booking_reference', 'bookings_reference_idx');
             $table->index(['hold_expires_at', 'status'], 'bookings_hold_expires_status_idx');
             $table->index(['confirmed_at', 'status'], 'bookings_confirmed_status_idx');
-            $table->fullText(['booking_reference']);
+            if (! in_array(DB::connection()->getDriverName(), ['sqlite'])) {
+                $table->fullText(['booking_reference']);
+            }
         });
 
         // Booking items indexes
@@ -34,7 +37,9 @@ return new class extends Migration
             $table->index(['provider_id', 'provider_hotel_id'], 'hotels_provider_idx');
             $table->index(['is_active', 'is_featured', 'star_rating'], 'hotels_active_featured_star_idx');
             $table->index(['latitude', 'longitude'], 'hotels_location_idx');
-            $table->fullText(['name', 'description', 'address']);
+            if (! in_array(DB::connection()->getDriverName(), ['sqlite'])) {
+                $table->fullText(['name', 'description', 'address']);
+            }
         });
 
         Schema::table('hotel_room_types', function (Blueprint $table) {
@@ -100,7 +105,9 @@ return new class extends Migration
             $table->index(['is_active', 'is_featured', 'total_capacity'], 'venues_active_featured_capacity_idx');
             $table->index(['provider_id', 'provider_venue_id'], 'venues_provider_idx');
             $table->index(['latitude', 'longitude'], 'venues_location_idx');
-            $table->fullText(['name', 'description', 'address']);
+            if (! in_array(DB::connection()->getDriverName(), ['sqlite'])) {
+                $table->fullText(['name', 'description', 'address']);
+            }
         });
 
         Schema::table('venue_packages', function (Blueprint $table) {
