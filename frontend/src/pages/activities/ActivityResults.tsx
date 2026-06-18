@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { PageSkeleton } from '@/components/ui/LoadingScreen'
 import { Modal } from '@/components/ui/Modal'
+import { useCartStore } from '@/store/cart'
+import { toast } from 'react-hot-toast'
 
 interface SearchParams {
   city_id?: string
@@ -298,12 +300,31 @@ export function ActivityResults() {
                             key={activity.id}
                             activity={activity}
                             onSelect={() => {
-                              navigate(`/activities/${activity.provider_item_id}`, {
-                                state: { 
-                                  date: searchParams.get('date'),
-                                  participants: searchParams.get('participants')
-                                }
+                              const date = searchParams.get('date') || new Date().toISOString().split('T')[0]
+                              useCartStore.getState().addItem({
+                                type: 'activity',
+                                serviceId: activity.provider_item_id,
+                                providerId: activity.provider_code,
+                                name: activity.name,
+                                image: activity.images?.[0],
+                                dates: { start: date },
+                                passengers: parseInt(searchParams.get('participants') || '1'),
+                                options: [],
+                                pricing: {
+                                  basePrice: activity.pricing?.per_person ?? activity.pricing?.base_price ?? 0,
+                                  taxes: 0,
+                                  fees: 0,
+                                  serviceFee: 0,
+                                  discount: 0,
+                                  optionsTotal: 0,
+                                  total: activity.pricing?.per_person ?? 0,
+                                  currency: activity.pricing?.currency || 'INR',
+                                  breakdown: [],
+                                },
+                                availability: { available: activity.availability?.available ?? true },
                               })
+                              toast.success('Added to cart')
+                              navigate('/checkout')
                             }}
                           />
                         ))}
