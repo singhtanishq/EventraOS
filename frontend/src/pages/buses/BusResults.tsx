@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { PageSkeleton } from '@/components/ui/LoadingScreen'
 import { Modal } from '@/components/ui/Modal'
+import { useCartStore } from '@/store/cart'
+import { toast } from 'react-hot-toast'
 
 interface SearchParams {
   origin_terminal_id?: string
@@ -297,12 +299,31 @@ export function BusResults() {
                             bus={bus}
                             formatDuration={formatDuration}
                             onSelect={() => {
-                              navigate(`/buses/${bus.provider_item_id}`, {
-                                state: { 
-                                  journey_date: searchParams.get('journey_date'),
-                                  passengers: searchParams.get('passengers')
-                                }
+                              const journeyDate = searchParams.get('journey_date') || new Date().toISOString().split('T')[0]
+                              useCartStore.getState().addItem({
+                                type: 'bus',
+                                serviceId: bus.provider_item_id,
+                                providerId: bus.provider_code,
+                                name: bus.name,
+                                image: bus.images?.[0],
+                                dates: { start: journeyDate },
+                                passengers: parseInt(searchParams.get('passengers') || '1'),
+                                options: [],
+                                pricing: {
+                                  basePrice: bus.pricing?.total ?? bus.pricing?.base_price ?? 0,
+                                  taxes: 0,
+                                  fees: 0,
+                                  serviceFee: 0,
+                                  discount: 0,
+                                  optionsTotal: 0,
+                                  total: bus.pricing?.total ?? 0,
+                                  currency: bus.pricing?.currency || 'INR',
+                                  breakdown: [],
+                                },
+                                availability: { available: bus.availability?.available ?? true },
                               })
+                              toast.success('Added to cart')
+                              navigate('/checkout')
                             }}
                           />
                         ))}
