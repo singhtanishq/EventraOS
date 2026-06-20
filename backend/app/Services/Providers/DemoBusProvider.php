@@ -54,10 +54,10 @@ class DemoBusProvider extends BaseProvider
         if (!empty($criteria['price_min']) || !empty($criteria['price_max'])) {
             $query->whereHas('types.fares.inventory', function ($q) use ($criteria) {
                 if (!empty($criteria['price_min'])) {
-                    $q->where('sell_price', '>=', $criteria['price_min']);
+                    $q->where('current_fare', '>=', $criteria['price_min']);
                 }
                 if (!empty($criteria['price_max'])) {
-                    $q->where('sell_price', '<=', $criteria['price_max']);
+                    $q->where('current_fare', '<=', $criteria['price_max']);
                 }
             });
         }
@@ -76,7 +76,7 @@ class DemoBusProvider extends BaseProvider
         $results = $buses->map(function ($bus) {
             $fare = $bus->types->flatMap->fares->firstWhere('is_active', true);
             $inventory = $fare?->inventory()->where('available_seats', '>', 0)->first();
-            $price = $inventory?->sell_price ?? 0;
+            $price = $inventory?->current_fare ?? 0;
 
             return new \App\Services\Providers\DTO\SearchResult(
                 id: 'bus_' . $bus->id,
