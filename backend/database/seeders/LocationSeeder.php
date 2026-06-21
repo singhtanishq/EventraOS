@@ -108,15 +108,18 @@ class LocationSeeder extends Seeder
             }
 
             foreach ($entry['airports'] as $airportData) {
-                Airport::create(array_merge($airportData, ['city_id' => $cityMap[$airportData['city']], 'is_active' => true]));
+                $airportDataClean = collect($airportData)->except('city')->all();
+                Airport::create(array_merge($airportDataClean, ['city_id' => $cityMap[$airportData['city']], 'is_active' => true]));
             }
 
             foreach ($entry['stations'] as $stationData) {
-                Station::create(array_merge($stationData, ['city_id' => $cityMap[$stationData['city']], 'type' => 'train', 'is_active' => true]));
+                $stationDataClean = collect($stationData)->except('city')->all();
+                Station::create(array_merge($stationDataClean, ['city_id' => $cityMap[$stationData['city']], 'type' => 'train', 'is_active' => true]));
             }
 
             foreach ($entry['bus_terminals'] as $terminalData) {
-                BusTerminal::create(array_merge($terminalData, ['city_id' => $cityMap[$terminalData['city']], 'is_active' => true]));
+                $terminalDataClean = collect($terminalData)->except('city')->all();
+                BusTerminal::create(array_merge($terminalDataClean, ['city_id' => $cityMap[$terminalData['city']], 'is_active' => true]));
             }
         }
     }
