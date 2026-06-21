@@ -29,9 +29,9 @@ class LocationSeeder extends Seeder
                     ['city' => 'Goa', 'name' => 'Dabolim Airport', 'iata_code' => 'GOI', 'icao_code' => 'VOGO', 'latitude' => 15.3808, 'longitude' => 73.8314, 'timezone' => 'Asia/Kolkata', 'is_international' => true],
                 ],
                 'stations' => [
-                    ['city' => 'Delhi', 'name' => 'New Delhi Railway Station', 'code' => 'NDLS', 'latitude' => 28.6428, 'longitude' => 77.2192],
-                    ['city' => 'Mumbai', 'name' => 'Mumbai Central', 'code' => 'BCT', 'latitude' => 18.9712, 'longitude' => 72.8193],
-                    ['city' => 'Jaipur', 'name' => 'Jaipur Junction', 'code' => 'JP', 'latitude' => 26.9196, 'longitude' => 75.7878],
+                    ['city' => 'Delhi', 'name' => 'New Delhi Railway Station', 'code' => 'NDLS', 'latitude' => 28.6428, 'longitude' => 77.2192, 'timezone' => 'Asia/Kolkata'],
+                    ['city' => 'Mumbai', 'name' => 'Mumbai Central', 'code' => 'BCT', 'latitude' => 18.9712, 'longitude' => 72.8193, 'timezone' => 'Asia/Kolkata'],
+                    ['city' => 'Jaipur', 'name' => 'Jaipur Junction', 'code' => 'JP', 'latitude' => 26.9196, 'longitude' => 75.7878, 'timezone' => 'Asia/Kolkata'],
                 ],
                 'bus_terminals' => [
                     ['city' => 'Delhi', 'name' => 'Kashmere Gate ISBT', 'code' => 'DEL-ISBT'],
