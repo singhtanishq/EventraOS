@@ -647,7 +647,7 @@ class InventorySeeder extends Seeder
         ];
 
         foreach ($activities as $data) {
-            Activity::create([
+            $activity = Activity::create([
                 'provider_id' => $this->demoProvider->id,
                 'category_id' => $categoryMap[$data['category']]->id,
                 'city_id' => $this->cityIds[$data['city']],
