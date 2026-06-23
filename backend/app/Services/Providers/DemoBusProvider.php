@@ -217,7 +217,7 @@ class DemoBusProvider extends BaseProvider
             : \App\Models\BusFare::where('bus_route_id', $bus->id)->where('is_active', true)->first();
 
         $available = $fare?->inventory()
-            ->where('journey_date', $criteria['journey_date'] ?? now()->toDateString())
+            ->whereDate('journey_date', $criteria['journey_date'] ?? now()->toDateString())
             ->where('available_seats', '>', 0)
             ->exists();
 
