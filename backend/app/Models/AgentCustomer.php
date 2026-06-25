@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AgentCustomer extends Model
 {
+    protected $table = 'agent_customers';
+
     protected $fillable = ['agent_id', 'customer_id', 'relationship_type', 'assigned_at', 'assigned_by', 'is_active'];
     protected $casts = ['assigned_at' => 'datetime', 'is_active' => 'boolean'];
 
