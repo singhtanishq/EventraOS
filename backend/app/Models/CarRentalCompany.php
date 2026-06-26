@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class CarRentalCompany extends Model
 {
+    protected $table = 'car_rental_companies';
+
     protected $fillable = ['uuid', 'provider_id', 'name', 'code', 'logo', 'website', 'is_active', 'is_demo', 'metadata'];
     protected $casts = ['is_active' => 'boolean', 'is_demo' => 'boolean', 'metadata' => 'array'];
 
