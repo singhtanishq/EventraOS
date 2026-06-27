@@ -7,13 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
 
 class Customer extends Model
 {
-    use HasFactory, LogsActivity, SoftDeletes;
+    use HasFactory;
 
     protected $fillable = [
         'uuid',
@@ -67,14 +64,6 @@ class Customer extends Model
                 $customer->customer_number = 'CUST-' . strtoupper(\Illuminate\Support\Str::random(8));
             }
         });
-    }
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logOnly(['customer_number', 'nationality', 'wallet_balance', 'loyalty_points', 'is_vip', 'assigned_agent_id'])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
     }
 
     public function user(): BelongsTo
