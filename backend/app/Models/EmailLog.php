@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class EmailLog extends Model
 {
+    protected $table = 'email_logs';
+
     protected $fillable = [
         'uuid', 'template_id', 'template_key', 'to_email', 'to_name', 'subject',
         'status', 'provider', 'provider_message_id', 'error_message', 'metadata',
