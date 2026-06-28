@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PaymentAttempt extends Model
 {
+    protected $table = 'payment_attempts';
+
     protected $fillable = [
         'payment_id', 'attempt_number', 'status', 'request', 'response',
         'error_code', 'error_message', 'duration_ms', 'started_at', 'completed_at',
