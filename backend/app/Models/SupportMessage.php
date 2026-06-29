@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class SupportMessage extends Model
 {
+    protected $table = 'support_messages';
+
     protected $fillable = [
         'ticket_id', 'sender_id', 'sender_type', 'message',
         'is_internal', 'attachments', 'is_read', 'read_at',
