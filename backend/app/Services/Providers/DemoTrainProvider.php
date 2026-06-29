@@ -55,21 +55,21 @@ class DemoTrainProvider extends BaseProvider
         if (!empty($criteria['price_min']) || !empty($criteria['price_max'])) {
             $query->whereHas('fares.inventory', function ($q) use ($criteria) {
                 if (!empty($criteria['price_min'])) {
-                    $q->where('sell_price', '>=', $criteria['price_min']);
+                    $q->where('current_fare', '>=', $criteria['price_min']);
                 }
                 if (!empty($criteria['price_max'])) {
-                    $q->where('sell_price', '<=', $criteria['price_max']);
+                    $q->where('current_fare', '<=', $criteria['price_max']);
                 }
             });
         }
 
         $sort = $criteria['sort'] ?? 'recommended';
         match ($sort) {
-            'cheapest' => $query->orderBy('fares.inventory.sell_price', 'asc'),
+            'cheapest' => $query->orderBy('duration_minutes', 'asc'),
             'fastest' => $query->orderBy('duration_minutes', 'asc'),
             'earliest' => $query->orderBy('departure_time', 'asc'),
             'latest' => $query->orderBy('departure_time', 'desc'),
-            default => $query->orderBy('stops', 'asc')->orderBy('fares.inventory.sell_price', 'asc'),
+            default => $query->orderBy('departure_time', 'asc'),
         };
 
         $trains = \App\Models\TrainRoute::query()
@@ -81,7 +81,7 @@ class DemoTrainProvider extends BaseProvider
 
         $results = $trains->map(function ($train) {
             $fare = $train->fares()->where('is_active', true)->first();
-            $price = $fare?->inventory()->where('available_berths', '>', 0)->min('sell_price') ?? 0;
+            $price = $fare?->inventory()->where('available_berths', '>', 0)->min('current_fare') ?? 0;
 
             return new \App\Services\Providers\DTO\SearchResult(
                 id: 'train_' . $train->id,
@@ -179,10 +179,10 @@ class DemoTrainProvider extends BaseProvider
                         'change_fee' => (float) $f->change_fee,
                         'cancel_fee' => (float) $f->cancel_fee,
                         'pricing' => [
-                            'base_price' => (float) $f->inventory()->min('sell_price') ?? 0,
+                            'base_price' => (float) $f->inventory()->min('current_fare') ?? 0,
                             'currency' => 'INR',
-                            'total' => (float) $f->inventory()->min('sell_price') ?? 0,
-                            'per_passenger' => $f->inventory()->min('sell_price') ?? 0,
+                            'total' => (float) $f->inventory()->min('current_fare') ?? 0,
+                            'per_passenger' => $f->inventory()->min('current_fare') ?? 0,
                         ],
                         'availability' => [
                             'available' => $f->inventory()->where('available_seats', '>', 0)->exists(),
