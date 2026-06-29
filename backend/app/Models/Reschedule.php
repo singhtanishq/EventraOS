@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Reschedule extends Model
 {
+    protected $table = 'reschedules';
+
     protected $fillable = [
         'uuid', 'reschedule_reference', 'booking_id', 'booking_item_id',
         'customer_id', 'requested_by', 'status', 'original_schedule',
