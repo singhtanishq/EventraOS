@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class TravelPackage extends Model
 {
+    protected $table = 'travel_packages';
+
     protected $fillable = [
         'uuid', 'provider_id', 'name', 'slug', 'description', 'short_description',
         'destinations', 'includes', 'excludes', 'itinerary', 'duration_nights',
