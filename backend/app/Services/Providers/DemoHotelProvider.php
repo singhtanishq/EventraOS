@@ -70,8 +70,8 @@ class DemoHotelProvider extends BaseProvider
 
         $sort = $criteria['sort'] ?? 'recommended';
         match ($sort) {
-            'price_low' => $query->orderBy('roomTypes.inventory.sell_price', 'asc'),
-            'price_high' => $query->orderBy('roomTypes.inventory.sell_price', 'desc'),
+            'price_low' => $query->orderBy('star_rating', 'asc'),
+            'price_high' => $query->orderBy('star_rating', 'desc'),
             'rating' => $query->orderBy('rating', 'desc'),
             'distance' => $query->orderBy('sort_order', 'asc'),
             default => $query->orderBy('is_featured', 'desc')->orderBy('rating', 'desc'),
