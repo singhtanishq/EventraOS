@@ -22,6 +22,7 @@ return new class extends Migration
             $table->boolean('is_low_cost')->default(false);
             $table->boolean('is_demo')->default(false);
             $table->json('metadata')->nullable();
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['code', 'is_active']);
@@ -40,6 +41,7 @@ return new class extends Migration
             $table->string('timezone');
             $table->json('terminals')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->unique('iata_code');
@@ -68,6 +70,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->boolean('is_demo')->default(false);
             $table->json('metadata')->nullable();
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['departure_airport_id', 'departure_date', 'is_active']);
@@ -90,6 +93,7 @@ return new class extends Migration
             $table->string('aircraft_code')->nullable();
             $table->string('operating_carrier')->nullable(); // Codeshare
             $table->string('marketing_carrier')->nullable();
+            $table->softDeletes();
             $table->timestamps();
 
             $table->unique(['flight_id', 'segment_number']);
@@ -110,6 +114,7 @@ return new class extends Migration
             $table->decimal('change_fee', 15, 4)->default(0);
             $table->decimal('cancel_fee', 15, 4)->default(0);
             $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['flight_id', 'cabin_class', 'is_active']);
@@ -118,7 +123,7 @@ return new class extends Migration
         Schema::create('flight_inventory', function (Blueprint $table) {
             $table->id();
             $table->foreignId('flight_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('fare_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('fare_id')->constrained('flight_fares')->cascadeOnDelete();
             $table->date('date'); // Flight date
             $table->unsignedInteger('total_seats')->default(0);
             $table->unsignedInteger('available_seats')->default(0);
@@ -131,6 +136,7 @@ return new class extends Migration
             $table->decimal('fee_amount', 15, 4)->default(0);
             $table->boolean('is_closed')->default(false);
             $table->json('seat_map')->nullable(); // Seat availability by row/column
+            $table->softDeletes();
             $table->timestamps();
 
             $table->unique(['fare_id', 'date']);
@@ -140,8 +146,8 @@ return new class extends Migration
 
         Schema::create('flight_availability_cache', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('departure_airport_id')->constrained('airports')->cascadeOnDelete();
-            $table->foreignId('arrival_airport_id')->constrained('airports')->cascadeOnDelete();
+            $table->foreignId('departure_airport_id')->constrained('airports')->nullOnDelete();
+            $table->foreignId('arrival_airport_id')->constrained('airports')->nullOnDelete();
             $table->date('departure_date');
             $table->date('return_date')->nullable();
             $table->unsignedInteger('adults')->default(1);
@@ -150,6 +156,7 @@ return new class extends Migration
             $table->string('cabin_class')->default('economy');
             $table->json('result');
             $table->timestamp('expires_at');
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['departure_airport_id', 'arrival_airport_id', 'departure_date']);
