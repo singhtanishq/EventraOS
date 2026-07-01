@@ -19,6 +19,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->boolean('is_demo')->default(false);
             $table->json('metadata')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
 
@@ -26,7 +27,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->foreignId('provider_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignId('operator_id')->constrained()->restrictOnDelete();
+            $table->foreignId('operator_id')->constrained('train_operators')->restrictOnDelete();
             $table->string('train_number'); // e.g., "12951", "12009"
             $table->string('train_name'); // e.g., "Rajdhani Express", "Shatabdi Express"
             $table->foreignId('origin_station_id')->constrained('stations')->restrictOnDelete();
@@ -40,6 +41,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->boolean('is_demo')->default(false);
             $table->json('metadata')->nullable();
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['origin_station_id', 'destination_station_id', 'is_active']);
@@ -58,6 +60,7 @@ return new class extends Migration
             $table->boolean('has_berth')->default(true);
             $table->boolean('is_ac')->default(false);
             $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['train_route_id', 'is_active']);
@@ -76,6 +79,7 @@ return new class extends Migration
             $table->string('currency', 3)->default('INR');
             $table->json('fare_rules')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['train_route_id', 'class_id', 'quota', 'is_active']);
@@ -94,6 +98,7 @@ return new class extends Migration
             $table->unsignedInteger('wl_count')->default(0); // Waitlist
             $table->decimal('current_fare', 15, 4);
             $table->boolean('is_closed')->default(false);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->unique(['class_id', 'fare_id', 'journey_date']);
@@ -103,12 +108,13 @@ return new class extends Migration
 
         Schema::create('train_availability_cache', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('origin_station_id')->constrained('stations')->cascadeOnDelete();
-            $table->foreignId('destination_station_id')->constrained('stations')->cascadeOnDelete();
+            $table->foreignId('origin_station_id')->constrained('stations')->nullOnDelete();
+            $table->foreignId('destination_station_id')->constrained('stations')->nullOnDelete();
             $table->date('journey_date');
             $table->string('quota')->default('GN');
             $table->json('result');
             $table->timestamp('expires_at');
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['origin_station_id', 'destination_station_id', 'journey_date']);
