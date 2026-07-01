@@ -19,6 +19,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->boolean('is_demo')->default(false);
             $table->json('metadata')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
 
@@ -35,6 +36,7 @@ return new class extends Migration
             $table->string('fuel_type')->default('petrol'); // petrol, diesel, electric, hybrid
             $table->integer('sort_order')->default(0);
             $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
         });
 
@@ -59,6 +61,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->boolean('is_demo')->default(false);
             $table->json('metadata')->nullable();
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['company_id', 'is_active']);
@@ -81,6 +84,7 @@ return new class extends Migration
             $table->json('cancellation_policy')->nullable();
             $table->json('terms_conditions')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['car_id', 'rate_type', 'is_active']);
@@ -94,6 +98,7 @@ return new class extends Migration
             $table->enum('status', ['available', 'booked', 'maintenance', 'unavailable'])->default('available');
             $table->unsignedBigInteger('booking_id')->nullable()->index();
             $table->decimal('price_override', 15, 4)->nullable();
+            $table->softDeletes();
             $table->timestamps();
 
             $table->unique(['car_id', 'rate_id', 'date']);
@@ -112,6 +117,7 @@ return new class extends Migration
             $table->boolean('is_airport')->default(false);
             $table->foreignId('airport_id')->nullable()->constrained('airports')->nullOnDelete();
             $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['company_id', 'is_active']);
