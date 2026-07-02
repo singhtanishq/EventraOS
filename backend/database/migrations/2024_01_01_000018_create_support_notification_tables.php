@@ -46,7 +46,7 @@ return new class extends Migration
         Schema::create('support_messages', function (Blueprint $table) {
             $table->id();
             $table->foreignId('ticket_id')->constrained('support_tickets')->cascadeOnDelete();
-            $table->foreignId('sender_id')->constrained('users')->restrictOnDelete();
+            $table->foreignId('sender_id')->constrained('users')->nullOnDelete();
             $table->enum('sender_type', ['customer', 'agent', 'admin', 'system']);
             $table->text('message');
             $table->boolean('is_internal')->default(false); // Internal notes
