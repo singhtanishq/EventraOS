@@ -54,6 +54,11 @@ class SearchController extends Controller
             'children' => $criteria['children'] ?? 0,
         ];
 
+        // The frontend may send amenities as a repeated param (PHP string) or a comma list
+        if (isset($criteria['amenities']) && is_string($criteria['amenities'])) {
+            $criteria['amenities'] = array_map('trim', explode(',', $criteria['amenities']));
+        }
+
         $results = $this->searchService->searchHotels($criteria);
 
         return response()->json([
@@ -225,7 +230,7 @@ class SearchController extends Controller
             'passengers' => 'sometimes|integer|min:1|max:20',
             'transmission' => 'sometimes|in:manual,automatic',
             'fuel_type' => 'sometimes|in:petrol,diesel,electric,hybrid',
-            'with_driver' => 'sometimes|boolean',
+            'with_driver' => 'sometimes|in:true,false,1,0',
             'price_min' => 'sometimes|numeric|min:0',
             'price_max' => 'sometimes|numeric|min:0',
             'sort' => 'sometimes|in:recommended,price_low,price_high,rating',
