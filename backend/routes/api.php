@@ -25,7 +25,7 @@ Route::prefix('auth')->group(function () {
 });
 
 // Search (public, read-only, rate limited)
-Route::prefix('search')->middleware('throttle:60,1')->group(function () {
+Route::prefix('search')->middleware('throttle:120,1')->group(function () {
     Route::get('/hotels', [SearchController::class, 'searchHotels']);
     Route::get('/flights', [SearchController::class, 'searchFlights']);
     Route::get('/trains', [SearchController::class, 'searchTrains']);
