@@ -393,7 +393,7 @@ export function Checkout() {
           <div className="w-24 h-24 rounded-full bg-eventra-slate-100 flex items-center justify-center mx-auto mb-6">
             <Package className="w-12 h-12 text-eventra-slate-400" />
           </div>
-          <h2 className="text-heading-lg font-bold text-eventra-navy-900 mb-2">Your cart is empty</h2>
+          <h2 className="text-heading-lg font-bold text-eventra-navy-900 mb-2">You have nothing booked yet</h2>
           <p className="text-eventra-slate-600 mb-6">
             Browse hotels, flights, trains and more to start planning your next trip.
           </p>
@@ -459,7 +459,7 @@ export function Checkout() {
               <div className="alert alert-warning flex items-start gap-2">
                 <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-medium">Some items in your cart need attention</p>
+                  <p className="font-medium">Some selections in your booking need attention</p>
                   <p className="text-body-sm mt-1">{validation.errors.join(' • ')}</p>
                 </div>
               </div>
@@ -515,7 +515,7 @@ export function Checkout() {
             </AnimatePresence>
           </div>
 
-          {/* Order Summary Sidebar */}
+          {/* Price Summary Sidebar */}
           <div className="lg:col-span-1">
             <OrderSummary
               items={items}
@@ -548,7 +548,7 @@ function ReviewStep({
 }) {
   return (
     <Card variant="elevated" padding="lg">
-      <h2 className="text-heading-lg font-semibold text-eventra-navy-900 mb-2">Review Your Cart</h2>
+      <h2 className="text-heading-lg font-semibold text-eventra-navy-900 mb-2">Review Your Selection</h2>
       <p className="text-eventra-slate-600 mb-6">Check your selections before entering traveler details</p>
 
       <div className="space-y-4 mb-6">
@@ -922,7 +922,7 @@ function OrderSummary({
 }) {
   return (
     <Card variant="elevated" padding="lg" className="sticky top-36 h-fit">
-      <h3 className="font-semibold text-eventra-navy-900 mb-4">Order Summary</h3>
+      <h3 className="font-semibold text-eventra-navy-900 mb-4">Price Summary</h3>
 
       <div className="space-y-3 mb-4">
         {items.map((item) => (
