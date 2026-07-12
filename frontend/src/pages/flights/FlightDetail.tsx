@@ -201,7 +201,7 @@ export function FlightDetail() {
       },
     })
 
-    toast.success('Added to cart')
+    toast.success('Added to your booking')
     navigate('/checkout')
   }
 
