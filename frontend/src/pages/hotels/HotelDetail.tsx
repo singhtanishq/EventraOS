@@ -194,7 +194,7 @@ export function HotelDetail() {
       },
     })
 
-    toast.success('Added to cart')
+    toast.success('Added to your booking')
     navigate('/checkout')
   }
 
