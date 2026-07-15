@@ -320,7 +320,7 @@ export function VenueDetail() {
       cancellationPolicy: 'Venue cancellation policy applies',
     })
 
-    toast.success('Added to cart')
+    toast.success('Added to your booking')
     navigate('/checkout')
   }
 
