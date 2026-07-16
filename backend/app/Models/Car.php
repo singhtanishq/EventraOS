@@ -47,4 +47,16 @@ class Car extends Model
     {
         return $this->hasMany(CarInventory::class);
     }
+
+    public function pickupLocations()
+    {
+        return $this->hasManyThrough(
+            \App\Models\CarPickupLocation::class,
+            \App\Models\CarRentalCompany::class,
+            'id',          // company id on companies table
+            'company_id',  // company_id on pickup locations
+            'company_id',  // company_id on cars
+            'id'           // id on companies
+        );
+    }
 }
