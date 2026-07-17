@@ -323,9 +323,6 @@ class ApiEdgeCaseTest extends TestCase
         // Create booking as customer, then read it as agent-turned-customer is
         // blocked by the authorization check inside show()
         $booking = $this->createBooking($this->customerToken, []);
-        if ($booking->status() !== 201) {
-            fwrite(STDERR, "\nDEBUG createBooking: " . $booking->getContent() . "\n");
-        }
         $booking->assertStatus(201);
         $id = $booking->json('data.id');
 
@@ -453,8 +450,9 @@ class ApiEdgeCaseTest extends TestCase
 
     public function test_promo_validation_rejects_unknown_codes(): void
     {
+        // Unknown codes fail validation (the controller rules only allow active, in-window codes)
         $this->postJson('/api/promotions/validate', ['code' => 'NOPE-404', 'cart_total' => 5000])
-            ->assertStatus(404);
+            ->assertStatus(422);
     }
 
     public function test_promo_validation_requires_amount(): void
