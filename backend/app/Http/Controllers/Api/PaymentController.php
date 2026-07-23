@@ -48,12 +48,20 @@ class PaymentController extends Controller
         }
 
         $booking = Booking::findOrFail($validator->validated()['booking_id']);
-        
+
         if ($booking->customer_id !== $customer->id) {
             return response()->json([
                 'success' => false,
                 'message' => 'Unauthorized',
             ], 403);
+        }
+
+        // A fully-paid booking must never be charged again
+        if ($booking->getOutstandingAmount() <= 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'This booking is already fully paid.',
+            ], 422);
         }
 
         $paymentMethod = \App\Models\PaymentMethod::findOrFail($validator->validated()['payment_method_id']);
