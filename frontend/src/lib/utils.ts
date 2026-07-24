@@ -255,3 +255,21 @@ export function getRelativeTime(date: Date | string): string {
     return 'Just now'
   }
 }
+/**
+ * Resolve a date for a search query: returns the provided date if it is a
+ * valid today-or-later date, otherwise the fallback (today + fallbackDays).
+ * Keeps bookmarked/shared URLs working even when their dates have passed.
+ */
+export function toSearchDate(value: string | null | undefined, fallbackDays: number): string {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  if (value) {
+    const parsed = new Date(value)
+    if (!isNaN(parsed.getTime()) && parsed >= today) {
+      return value.slice(0, 10)
+    }
+  }
+  const fallback = new Date()
+  fallback.setDate(fallback.getDate() + fallbackDays)
+  return fallback.toISOString().split('T')[0]
+}
