@@ -163,14 +163,7 @@ export function CarResults() {
     key => !['city_id', 'pickup_date', 'return_date', 'passengers', 'pickup_time', 'return_time'].includes(key)
   ).length
 
-  // Both dates are required by the API - default pickup to today and return to
-  // pickup + 3, clamping past dates so shared/bookmarked URLs keep working
-  const pickupDate = toSearchDate(searchParams.get('pickup_date'), 0)
-  const returnDateRaw = toSearchDate(searchParams.get('return_date'), 3)
-  const returnDate = returnDateRaw > pickupDate
-    ? returnDateRaw
-    : new Date(new Date(pickupDate).getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0]
-  const days = pickupDate && returnDate 
+  const days = pickupDate && returnDate
     ? Math.ceil((new Date(returnDate).getTime() - new Date(pickupDate).getTime()) / (1000 * 60 * 60 * 24))
     : 1
 
