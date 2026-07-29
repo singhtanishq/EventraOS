@@ -31,7 +31,12 @@ class DemoActivityProvider extends BaseProvider
         }
 
         if (!empty($criteria['category_id'])) {
-            $query->where('category_id', $criteria['category_id']);
+            // Frontend may send a comma-separated selection of category ids
+            $categoryIds = collect(explode(',', (string) $criteria['category_id']))
+                ->map(fn ($v) => (int) trim($v))->filter()->values();
+            if ($categoryIds->isNotEmpty()) {
+                $query->whereIn('category_id', $categoryIds->all());
+            }
         } elseif (!empty($criteria['category'])) {
             $query->whereHas('category', fn ($q) => $q->where('name', 'like', "%{$criteria['category']}%"));
         }
