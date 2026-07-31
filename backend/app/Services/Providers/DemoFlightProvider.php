@@ -63,7 +63,14 @@ class DemoFlightProvider extends BaseProvider
         }
 
         if (!empty($criteria['airline_ids'])) {
-            $query->whereIn('airline_id', $criteria['airline_ids']);
+            // Accept an array or a comma-separated string of airline ids
+            $airlineIds = is_array($criteria['airline_ids'])
+                ? $criteria['airline_ids']
+                : explode(',', (string) $criteria['airline_ids']);
+            $airlineIds = collect($airlineIds)->map(fn ($v) => (int) trim($v))->filter()->values();
+            if ($airlineIds->isNotEmpty()) {
+                $query->whereIn('airline_id', $airlineIds->all());
+            }
         }
 
         if (!empty($criteria['price_min']) || !empty($criteria['price_max'])) {
