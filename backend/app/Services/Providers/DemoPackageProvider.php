@@ -26,9 +26,24 @@ class DemoPackageProvider extends BaseProvider
             ->with(['pricing']);
 
         if (!empty($criteria['destination_ids'])) {
-            $query->whereHas('items', function ($q) use ($criteria) {
-                $q->whereIn('service_name', $criteria['destination_ids']);
-            });
+            // The frontend sends destination CITY names; packages store them as a
+            // JSON array of {city, country}. Normalize the incoming list (array or
+            // comma string) and match any of them case-insensitively.
+            $destNames = collect(is_array($criteria['destination_ids'])
+                ? $criteria['destination_ids']
+                : explode(',', (string) $criteria['destination_ids']))
+                ->map(fn ($v) => strtolower(trim($v)))->filter()->values();
+
+            if ($destNames->isNotEmpty()) {
+                $query->where(function ($q) use ($destNames) {
+                    foreach ($destNames as $name) {
+                        $q->orWhereRaw(
+                            'EXISTS (SELECT 1 FROM json_each(destinations) WHERE json_extract(json_each.value, "$.city") LIKE ?)',
+                            ['%' . $name . '%']
+                        );
+                    }
+                });
+            }
         }
 
         if (!empty($criteria['start_date']) && !empty($criteria['end_date'])) {
