@@ -25,3 +25,8 @@ class Car extends Model
     public function category(): BelongsTo { return $this->belongsTo(CarCategory::class); }
     public function rates(): HasMany { return $this->hasMany(CarRate::class); }
 }
+
+    public function inventory(): HasMany
+    {
+        return $this->hasMany(CarInventory::class);
+    }
