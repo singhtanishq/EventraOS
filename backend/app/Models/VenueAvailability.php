@@ -11,4 +11,5 @@ class VenueAvailability extends Model
     protected $casts = ['date' => 'date', 'event_details' => 'array', 'price_override' => 'decimal:4'];
 
     public function venue(): BelongsTo { return $this->belongsTo(Venue::class); }
+    protected $table = 'venue_availability';
 }
