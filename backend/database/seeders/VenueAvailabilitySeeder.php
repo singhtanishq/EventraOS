@@ -15,8 +15,8 @@ class VenueAvailabilitySeeder extends Seeder
         $venues = \App\Models\Venue::where('is_active', true)->where('is_demo', true)->get();
         
         foreach ($venues as $venue) {
-            // Create availability for the next 90 days
-            $dates = collect(range(0, 90))->map(fn ($i) => \Carbon\Carbon::today()->addDays($i));
+            // Create availability for the next 180 days (6 months)
+            $dates = collect(range(0, 180))->map(fn ($i) => Carbon::today()->addDays($i));
             
             foreach ($dates as $date) {
                 // 80% chance of availability
