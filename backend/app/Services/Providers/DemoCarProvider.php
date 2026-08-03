@@ -35,7 +35,7 @@ class DemoCarProvider extends BaseProvider
             $return = $criteria['return_date'];
             $query->whereHas('inventory', function ($q) use ($criteria) {
                 $q->whereBetween('date', [$criteria['pickup_date'], $criteria['return_date']])
-                    ->where('available', true);
+                    ->where('status', 'available');
             });
         }
 
