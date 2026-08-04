@@ -33,6 +33,6 @@ class TravelPackage extends Model
         });
     }
 
-    public function items(): HasMany { return $this->hasMany(PackageItem::class); }
+    public function items(): HasMany { return $this->hasMany(PackageItem::class, 'package_id'); }
     public function pricing(): HasMany { return $this->hasMany(PackagePricing::class, 'package_id'); }
 }
