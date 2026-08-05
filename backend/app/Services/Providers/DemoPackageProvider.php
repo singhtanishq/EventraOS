@@ -81,9 +81,7 @@ class DemoPackageProvider extends BaseProvider
             default => $query->orderBy('rating', 'desc')->orderBy('pricing.price', 'asc'),
         };
 
-        $packages = \App\Models\TravelPackage::query()
-            ->where('is_active', true)
-            ->where('is_demo', true)
+        $packages = $query
             ->with(['pricing', 'items'])
             ->limit(20)
             ->get();
