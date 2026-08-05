@@ -523,7 +523,6 @@ class InventorySeeder extends Seeder
                 if (rand(1, 10) <= 8) {
                     VenueAvailability::create([
                         'venue_id' => $venue->id,
-                        'provider_id' => $this->demoProvider->id,
                         'date' => $date->toDateString(),
                         'status' => 'available',
                         'price_override' => null,
