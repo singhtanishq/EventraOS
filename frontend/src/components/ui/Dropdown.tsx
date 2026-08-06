@@ -29,20 +29,23 @@ interface DropdownProps {
 }
 
 export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
-  ({
-    trigger,
-    options,
-    placeholder = 'Select...',
-    value,
-    onChange,
-    multiple = false,
-    searchable = false,
-    disabled = false,
-    position = 'bottom',
-    className,
-    menuClassName,
-    onOpenChange,
-  } => {
+  (
+    {
+      trigger,
+      options,
+      placeholder = 'Select...',
+      value,
+      onChange,
+      multiple = false,
+      searchable = false,
+      disabled = false,
+      position = 'bottom',
+      className,
+      menuClassName,
+      onOpenChange,
+    },
+    ref
+  ) => {
     const [isOpen, setIsOpen] = useState(false)
     const [searchQuery, setSearchQuery] = useState('')
     const dropdownRef = useRef<HTMLDivElement>(null)
@@ -54,18 +57,23 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       onOpenChange?.(open)
     }
 
-    const handleTriggerClick = () => {
+    const handleTriggerClick = (e: React.MouseEvent) => {
+      e.stopPropagation()
       if (disabled) return
       handleOpenChange(!isOpen)
     }
 
     const handleOptionClick = (option: DropdownOption) => {
       if (option.disabled) return
-      if (onChange) {
-        onChange(option.value)
-      }
-      if (!multiple) {
-        handleOpenChange(false)
+      if (multiple) {
+        const currentValues = (value || '').split(',').filter(Boolean)
+        const newValues = currentValues.includes(option.value)
+          ? currentValues.filter((v) => v !== option.value)
+          : [...currentValues, option.value]
+        onChange?.(newValues.join(','))
+      } else {
+        onChange?.(option.value)
+        setIsOpen(false)
       }
     }
 
@@ -113,16 +121,16 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       option.label.toString().toLowerCase().includes(searchQuery.toLowerCase())
     )
 
-    const isSelected = (value: string) => {
+    const isSelected = (optionValue: string) => {
       if (multiple) {
-        return (value as string).split(',').includes(value)
+        return (value || '').split(',').filter(Boolean).includes(optionValue)
       }
-      return value === value
+      return value === optionValue
     }
 
     const getSelectedLabels = () => {
       if (multiple) {
-        return (value || '').split(',').map((v) => {
+        return (value || '').split(',').filter(Boolean).map((v) => {
           const option = options.find((o) => o.value === v)
           return option?.label
         }).filter(Boolean)
@@ -131,42 +139,9 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       return option ? [option.label.toString()] : []
     }
 
-    const handleTriggerClick = () => {
-      if (disabled) return
-      handleOpenChange(!isOpen)
-    }
-
     const triggerWithProps = React.cloneElement(trigger, {
       ref: triggerRef,
       onClick: handleTriggerClick,
-      'aria-haspopup': 'listbox',
-      'aria-expanded': isOpen,
-      disabled,
-    })
-
-    const filteredOptions = options.filter((option) =>
-      option.label.toString().toLowerCase().includes(searchQuery.toLowerCase())
-    )
-
-    const handleOptionClick = (option: DropdownOption) => {
-      if (option.disabled) return
-      if (multiple) {
-        const newValue = (value || '').split(',').includes(option.value)
-          ? (value || '').split(',').filter((v) => v !== option.value).join(',')
-          : (value || '').split(',').concat(option.value).filter(Boolean).join(',')
-        onChange?.(newValue)
-      } else {
-        onChange?.(option.value)
-        setIsOpen(false)
-      }
-    }
-
-    const triggerWithProps = React.cloneElement(trigger, {
-      ref: triggerRef,
-      onClick: (e: React.MouseEvent) => {
-        e.stopPropagation()
-        if (!disabled) setIsOpen(!isOpen)
-      },
       'aria-haspopup': 'listbox',
       'aria-expanded': isOpen,
       disabled,
@@ -224,7 +199,6 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
                         : 'hover:bg-eventra-slate-50',
                       isSelected(option.value) && 'bg-eventra-blue-50 text-eventra-blue-700'
                     )}
-                    onClick={() => handleOptionClick(option)}
                     role="option"
                     aria-selected={isSelected(option.value)}
                     aria-disabled={option.disabled}
@@ -246,102 +220,23 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
             </div>
           </motion.div>
         )}
-      )}
-    </AnimatePresence>
-  )
-
-  const getPositionStyles = () => {
-    const positions = {
-      bottom: { top: '100%', left: '0', mt: '4px' },
-      top: { bottom: '100%', left: '0', mb: '4px' },
-      left: { right: '100%', top: '0', mr: '4px' },
-      right: { left: '100%', top: '0', ml: '4px' },
-    }
-    return positions[position]
-  }
-
-  return (
-    <div
-      ref={dropdownRef}
-      className={cn('relative inline-block', className)}
-      onKeyDown={(e) => {
-        if (e.key === 'Escape') setIsOpen(false)
-      }}
-    >
-      {trigger}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className={cn(
-              'absolute z-50 min-w-[200px] bg-white rounded-xl border border-eventra-slate-200 shadow-lg py-1',
-              position === 'bottom' && 'top-full mt-1',
-              position === 'top' && 'bottom-full mb-1',
-              position === 'left' && 'right-full mr-1',
-              position === 'right' && 'left-full ml-1',
-            )}
-            role="listbox"
-            onKeyDown={(e) => {
-              if (e.key === 'Escape') setIsOpen(false)
-            }}
-          >
-            {searchable && (
-              <div className="p-2 border-b border-eventra-slate-200">
-                <Input
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search..."
-                  leftIcon={<Search className="w-4 h-4" />}
-                  className="w-full"
-                />
-              </div>
-            )}
-            <div className="max-h-60 overflow-y-auto py-1">
-              {filteredOptions.length === 0 ? (
-                <div className="px-3 py-4 text-center text-eventra-slate-500 text-body-sm">
-                  No options found
-                </div>
-              ) : (
-                filteredOptions.map((option) => (
-                  <button
-                    key={option.value}
-                    type="button"
-                    onClick={() => handleOptionClick(option)}
-                    disabled={option.disabled}
-                    className={cn(
-                      'w-full px-3 py-2.5 text-left rounded-lg transition-colors flex items-center gap-3',
-                      option.disabled
-                        ? 'opacity-50 cursor-not-allowed'
-                        : 'hover:bg-eventra-slate-50',
-                      isSelected(option.value) && 'bg-eventra-blue-50 text-eventra-blue-700'
-                    )}
-                    role="option"
-                    aria-selected={isSelected(option.value)}
-                    aria-disabled={option.disabled}
-                  >
-                    {option.icon && (
-                      <span className="w-5 h-5 flex-shrink-0 flex items-center justify-center">
-                        {option.icon}
-                      </span>
-                    )}
-                    <span className="flex-1 text-body-sm font-medium text-eventra-navy-900">
-                      {option.label}
-                    </span>
-                    {isSelected(option.value) && (
-                      <Check className="w-5 h-5 text-eventra-blue-600 flex-shrink-0" />
-                    )}
-                  </button>
-                ))}
-              )}
-            </div>
-          </motion.div>
-        )}
       </AnimatePresence>
-    </div>
-  )
-}
+    )
+
+    return (
+      <div
+        ref={dropdownRef}
+        className={cn('relative inline-block', className)}
+        onKeyDown={(e) => {
+          if (e.key === 'Escape') setIsOpen(false)
+        }}
+      >
+        {triggerWithProps}
+        {isOpen && createPortal(dropdownContent, document.body)}
+      </div>
+    )
+  }
+)
 
 Dropdown.displayName = 'Dropdown'
 
@@ -468,11 +363,3 @@ export function Select({
 }
 
 Select.displayName = 'Select'
-
-import { useState, useRef, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { cn } from '@/lib/utils'
-import { Search, ChevronDown, ChevronUp, Check, X, ChevronDown as ChevronDownIcon } from 'lucide-react'
-import { Input } from '@/components/ui/Input'
-import { Button } from '@/components/ui/Button'
-import { Check } from 'lucide-react'
