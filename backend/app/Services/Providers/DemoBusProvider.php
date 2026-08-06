@@ -23,7 +23,7 @@ class DemoBusProvider extends BaseProvider
     {
         $query = \App\Models\BusRoute::query()->where('is_active', true)
             ->where('is_demo', true)
-            ->with(['operator', 'busTypes.fares.inventory']);
+            ->with(['operator', 'types.fares.inventory']);
 
         if (!empty($criteria['origin_terminal_id'])) {
             $query->where('origin_terminal_id', $criteria['origin_terminal_id']);
@@ -33,21 +33,26 @@ class DemoBusProvider extends BaseProvider
             $query->where('destination_terminal_id', $criteria['destination_terminal_id']);
         }
 
-        if (!empty($criteria['journey_date'])) {
-            $query->whereHas('busTypes.fares.inventory', function ($q) use ($criteria) {
-                $q->where('date', $criteria['journey_date'])
+        if (!empty($criteria['departure_date'])) {
+            $query->whereHas('types.fares.inventory', function ($q) use ($criteria) {
+                $q->where('journey_date', $criteria['departure_date'])
+                    ->where('available_seats', '>', 0);
+            });
+        } elseif (!empty($criteria['journey_date'])) {
+            $query->whereHas('types.fares.inventory', function ($q) use ($criteria) {
+                $q->where('journey_date', $criteria['journey_date'])
                     ->where('available_seats', '>', 0);
             });
         }
 
         if (!empty($criteria['bus_type'])) {
-            $query->whereHas('busTypes', function ($q) use ($criteria) {
+            $query->whereHas('types', function ($q) use ($criteria) {
                 $q->where('name', 'like', "%{$criteria['bus_type']}%");
             });
         }
 
         if (!empty($criteria['price_min']) || !empty($criteria['price_max'])) {
-            $query->whereHas('busTypes.fares.inventory', function ($q) use ($criteria) {
+            $query->whereHas('types.fares.inventory', function ($q) use ($criteria) {
                 if (!empty($criteria['price_min'])) {
                     $q->where('sell_price', '>=', $criteria['price_min']);
                 }
@@ -59,17 +64,17 @@ class DemoBusProvider extends BaseProvider
 
         $sort = $criteria['sort'] ?? 'recommended';
         match ($sort) {
-            'cheapest' => $query->orderBy('busTypes.fares.inventory.sell_price', 'asc'),
+            'cheapest' => $query->orderBy('types.fares.inventory.sell_price', 'asc'),
             'fastest' => $query->orderBy('duration_minutes', 'asc'),
             'earliest' => $query->orderBy('departure_time', 'asc'),
             'latest' => $query->orderBy('departure_time', 'desc'),
-            default => $query->orderBy('stops', 'asc')->orderBy('busTypes.fares.inventory.sell_price', 'asc'),
+            default => $query->orderBy('types.fares.inventory.sell_price', 'asc'),
         };
 
         $buses = \App\Models\BusRoute::query()
             ->where('is_active', true)
             ->where('is_demo', true)
-            ->with(['operator', 'busTypes.fares.inventory'])
+            ->with(['operator', 'types.fares.inventory'])
             ->limit(20)
             ->get();
 
