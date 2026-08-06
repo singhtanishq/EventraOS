@@ -35,12 +35,12 @@ class DemoBusProvider extends BaseProvider
 
         if (!empty($criteria['departure_date'])) {
             $query->whereHas('types.fares.inventory', function ($q) use ($criteria) {
-                $q->where('journey_date', $criteria['departure_date'])
+                $q->whereDate('journey_date', $criteria['departure_date'])
                     ->where('available_seats', '>', 0);
             });
         } elseif (!empty($criteria['journey_date'])) {
             $query->whereHas('types.fares.inventory', function ($q) use ($criteria) {
-                $q->where('journey_date', $criteria['journey_date'])
+                $q->whereDate('journey_date', $criteria['journey_date'])
                     ->where('available_seats', '>', 0);
             });
         }
