@@ -860,15 +860,14 @@ class InventorySeeder extends Seeder
                 ['service_type' => 'transfer', 'service_name' => "Airport transfer in {$data['city']}", 'quantity' => 2, 'description' => "Airport pickup and drop"],
                 ['service_type' => 'activity', 'service_name' => "City tour in {$data['city']}", 'quantity' => 1, 'description' => "Guided city tour"],
             ];
-            foreach ($destinations as $item) {
+            foreach ($destinations as $index => $item) {
                 \App\Models\PackageItem::create([
                     'package_id' => $package->id,
-                    'provider_id' => $this->demoProvider->id,
+                    'day_number' => 1,
                     'service_type' => $item['service_type'],
                     'service_name' => $item['service_name'],
-                    'quantity' => $item['quantity'],
-                    'description' => $item['description'],
-                    'is_included' => true,
+                    'service_details' => ['description' => $item['description']],
+                    'sort_order' => $index,
                 ]);
             }
         }
