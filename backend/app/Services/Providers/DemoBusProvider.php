@@ -74,7 +74,7 @@ class DemoBusProvider extends BaseProvider
         $buses = $query->limit(20)->get();
 
         $results = $buses->map(function ($bus) {
-            $fare = $bus->busTypes->flatMap->fares->firstWhere('is_active', true);
+            $fare = $bus->types->flatMap->fares->firstWhere('is_active', true);
             $inventory = $fare?->inventory()->where('available_seats', '>', 0)->first();
             $price = $inventory?->sell_price ?? 0;
 
