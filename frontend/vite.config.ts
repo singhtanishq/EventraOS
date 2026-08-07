@@ -59,12 +59,13 @@ export default defineConfig({
         chunkFileNames: 'assets/js/[name]-[hash].js',
         entryFileNames: 'assets/js/[name]-[hash].js',
         assetFileNames: (assetInfo) => {
-          const info = assetInfo.name.split('.')
+          const name = assetInfo.name || ''
+          const info = name.split('.')
           const ext = info[info.length - 1]
-          if (/\.(png|jpe?g|gif|svg|webp|avif)$/.test(assetInfo.name)) {
+          if (/\.(png|jpe?g|gif|svg|webp|avif)$/.test(name)) {
             return `assets/images/[name]-[hash].${ext}`
           }
-          if (/\.(woff2?|eot|ttf|otf)$/.test(assetInfo.name)) {
+          if (/\.(woff2?|eot|ttf|otf)$/.test(name)) {
             return `assets/fonts/[name]-[hash].${ext}`
           }
           return `assets/[name]-[hash].${ext}`
