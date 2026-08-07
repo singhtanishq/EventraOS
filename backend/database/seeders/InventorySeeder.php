@@ -17,6 +17,7 @@ use App\Models\CarRate;
 use App\Models\CarInventory;
 use App\Models\CarPickupLocation;
 use App\Models\Activity;
+use App\Models\ActivitySchedule;
 use App\Models\ActivityCategory;
 use App\Models\ActivityPricing;
 use App\Models\Flight;
@@ -707,6 +708,20 @@ class InventorySeeder extends Seeder
                 'participant_type' => 'adult',
                 'price' => $data['price'],
                 'currency' => 'INR',
+                'is_active' => true,
+            ]);
+
+            // Recurring daily departures for the next 45 days
+            ActivitySchedule::create([
+                'activity_id' => $activity->id,
+                'provider_id' => $this->demoProvider->id,
+                'name' => 'Daily Departure',
+                'start_time' => '09:00:00',
+                'end_time' => '17:00:00',
+                'days_of_week' => [1, 2, 3, 4, 5, 6, 7],
+                'valid_from' => Carbon::today(),
+                'valid_to' => Carbon::today()->addDays(45),
+                'max_participants' => 20,
                 'is_active' => true,
             ]);
         }
