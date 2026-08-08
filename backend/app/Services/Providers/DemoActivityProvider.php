@@ -42,8 +42,12 @@ class DemoActivityProvider extends BaseProvider
         }
 
         if (!empty($criteria['date'])) {
+            // A schedule covers the requested date when the date falls inside
+            // the schedule's validity window.
             $query->whereHas('schedules', function ($q) use ($criteria) {
-                $q->whereDate('start_time', '>=', $criteria['date']);
+                $q->where('is_active', true)
+                    ->whereDate('valid_from', '<=', $criteria['date'])
+                    ->whereDate('valid_to', '>=', $criteria['date']);
             });
         }
 
