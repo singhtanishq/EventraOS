@@ -174,7 +174,6 @@ export function reportBundleSize() {
       }
 
       return report
-    }
   }
 
   return null
