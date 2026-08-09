@@ -339,9 +339,10 @@ export function ActivityResults() {
                         </Button>
                       </div>
                     )}
-                  </>
-                )}
+</>
               )}
+            </> 
+            )}
           </main>
         </div>
       </div>
