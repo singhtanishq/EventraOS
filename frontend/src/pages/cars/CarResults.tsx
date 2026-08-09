@@ -488,7 +488,7 @@ function CarFilters({ filters, onChange, onClearAll }: { filters: Partial<Search
         <div>
           <label className="label">Category</label>
           <div className="space-y-2">
-            ['Economy', 'Compact', 'Sedan', 'SUV', 'Luxury', 'Van', 'Minivan'].map((cat) => (
+            {(['Economy', 'Compact', 'Sedan', 'SUV', 'Luxury', 'Van', 'Minivan'] as const).map((cat) => (
               <label key={cat} className="flex items-center gap-3 cursor-pointer">
                 <input
                   type="checkbox"
@@ -498,7 +498,7 @@ function CarFilters({ filters, onChange, onClearAll }: { filters: Partial<Search
                 />
                 <span className="text-body-sm text-eventra-navy-700">{cat}</span>
               </label>
-            ))
+            ))}
           </div>
         </div>
 
