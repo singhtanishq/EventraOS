@@ -532,12 +532,12 @@ function BusFilters({ filters, onChange, onClearAll }: { filters: Partial<Search
         <div>
           <label className="label">Departure Time</label>
           <div className="space-y-2">
-            ['Before 6 AM', '6 AM - 12 PM', '12 PM - 6 PM', 'After 6 PM'].map((time) => (
+            {(['Before 6 AM', '6 AM - 12 PM', '12 PM - 6 PM', 'After 6 PM'] as const).map((time) => (
               <label key={time} className="flex items-center gap-3 cursor-pointer">
                 <input type="checkbox" className="form-checkbox" />
                 <span className="text-body-sm text-eventra-navy-700">{time}</span>
               </label>
-            ))
+            ))}
           </div>
         </div>
       </div>
