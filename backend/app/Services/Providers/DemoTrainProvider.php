@@ -41,9 +41,16 @@ class DemoTrainProvider extends BaseProvider
         }
 
         if (!empty($criteria['class'])) {
-            $query->whereHas('fares', function ($q) use ($criteria) {
-                $q->where('class_id', $criteria['class']);
-            });
+            // Frontend sends comma-separated class codes (e.g. "1A,2A,SL"); resolve
+            // them to class ids and match any of them.
+            $classIds = \App\Models\TrainClass::whereIn('code', collect(explode(',', (string) $criteria['class']))
+                    ->map(fn ($v) => strtoupper(trim($v)))->filter()->values()->all())
+                ->pluck('id');
+            if ($classIds->isNotEmpty()) {
+                $query->whereHas('fares', function ($q) use ($classIds) {
+                    $q->whereIn('class_id', $classIds->all());
+                });
+            }
         }
 
         if (!empty($criteria['quota'])) {
