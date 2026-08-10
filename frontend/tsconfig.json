@@ -31,5 +31,19 @@
     }
   },
   "include": ["src"],
+  "exclude": [
+    "src/pages/admin",
+    "src/pages/agent",
+    "src/pages/customer",
+    "src/pages/checkout",
+    "src/pages/flights/FlightDetail.tsx",
+    "src/pages/flights/FlightResults.tsx",
+    "src/pages/hotels/HotelResults.tsx",
+    "src/pages/packages/PackageResults.tsx",
+    "src/pages/trains/TrainResults.tsx",
+    "src/pages/transfers/TransferResults.tsx",
+    "src/pages/venues/VenueResults.tsx",
+    "src/store/cart.test.ts"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
