@@ -33,6 +33,27 @@ class DemoTrainProvider extends BaseProvider
             $query->where('destination_station_id', $criteria['destination_station_id']);
         }
 
+        // Free-text origin/destination: resolve against station names and city names
+        if (!empty($criteria['origin']) && empty($criteria['origin_station_id'])) {
+            $originIds = \App\Models\Station::where('name', 'like', '%' . $criteria['origin'] . '%')
+                ->orWhereHas('city', fn ($c) => $c->where('name', 'like', '%' . $criteria['origin'] . '%'))
+                ->pluck('id');
+            if ($originIds->isEmpty()) {
+                return new SearchResultCollection([], 0, $this->getCode());
+            }
+            $query->whereIn('origin_station_id', $originIds->all());
+        }
+
+        if (!empty($criteria['destination']) && empty($criteria['destination_station_id'])) {
+            $destIds = \App\Models\Station::where('name', 'like', '%' . $criteria['destination'] . '%')
+                ->orWhereHas('city', fn ($c) => $c->where('name', 'like', '%' . $criteria['destination'] . '%'))
+                ->pluck('id');
+            if ($destIds->isEmpty()) {
+                return new SearchResultCollection([], 0, $this->getCode());
+            }
+            $query->whereIn('destination_station_id', $destIds->all());
+        }
+
         if (!empty($criteria['journey_date'])) {
             $query->whereHas('inventory', function ($q) use ($criteria) {
                 $q->whereDate('journey_date', $criteria['journey_date'])
