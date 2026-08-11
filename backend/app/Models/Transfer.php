@@ -33,6 +33,8 @@ class Transfer extends Model
 
     public function operator(): BelongsTo { return $this->belongsTo(TransferOperator::class); }
     public function vehicleType(): BelongsTo { return $this->belongsTo(TransferVehicleType::class); }
+    public function pickupLocation(): BelongsTo { return $this->belongsTo(\App\Models\Airport::class, 'pickup_location_id'); }
+    public function dropoffLocation(): BelongsTo { return $this->belongsTo(\App\Models\Airport::class, 'dropoff_location_id'); }
     public function pricing(): HasMany { return $this->hasMany(TransferPricing::class); }
     public function inventory(): HasMany { return $this->hasMany(TransferInventory::class); }
 }
