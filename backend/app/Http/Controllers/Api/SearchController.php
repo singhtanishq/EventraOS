@@ -126,7 +126,9 @@ class SearchController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'origin_station_id' => 'sometimes|integer|exists:stations,id',
+            'origin' => 'sometimes|string',
             'destination_station_id' => 'sometimes|integer|exists:stations,id',
+            'destination' => 'sometimes|string',
             'journey_date' => 'required|date|after_or_equal:today',
             'passengers' => 'sometimes|integer|min:1|max:10',
             'class' => 'sometimes|string',
@@ -158,6 +160,8 @@ class SearchController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'origin_terminal_id' => 'sometimes|integer|exists:bus_terminals,id',
+            'origin' => 'sometimes|string',
+            'destination' => 'sometimes|string',
             'destination_terminal_id' => 'sometimes|integer|exists:bus_terminals,id',
             'journey_date' => 'required|date|after_or_equal:today',
             'passengers' => 'sometimes|integer|min:1|max:10',
@@ -221,6 +225,7 @@ class SearchController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'city_id' => 'sometimes|integer|exists:cities,id',
+            'city' => 'sometimes|string',
             'pickup_date' => 'required|date|after_or_equal:today',
             'pickup_time' => 'sometimes|date_format:H:i',
             'return_date' => 'required|date|after:pickup_date',
@@ -257,6 +262,7 @@ class SearchController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'city_id' => 'sometimes|integer|exists:cities,id',
+            'city' => 'sometimes|string',
             'category_id' => 'sometimes|string',
             'date' => 'sometimes|date|after_or_equal:today',
             'participants' => 'sometimes|integer|min:1|max:100',
@@ -288,6 +294,7 @@ class SearchController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'pickup_location_id' => 'sometimes|integer|exists:airports,id',
+            'city' => 'sometimes|string',
             'dropoff_location_id' => 'sometimes|integer|exists:airports,id',
             'date' => 'required|date|after_or_equal:today',
             'time' => 'sometimes|date_format:H:i',
