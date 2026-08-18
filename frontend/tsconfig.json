@@ -48,6 +48,8 @@
     "src/lib/dateUtils.ts",
     "src/lib/currencyUtils.ts",
     "src/lib/validation.ts",
+    "src/layouts/Layout.tsx",
+    "src/layouts/AuthLayout.tsx",
     "src/store/auth.ts",
     "src/store/cart.ts",
     "src/store/search.ts",
