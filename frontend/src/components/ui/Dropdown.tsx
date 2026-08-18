@@ -201,7 +201,7 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
                       <CheckCircle2 className="w-5 h-5 text-eventra-blue-600 flex-shrink-0" />
                     )}
                   </button>
-                ))}
+                )}
               )}
             </div>
           </motion.div>
