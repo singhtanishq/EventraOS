@@ -172,36 +172,39 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
                   No options found
                 </div>
               ) : (
-                filteredOptions.map((option) => (
-                  <button
-                    key={option.value}
-                    type="button"
-                    onClick={() => handleOptionClick(option)}
-                    disabled={option.disabled}
-                    className={cn(
-                      'w-full px-3 py-2.5 text-left rounded-lg transition-colors flex items-center gap-3',
-                      option.disabled
-                        ? 'opacity-50 cursor-not-allowed'
-                        : 'hover:bg-eventra-slate-50',
-                      isSelected(option.value) && 'bg-eventra-blue-50 text-eventra-blue-700'
-                    )}
-                    role="option"
-                    aria-selected={isSelected(option.value)}
-                    aria-disabled={option.disabled}
-                  >
-                    {option.icon && (
-                      <span className="w-5 h-5 flex-shrink-0 flex items-center justify-center">
-                        {option.icon}
+                <>
+                  {filteredOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() => handleOptionClick(option)}
+                      disabled={option.disabled}
+                      className={cn(
+                        'w-full px-3 py-2.5 text-left rounded-lg transition-colors flex items-center gap-3',
+                        option.disabled
+                          ? 'opacity-50 cursor-not-allowed'
+                          : 'hover:bg-eventra-slate-50',
+                        isSelected(option.value) && 'bg-eventra-blue-50 text-eventra-blue-700'
+                      )}
+                      role="option"
+                      aria-selected={isSelected(option.value)}
+                      aria-disabled={option.disabled}
+                    >
+                      {option.icon && (
+                        <span className="w-5 h-5 flex-shrink-0 flex items-center justify-center">
+                          {option.icon}
+                        </span>
+                      )}
+                      <span className="flex-1 text-body-sm font-medium text-eventra-navy-900">
+                        {option.label}
                       </span>
-                    )}
-                    <span className="flex-1 text-body-sm font-medium text-eventra-navy-900">
-                      {option.label}
-                    </span>
-                    {isSelected(option.value) && (
-                      <CheckCircle2 className="w-5 h-5 text-eventra-blue-600 flex-shrink-0" />
-                    )}
-                  </button>
-                ))}
+                      {isSelected(option.value) && (
+                        <CheckCircle2 className="w-5 h-5 text-eventra-blue-600 flex-shrink-0" />
+                      )}
+                    </button>
+                  ))}
+                </>
+              )}
             </div>
           </motion.div>
         )}
