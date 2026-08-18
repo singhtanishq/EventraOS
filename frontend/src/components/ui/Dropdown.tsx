@@ -1,4 +1,4 @@
-import { forwardRef, ReactNode, useState, useRef, useEffect } from 'react'
+import { forwardRef, type ReactNode } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { createPortal } from 'react-dom'
 import { cn } from '@/lib/utils'
@@ -88,15 +88,12 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
           break
         case 'ArrowDown':
           e.preventDefault()
-          // Focus next option
           break
         case 'ArrowUp':
           e.preventDefault()
-          // Focus previous option
           break
         case 'Enter':
           e.preventDefault()
-          // Select focused option
           break
       }
     }
@@ -126,17 +123,6 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
         return (value || '').split(',').filter(Boolean).includes(optionValue)
       }
       return value === optionValue
-    }
-
-    const getSelectedLabels = () => {
-      if (multiple) {
-        return (value || '').split(',').filter(Boolean).map((v) => {
-          const option = options.find((o) => o.value === v)
-          return option?.label
-        }).filter(Boolean)
-      }
-      const option = options.find((o) => o.value === value)
-      return option ? [option.label.toString()] : []
     }
 
     const triggerWithProps = React.cloneElement(trigger, {
@@ -215,7 +201,7 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
                       <CheckCircle2 className="w-5 h-5 text-eventra-blue-600 flex-shrink-0" />
                     )}
                   </button>
-                ))
+                ))}
               )}
             </div>
           </motion.div>
