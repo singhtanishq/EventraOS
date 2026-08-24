@@ -1,5 +1,6 @@
+import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import Link from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import {
   Building2,
   Plane,
@@ -27,15 +28,15 @@ import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 
 const services = [
-  { id: 'hotels', name: 'Hotels', icon: Building2, description: '10,000+ properties worldwide', href: '/hotels', color: 'eventra-blue' },
-  { id: 'flights', name: 'Flights', icon: Plane, description: '500+ airlines, best fares', href: '/flights', color: 'eventra-cyan' },
-  { id: 'trains', name: 'Trains', icon: Train, description: 'Extensive rail network', href: '/trains', color: 'eventra-teal' },
-  { id: 'buses', name: 'Buses', icon: Bus, description: 'Comfortable intercity travel', href: '/buses', color: 'eventra-amber' },
-  { id: 'venues', name: 'Venues', icon: MapPin, description: 'Weddings, conferences, events', href: '/venues', color: 'eventra-red' },
-  { id: 'cars', name: 'Car Rentals', icon: Car, description: 'Self-drive & chauffeur', href: '/cars', color: 'eventra-green' },
-  { id: 'activities', name: 'Activities', icon: Ship, description: 'Tours, experiences, tickets', href: '/activities', color: 'eventra-blue' },
-  { id: 'transfers', name: 'Transfers', icon: MapPinCheck, description: 'Airport & city transfers', href: '/transfers', color: 'eventra-cyan' },
-  { id: 'packages', name: 'Packages', icon: Briefcase, description: 'Curated travel bundles', href: '/packages', color: 'eventra-teal' },
+  { id: 'hotels', name: 'Hotels', icon: Building2, description: '10,000+ properties worldwide', href: '/hotels', color: 'blue' },
+  { id: 'flights', name: 'Flights', icon: Plane, description: '500+ airlines, best fares', href: '/flights', color: 'cyan' },
+  { id: 'trains', name: 'Trains', icon: Train, description: 'Extensive rail network', href: '/trains', color: 'teal' },
+  { id: 'buses', name: 'Buses', icon: Bus, description: 'Comfortable intercity travel', href: '/buses', color: 'amber' },
+  { id: 'venues', name: 'Venues', icon: MapPin, description: 'Weddings, conferences, events', href: '/venues', color: 'red' },
+  { id: 'cars', name: 'Car Rentals', icon: Car, description: 'Self-drive & chauffeur', href: '/cars', color: 'green' },
+  { id: 'activities', name: 'Activities', icon: Ship, description: 'Tours, experiences, tickets', href: '/activities', color: 'blue' },
+  { id: 'transfers', name: 'Transfers', icon: MapPinCheck, description: 'Airport & city transfers', href: '/transfers', color: 'cyan' },
+  { id: 'packages', name: 'Packages', icon: Briefcase, description: 'Curated travel bundles', href: '/packages', color: 'teal' },
 ]
 
 const features = [
