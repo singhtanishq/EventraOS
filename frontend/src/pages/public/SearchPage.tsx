@@ -228,17 +228,18 @@ export function SearchPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            {serviceTypes.slice(1).map((service) => (
+            {serviceTypes.slice(1).map((service, index) => (
               <motion.div
                 key={service.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.1 * serviceTypes.indexOf(service) }}
+                transition={{ duration: 0.4, delay: 0.1 * index }}
                 className="group cursor-pointer"
+                onClick={() => navigate(service.href)}
               >
                 <Card variant="outlined" padding="lg" className="h-full text-center transition-all hover:shadow-xl hover:border-eventra-blue-500">
-                  <div className={cn('w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 transition-colors group-hover:scale-110', `${service.color}-100`)}>
-                    <service.icon className={cn('w-7 h-7', `${service.color}-600`)} />
+                  <div className={cn('w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 transition-colors group-hover:scale-110', `bg-${service.color}-100`)}>
+                    <service.icon className={cn('w-7 h-7', `text-${service.color}-600`)} />
                   </div>
                   <h3 className="text-heading-sm font-semibold text-eventra-navy-900 mb-2">{service.name}</h3>
                   <p className="text-body-sm text-eventra-slate-600">{service.description}</p>
