@@ -36,6 +36,7 @@ class DemoTrainProvider extends BaseProvider
         // Free-text origin/destination: resolve against station names and city names
         if (!empty($criteria['origin']) && empty($criteria['origin_station_id'])) {
             $originIds = \App\Models\Station::where('name', 'like', '%' . $criteria['origin'] . '%')
+                ->orWhere('code', 'like', '%' . $criteria['origin'] . '%')
                 ->orWhereHas('city', fn ($c) => $c->where('name', 'like', '%' . $criteria['origin'] . '%'))
                 ->pluck('id');
             if ($originIds->isEmpty()) {
@@ -46,6 +47,7 @@ class DemoTrainProvider extends BaseProvider
 
         if (!empty($criteria['destination']) && empty($criteria['destination_station_id'])) {
             $destIds = \App\Models\Station::where('name', 'like', '%' . $criteria['destination'] . '%')
+                ->orWhere('code', 'like', '%' . $criteria['destination'] . '%')
                 ->orWhereHas('city', fn ($c) => $c->where('name', 'like', '%' . $criteria['destination'] . '%'))
                 ->pluck('id');
             if ($destIds->isEmpty()) {
@@ -253,7 +255,7 @@ class DemoTrainProvider extends BaseProvider
 
         $available = $train->inventory()
             ->where('fare_id', $fare?->id)
-            ->where('journey_date', $criteria['journey_date'] ?? now()->toDateString())
+            ->whereDate('journey_date', $criteria['journey_date'] ?? now()->toDateString())
             ->where('available_berths', '>', 0)
             ->exists();
 
