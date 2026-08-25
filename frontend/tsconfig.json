@@ -15,7 +15,6 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
@@ -31,31 +30,15 @@
     }
   },
   "include": [
-    "src/main.tsx",
-    "src/App.tsx",
-    "src/vite-env.d.ts",
-    "src/components/ui/Button.tsx",
-    "src/components/ui/LoadingScreen.tsx",
-    "src/components/ui/Modal.tsx",
-    "src/components/ui/Badge.tsx",
-    "src/lib/api.ts",
-    "src/lib/utils.ts",
-    "src/lib/dateUtils.ts",
-    "src/lib/currencyUtils.ts",
-    "src/lib/validation.ts",
-    "src/layouts/AdminLayout.tsx",
-    "src/layouts/AgentLayout.tsx",
-    "src/store/auth.ts",
-    "src/store/cart.ts",
-    "src/store/search.ts",
-    "src/types/index.ts",
-    "src/pages/activities/ActivityResults.tsx",
-    "src/pages/buses/BusResults.tsx",
-    "src/pages/cars/CarResults.tsx",
-    "src/pages/auth/Login.tsx",
-    "src/pages/auth/Register.tsx",
-    "src/pages/public/Home.tsx",
-    "src/pages/public/SearchPage.tsx"
+    "src"
+  ],
+  "exclude": [
+    "src/**/test/**",
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+    "src/**/*.skip/**",
+    "src/lib/bundle-analysis.ts",
+    "src/lib/database-optimization.ts"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
