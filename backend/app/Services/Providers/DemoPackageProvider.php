@@ -210,7 +210,7 @@ class DemoPackageProvider extends BaseProvider
         if (! $pkg) return new AvailabilityResult(false, 0, 0, 'INR');
 
         $available = $pkg->inventory()
-            ->where('start_date', '>=', $criteria['start_date'] ?? now()->toDateString())
+            ->whereDate('start_date', '>=', $criteria['start_date'] ?? now()->toDateString())
             ->where('end_date', '<=', $criteria['end_date'] ?? now()->addDays(30)->toDateString())
             ->where('available_slots', '>', 0)
             ->exists();
