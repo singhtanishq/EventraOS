@@ -10,7 +10,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Checkbox } from '@/components/ui/Input'
-import { Select, SelectOption } from '@/components/ui/Input'
+import { cn } from '@/lib/utils'
 
 const registerSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
