@@ -1,14 +1,22 @@
 import { forwardRef, HTMLAttributes } from 'react'
 import { cn } from '@/lib/utils'
 
+type TypographyVariant =
+  | 'display-xl' | 'display-lg' | 'display-md' | 'display-sm'
+  | 'heading-xl' | 'heading-lg' | 'heading-md' | 'heading-sm'
+  | 'body-lg' | 'body-md' | 'body-sm' | 'body-xs'
+  | 'caption' | 'overline'
+
+type TypographyTag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span' | 'div' | 'small' | 'blockquote'
+
 interface TypographyProps extends HTMLAttributes<HTMLElement> {
-  variant?: 'display-xl' | 'display-lg' | 'display-md' | 'display-sm' | 'heading-xl' | 'heading-lg' | 'heading-md' | 'heading-sm' | 'body-lg' | 'body-md' | 'body-sm' | 'body-xs' | 'caption' | 'overline'
+  variant?: TypographyVariant
   weight?: 'normal' | 'medium' | 'semibold' | 'bold'
   color?: 'primary' | 'secondary' | 'muted' | 'success' | 'warning' | 'danger' | 'inherit'
-  as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span' | 'div' | 'small' | 'blockquote'
+  as?: TypographyTag
 }
 
-const variantClasses = {
+const variantClasses: Record<TypographyVariant, string> = {
   'display-xl': 'text-display-xl font-display font-bold',
   'display-lg': 'text-display-lg font-display font-bold',
   'display-md': 'text-display-md font-display font-bold',
@@ -46,7 +54,7 @@ export const Typography = forwardRef<HTMLElement, TypographyProps>(
   ({ className, variant = 'body-md', weight = 'normal', color = 'primary', as: Component = 'p', children, ...props }, ref) => {
     return (
       <Component
-        ref={ref}
+        ref={ref as never}
         className={cn(
           variantClasses[variant],
           weightClasses[weight],
@@ -71,26 +79,47 @@ export const Display = forwardRef<HTMLElement, Omit<TypographyProps, 'variant'>>
 )
 Display.displayName = 'Display'
 
-export const Heading = forwardRef<HTMLHeadingElement, Omit<TypographyProps, 'variant'>>(
-  ({ className, level = 2, ...props }, ref) => {
-    const variants = {
-      1: 'display-sm',
-      2: 'heading-xl',
-      3: 'heading-lg',
-      4: 'heading-md',
-      5: 'heading-sm',
-      6: 'heading-sm',
-    }
-    return (
-      <Typography ref={ref} variant={variants[level as keyof typeof variants]} as={`h${level}`} className={className} {...props} />
-    )
-  }
+interface HeadingProps extends Omit<TypographyProps, 'variant' | 'as'> {
+  level?: 1 | 2 | 3 | 4 | 5 | 6
+}
+
+const headingVariants: Record<number, TypographyVariant> = {
+  1: 'display-sm',
+  2: 'heading-xl',
+  3: 'heading-lg',
+  4: 'heading-md',
+  5: 'heading-sm',
+  6: 'heading-sm',
+}
+
+export const Heading = forwardRef<HTMLElement, HeadingProps>(
+  ({ className, level = 2, ...props }, ref) => (
+    <Typography
+      ref={ref}
+      variant={headingVariants[level]}
+      as={`h${level}` as TypographyTag}
+      className={className}
+      {...props}
+    />
+  )
 )
 Heading.displayName = 'Heading'
 
-export const Body = forwardRef<HTMLParagraphElement, Omit<TypographyProps, 'variant'>>(
+type BodySize = 'lg' | 'md' | 'sm' | 'xs'
+
+interface BodyProps extends Omit<TypographyProps, 'variant' | 'as'> {
+  size?: BodySize
+}
+
+export const Body = forwardRef<HTMLParagraphElement, BodyProps>(
   ({ className, size = 'md', ...props }, ref) => (
-    <Typography ref={ref} variant={`body-${size}`} as="p" className={className} {...props} />
+    <Typography
+      ref={ref as never}
+      variant={`body-${size}` as TypographyVariant}
+      as="p"
+      className={className}
+      {...props}
+    />
   )
 )
 Body.displayName = 'Body'
@@ -120,27 +149,41 @@ export const Blockquote = forwardRef<HTMLQuoteElement, TypographyProps>(
 )
 Blockquote.displayName = 'Blockquote'
 
-export const Code = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
+interface CodeProps extends HTMLAttributes<HTMLElement> {
+  inline?: boolean
+}
+
+export const Code = forwardRef<HTMLElement, CodeProps>(
   ({ className, children, inline = false, ...props }, ref) => {
-    const Component = inline ? 'code' : 'pre'
+    if (inline) {
+      return (
+        <code
+          ref={ref as never}
+          className={cn('font-mono text-eventra-navy-900 bg-eventra-slate-100 rounded-lg px-1.5 py-0.5 text-body-sm', className)}
+          {...props}
+        >
+          {children}
+        </code>
+      )
+    }
     return (
-      <Component
-        ref={ref}
-        className={cn(
-          'font-mono text-eventra-navy-900 bg-eventra-slate-100 rounded-lg',
-          inline ? 'px-1.5 py-0.5 text-body-sm' : 'p-4 overflow-x-auto text-body-sm',
-          className
-        )}
+      <pre
+        ref={ref as never}
+        className={cn('font-mono text-eventra-navy-900 bg-eventra-slate-100 rounded-lg p-4 overflow-x-auto text-body-sm', className)}
         {...props}
       >
         {children}
-      </Component>
+      </pre>
     )
   }
 )
 Code.displayName = 'Code'
 
-export const Link = forwardRef<HTMLAnchorElement, React.AnchorHTMLAttributes<HTMLAnchorElement>>(
+interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+  variant?: 'default' | 'muted' | 'danger' | 'button'
+}
+
+export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
   ({ className, variant = 'default', ...props }, ref) => {
     const variants = {
       default: 'text-eventra-blue-600 hover:text-eventra-blue-700 underline-offset-2 hover:underline',
@@ -160,20 +203,32 @@ export const Link = forwardRef<HTMLAnchorElement, React.AnchorHTMLAttributes<HTM
 )
 Link.displayName = 'Link'
 
-export const List = forwardRef<HTMLUListElement, React.HTMLAttributes<HTMLUListElement>>(
-  ({ className, ordered = false, spaced = true, ...props }, ref) => {
-    const Tag = ordered ? 'ol' : 'ul'
+interface ListProps extends React.HTMLAttributes<React.ElementType> {
+  ordered?: boolean
+  spaced?: boolean
+}
+
+export const List = forwardRef<React.ElementRef<'ul'>, ListProps>(
+  ({ className, ordered = false, spaced = true, children, ...props }, ref) => {
+    if (ordered) {
+      return (
+        <ol
+          ref={ref as never}
+          className={cn('list-decimal list-inside', spaced && 'space-y-3', className)}
+          {...props}
+        >
+          {children}
+        </ol>
+      )
+    }
     return (
-      <Tag
+      <ul
         ref={ref}
-        className={cn(
-          'list-disc list-inside space-y-2',
-          ordered && 'list-decimal',
-          spaced && 'space-y-3',
-          className
-        )}
+        className={cn('list-disc list-inside', spaced && 'space-y-3', className)}
         {...props}
-      />
+      >
+        {children}
+      </ul>
     )
   }
 )
@@ -186,13 +241,17 @@ export const ListItem = forwardRef<HTMLLIElement, React.HTMLAttributes<HTMLLIEle
 )
 ListItem.displayName = 'ListItem'
 
-export const Divider = forwardRef<HTMLHRElement, React.HTMLAttributes<HTMLHRElement>>(
+interface DividerProps extends React.HTMLAttributes<HTMLHRElement> {
+  orientation?: 'horizontal' | 'vertical'
+}
+
+export const Divider = forwardRef<HTMLHRElement, DividerProps>(
   ({ className, orientation = 'horizontal', ...props }, ref) => (
     <hr
       ref={ref}
       className={cn(
         'border-eventra-slate-200',
-        orientation === 'horizontal' ? 'w-full' : 'h-8',
+        orientation === 'horizontal' ? 'w-full' : 'h-8 w-px',
         className
       )}
       {...props}
