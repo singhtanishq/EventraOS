@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { forwardRef, ReactNode, useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
@@ -35,7 +36,7 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(
   ) => {
     const [isOpen, setIsOpen] = useState(false)
     const dropdownRef = useRef<HTMLDivElement>(null)
-    const triggerRef = useRef<HTMLElement>(null)
+    const triggerRef = useRef<HTMLDivElement>(null)
     const contentRef = useRef<HTMLDivElement>(null)
 
     const handleOpenChange = (open: boolean) => {
