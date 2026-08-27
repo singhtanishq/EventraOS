@@ -165,8 +165,11 @@ class DemoCarProvider extends BaseProvider
         $car = \App\Models\Car::find($itemId);
         if (! $car) return new AvailabilityResult(false, 0, 0, 'INR');
 
+        $pickupDate = $criteria['pickup_date'] ?? now()->toDateString();
+        $returnDate = $criteria['return_date'] ?? \Carbon\Carbon::parse($pickupDate)->addDays(7)->toDateString();
+
         $available = \App\Models\CarInventory::where('car_id', $itemId)
-            ->whereBetween('date', [$criteria['pickup_date'] ?? now()->toDateString(), $criteria['return_date'] ?? now()->addDays(7)->toDateString()])
+            ->whereBetween('date', [$pickupDate, $returnDate])
             ->where('status', 'available')
             ->exists();
 
