@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from 'react'
 import { useSearchStore } from '@/store/search'
+import { api } from '@/lib/api'
 import { useDebounce } from './useDebounce'
 
 interface SearchParams {
@@ -38,9 +39,10 @@ export function useSearch<T = any>(serviceType: string) {
     setError(null)
 
     try {
-      const { data } = await api.get(`/${serviceType}/search`, { params: searchParams })
-      setResults(data.data || data.results || data)
-      return data
+      const body = await api.get<any>(`/search/${serviceType}`, { params: searchParams })
+      const payload = body?.data ?? body?.results ?? body
+      setResults(payload?.results ?? payload ?? [], payload?.total_count)
+      return payload
     } catch (err: any) {
       const message = err.response?.data?.message || 'Search failed'
       setError(message)
@@ -48,7 +50,7 @@ export function useSearch<T = any>(serviceType: string) {
     } finally {
       setLoading(false)
     }
-  }, [serviceType, setParams, setDebouncedParams, setLoading, setError, setResults])
+  }, [serviceType, setParams, setLoading, setError, setResults])
 
   const searchDebounced = useCallback(async (searchParams: SearchParams) => {
     setDebouncedParams(searchParams)
@@ -57,9 +59,10 @@ export function useSearch<T = any>(serviceType: string) {
     setError(null)
 
     try {
-      const { data } = await api.get(`/${serviceType}/search`, { params: searchParams })
-      setResults(data.data || data.results || data)
-      return data
+      const body = await api.get<any>(`/search/${serviceType}`, { params: searchParams })
+      const payload = body?.data ?? body?.results ?? body
+      setResults(payload?.results ?? payload ?? [], payload?.total_count)
+      return payload
     } catch (err: any) {
       const message = err.response?.data?.message || 'Search failed'
       setError(message)
@@ -67,7 +70,7 @@ export function useSearch<T = any>(serviceType: string) {
     } finally {
       setLoading(false)
     }
-  }, [serviceType, setParams, setDebouncedParams, setLoading, setError, setResults])
+  }, [serviceType, setParams, setLoading, setError, setResults])
 
   const nextPage = useCallback(async () => {
     if (params.page && params.per_page) {
@@ -118,10 +121,10 @@ export function useQuickSearch<T = any>(serviceType: string) {
     setError(null)
 
     try {
-      const { data } = await api.get(`/${serviceType}/quick-search`, {
+      const body = await api.get<any>('/search/suggestions', {
         params: { q: query, ...filters }
       })
-      const searchResults = data.data || data.results || data || []
+      const searchResults = body?.data?.suggestions ?? body?.data ?? body?.results ?? []
       setResults(searchResults)
       return searchResults
     } catch (err: any) {
