@@ -183,7 +183,7 @@ class DemoVenueProvider extends BaseProvider
 
         $date = $criteria['date'] ?? now()->toDateString();
         $available = \App\Models\VenueAvailability::where('venue_id', $venue->id)
-            ->where('date', $criteria['date'] ?? now()->toDateString())
+            ->whereDate('date', $criteria['date'] ?? now()->toDateString())
             ->where('status', 'available')
             ->exists();
 
