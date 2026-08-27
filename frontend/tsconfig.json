@@ -40,7 +40,9 @@
     "src/**/*.test.tsx",
     "src/**/*.skip/**",
     "src/lib/bundle-analysis.ts",
-    "src/lib/database-optimization.ts"
+    "src/lib/database-optimization.ts",
+    "src/lib/performance.ts",
+    "src/lib/api-optimization.ts"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
