@@ -36,7 +36,12 @@ class CurrencyService
         'CHF' => 0.011,
     ];
 
-    public function format(float $amount, string $currency = 'INR', int $decimals = null): string
+    public static function format(float $amount, string $currency = 'INR', int $decimals = null): string
+    {
+        return (new self())->formatValue($amount, $currency, $decimals);
+    }
+
+    public function formatValue(float $amount, string $currency = 'INR', int $decimals = null): string
     {
         $currency = strtoupper($currency);
         $info = $this->currencies[$currency] ?? $this->currencies['INR'];
