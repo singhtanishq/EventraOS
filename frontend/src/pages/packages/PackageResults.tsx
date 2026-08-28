@@ -85,7 +85,7 @@ export function PackageResults() {
     const initialFilters: Partial<SearchParams> = {}
     searchParams.forEach((value, key) => {
       if (key !== 'page' && key !== 'per_page') {
-        initialFilters[key as keyof SearchParams] = value
+        (initialFilters as Record<string, string>)[key] = value
       }
     })
     setFilters(initialFilters)
@@ -460,7 +460,7 @@ function PackageFilters({ filters, onChange, onClearAll }: { filters: Partial<Se
 
   const handlePriceChange = debounce((range: number[]) => {
     setPriceRange(range)
-    onChange({ price_min: range[0], price_max: range[1] })
+    onChange({ price_min: String(range[0]), price_max: String(range[1]) })
   }, 500)
 
   const toggleDestination = (dest: string) => {
