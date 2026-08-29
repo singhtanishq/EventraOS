@@ -96,7 +96,7 @@ class PaymentService
 
                 if ($result['success']) {
                     $payment->markAuthorized($result['provider_payment_id'] ?? null, $result['gateway_response'] ?? []);
-                    
+
                     // For demo, auto-capture
                     if (config('app.env') === 'local' || $payment->paymentMethod->gateway === 'demo') {
                         $payment->markCaptured($result['gateway_response'] ?? []);
@@ -107,6 +107,20 @@ class PaymentService
                         'completed_at' => now(),
                         'response' => $result['gateway_response'] ?? [],
                     ]);
+
+                    // Confirm the booking once payment is captured
+                    if (in_array($payment->fresh()->status, ['captured', 'authorized']) && $payment->booking) {
+                        try {
+                            $this->bookingService->confirmBooking($payment->booking);
+                        } catch (\Throwable $confirmError) {
+                            // Confirmation issues (e.g. expired hold) shouldn't fail the payment itself
+                            Log::warning('Booking confirmation after payment failed', [
+                                'payment_id' => $payment->id,
+                                'booking_id' => $payment->booking->id,
+                                'error' => $confirmError->getMessage(),
+                            ]);
+                        }
+                    }
                 } else {
                     throw new \Exception($result['error'] ?? 'Payment failed');
                 }
