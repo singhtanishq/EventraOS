@@ -29,6 +29,11 @@ abstract class BaseProvider
         $this->config = $provider->configuration ?? [];
     }
 
+    public function getModel(): Provider
+    {
+        return $this->provider;
+    }
+
     public function getType(): string
     {
         return $this->provider->type;
