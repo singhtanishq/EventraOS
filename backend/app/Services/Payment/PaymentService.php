@@ -9,6 +9,7 @@ use App\Models\PaymentMethod;
 use App\Models\CustomerPaymentMethod;
 use App\Models\Provider;
 use App\Services\Providers\ProviderManager;
+use App\Services\Booking\BookingService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -113,7 +114,7 @@ class PaymentService
                     // Confirm the booking once payment is captured
                     if (in_array($payment->fresh()->status, ['captured', 'authorized']) && $payment->booking) {
                         try {
-                            $this->bookingService->confirmBooking($payment->booking);
+                            $this->bookingService()->confirmBooking($payment->booking);
                         } catch (\Throwable $confirmError) {
                             // Confirmation issues (e.g. expired hold) shouldn't fail the payment itself
                             Log::warning('Booking confirmation after payment failed', [
