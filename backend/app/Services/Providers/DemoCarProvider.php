@@ -116,7 +116,7 @@ class DemoCarProvider extends BaseProvider
             description: ($car->company?->name ? $car->company->name . ' - ' : '') . $car->name,
             images: $car->images ?? [],
             location: [
-                'city' => $car->pickupLocations->first()->city_name ?? 'Multiple locations',
+                'city' => $car->company?->city?->name ?? 'Multiple locations',
                 'country' => 'India',
             ],
             amenities: $car->features ?? [],
@@ -129,7 +129,7 @@ class DemoCarProvider extends BaseProvider
                 'deposit_amount' => $dailyRate?->deposit_amount ?? 5000,
                 'insurance_options' => $dailyRate?->insurance_options ?? [],
             ],
-            policies: [],
+            policies: $dailyRate?->cancellation_policy ?? [],
             availability: [
                 'available' => true,
                 'locations' => $car->pickupLocations->pluck('name')->toArray() ?: [],
