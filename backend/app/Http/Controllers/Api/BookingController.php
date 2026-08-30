@@ -256,7 +256,7 @@ class BookingController extends Controller
                 $hold = BookingHold::create([
                     'booking_id' => $booking->id,
                     'booking_item_id' => $item->id,
-                    'provider_id' => $provider->provider->id,
+                    'provider_id' => $provider->getModel()->id,
                     'provider_hold_reference' => $holdResult->getHoldReference(),
                     'expires_at' => $holdResult->getExpiresAt(),
                     'status' => 'active',
