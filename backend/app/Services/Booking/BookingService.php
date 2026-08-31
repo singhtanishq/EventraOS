@@ -627,7 +627,7 @@ class BookingService
         });
     }
 
-    public function generateVoucher(Booking $booking): \Barvdh\DomPDF\PDF
+    public function generateVoucher(Booking $booking): \Barryvdh\DomPDF\PDF
     {
         $html = view('pdf.voucher', compact('booking'))->render();
         $pdf = Pdf::loadHTML($html)->setPaper('a4', 'portrait');
