@@ -602,6 +602,18 @@ class InventorySeeder extends Seeder
                 'currency' => 'INR',
                 'is_active' => true,
             ]);
+
+            $dailyRateId = CarRate::where('car_id', $car->id)->where('rate_type', 'daily')->first()?->id;
+
+            // Seed 45 days of availability per car
+            foreach (range(0, 44) as $dayOffset) {
+                CarInventory::create([
+                    'car_id' => $car->id,
+                    'rate_id' => $dailyRateId,
+                    'date' => Carbon::today()->addDays($dayOffset)->toDateString(),
+                    'status' => 'available',
+                ]);
+            }
         }
     }
 
