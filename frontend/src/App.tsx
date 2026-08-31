@@ -2,7 +2,6 @@ import { Suspense, lazy, useEffect } from 'react'
 import { Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useAuthStore } from '@/store/auth'
 import { api } from '@/lib/api'
-import { Toaster } from 'react-hot-toast'
 import LoadingScreen from '@/components/ui/LoadingScreen'
 
 // Layouts
@@ -37,6 +36,7 @@ const BookingConfirmation = lazy(() => import('@/pages/checkout/BookingConfirmat
 // Auth Pages
 const Login = lazy(() => import('@/pages/auth/Login').then((m) => ({ default: m.Login })))
 const Register = lazy(() => import('@/pages/auth/Register').then((m) => ({ default: m.Register })))
+const ForgotPassword = lazy(() => import('@/pages/auth/ForgotPassword').then((m) => ({ default: m.ForgotPassword })))
 
 // Customer Pages
 const CustomerDashboard = lazy(() => import('@/pages/customer/Dashboard').then((m) => ({ default: m.CustomerDashboard })))
@@ -126,13 +126,13 @@ function App() {
   return (
     <div className="min-h-screen bg-white">
       <ScrollToTop />
-      <Toaster position="top-right" />
       <Suspense fallback={<LoadingScreen />}>
         <Routes>
           {/* Auth Routes (split-screen layout) */}
           <Route element={<AuthLayout />}>
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
+            <Route path="forgot-password" element={<ForgotPassword />} />
           </Route>
 
           {/* Public Routes inside main layout */}
