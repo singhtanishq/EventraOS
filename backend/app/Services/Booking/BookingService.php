@@ -250,10 +250,34 @@ class BookingService
         if (isset($pricing['fare_options'])) {
             // Flight - find selected fare
             $fareId = $configuration['fare_id'] ?? null;
-            $fare = $fareId 
+            $fare = $fareId
                 ? collect($pricing['fare_options'])->firstWhere('fare_id', $fareId)
                 : collect($pricing['fare_options'])->first();
             return $fare['pricing']['total'] ?? $fare['pricing']['per_passenger'] ?? 0;
+        }
+
+        if (isset($pricing['daily_rate'])) {
+            // Car rental - daily rate x number of days
+            $days = 1;
+            if (!empty($configuration['pickup_date']) && !empty($configuration['return_date'])) {
+                $days = max(1, \Carbon\Carbon::parse($configuration['pickup_date'])->diffInDays(\Carbon\Carbon::parse($configuration['return_date'])));
+            }
+            return (float) $pricing['daily_rate'] * $days;
+        }
+
+        if (isset($pricing['packages'])) {
+            // Venue - selected (or first) package price
+            $packageId = $configuration['package_id'] ?? null;
+            $package = $packageId
+                ? collect($pricing['packages'])->firstWhere('id', $packageId)
+                : collect($pricing['packages'])->first();
+            return (float) ($package['price'] ?? 0);
+        }
+
+        if (isset($pricing['per_person'])) {
+            // Activities / transfers - per person x participants
+            $participants = (int) ($configuration['participants'] ?? $configuration['passengers'] ?? 1);
+            return (float) $pricing['per_person'] * max(1, $participants);
         }
 
         // Default
