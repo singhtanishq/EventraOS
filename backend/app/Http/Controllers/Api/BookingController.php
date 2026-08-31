@@ -23,15 +23,18 @@ class BookingController extends Controller
     protected BookingService $bookingService;
     protected PaymentService $paymentService;
     protected ProviderManager $providerManager;
+    protected \App\Services\PDF\PDFService $pdfService;
 
     public function __construct(
         BookingService $bookingService,
         PaymentService $paymentService,
-        ProviderManager $providerManager
+        ProviderManager $providerManager,
+        \App\Services\PDF\PDFService $pdfService
     ) {
         $this->bookingService = $bookingService;
         $this->paymentService = $paymentService;
         $this->providerManager = $providerManager;
+        $this->pdfService = $pdfService;
     }
 
     public function index(Request $request)
@@ -417,7 +420,7 @@ class BookingController extends Controller
     public function downloadInvoice(Request $request, Booking $booking)
     {
         $user = $request->user();
-        
+
         if ($user->hasRole('customer') && $booking->customer_id !== $user->customer?->id) {
             return response()->json([
                 'success' => false,
@@ -425,7 +428,13 @@ class BookingController extends Controller
             ], 403);
         }
 
-        $pdf = $this->bookingService->generateInvoice($booking);
+        $invoice = \App\Models\Invoice::where('booking_id', $booking->id)->latest()->first();
+
+        if (!$invoice) {
+            $invoice = $this->bookingService->generateInvoice($booking);
+        }
+
+        $pdf = $this->pdfService->generateInvoiceStream($invoice);
 
         return response()->streamDownload(function () use ($pdf) {
             echo $pdf->output();
