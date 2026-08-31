@@ -75,7 +75,7 @@
                 <li>{{ $guest->first_name }} {{ $guest->last_name }} &mdash; {{ $guest->email }}</li>
                 @endforeach
             @empty
-                <li>{{ $customer->user->name ?? 'Guest' }} &mdash; {{ $customer->user->email ?? '' }}</li>
+                <li>{{ $booking->customer->user->name ?? 'Guest' }} &mdash; {{ $booking->customer->user->email ?? '' }}</li>
             @endforelse
         </ul>
     </div>
