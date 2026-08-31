@@ -142,14 +142,24 @@ class ProviderManager
         return $results;
     }
 
+    /**
+     * Normalize a provider item id: strip the "<type>_" prefix if present
+     * (e.g. "car_1" -> "1") so all providers can accept either format.
+     */
+    protected function normalizeItemId(string $type, string $itemId): string
+    {
+        return preg_replace('/^' . preg_quote($type, '/') . '_/', '', $itemId);
+    }
+
     public function getDetails(string $type, string $itemId, array $options = []): ?ProviderItemDetails
     {
-        // Extract provider code from itemId if present (e.g., "flight_123" -> provider could be determined)
         $provider = $this->getProvider($type);
-        
+
         if (!$provider) {
             return null;
         }
+
+        $itemId = $this->normalizeItemId($type, $itemId);
 
         try {
             return $provider->getDetails($itemId, $options);
@@ -165,10 +175,12 @@ class ProviderManager
     public function checkAvailability(string $type, string $itemId, array $criteria): AvailabilityResult
     {
         $provider = $this->getProvider($type);
-        
+
         if (!$provider) {
             return new AvailabilityResult(false, 0, 0, 'INR');
         }
+
+        $itemId = $this->normalizeItemId($type, $itemId);
 
         try {
             return $provider->checkAvailability($itemId, $criteria);
