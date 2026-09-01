@@ -20,6 +20,9 @@ class DebugTokenTest extends TestCase
         fwrite(STDERR, "me says: " . $this->getJson('/api/auth/me', ['Authorization' => "Bearer {$t1}"])->json('data.user.email') . "\n");
 
         $r2 = $this->postJson('/api/auth/login', ['email' => 'admin@demo.com', 'password' => 'password']);
+        fwrite(STDERR, "admin login full: " . $r2->getContent() . "
+");
+        foreach (\App\Models\User::all() as $u) { fwrite(STDERR, "user: {$u->id} {$u->email} active={$u->is_active}\n"); }
         $t2 = $r2->json('data.token');
         fwrite(STDERR, "admin login token: {$t2}\n");
         fwrite(STDERR, "me says: " . $this->getJson('/api/auth/me', ['Authorization' => "Bearer {$t2}"])->json('data.user.email') . "\n");
