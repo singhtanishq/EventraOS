@@ -13,12 +13,15 @@ export function useAuth() {
 
   useEffect(() => {
     const initAuth = async () => {
-      const token = localStorage.getItem('eventraos-auth')
+      // Only verify against the API when a session token actually exists;
+      // the persisted store key is always present, so it cannot be used as the test.
+      const token = useAuthStore.getState().token
       if (token) {
         try {
           const { data } = await api.get<{ data: AuthPayload }>('/auth/me')
           if (data.user) {
-            setAuth(data.user, data.token)
+            // /auth/me does not return a new token — keep the existing one
+            setAuth(data.user, data.token || token)
           } else {
             storeLogout()
           }
