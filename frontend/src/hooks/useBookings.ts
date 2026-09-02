@@ -43,6 +43,7 @@ export function useBookings(options: UseBookingsOptions = {}) {
 
   const fetchBookings = useCallback(async (pageNum = 1) => {
     setIsLoading(true)
+    setError(null)
     try {
       const params = new URLSearchParams()
       if (status) params.set('status', status)
@@ -54,9 +55,13 @@ export function useBookings(options: UseBookingsOptions = {}) {
       if (data.pagination) {
         setPagination(data.pagination)
       }
+      return { success: true as const }
     } catch (err: any) {
       const message = err.response?.data?.message || 'Failed to load bookings'
-      return { success: false, message }
+      setError(message)
+      return { success: false as const, message }
+    } finally {
+      setIsLoading(false)
     }
   }, [status, per_page])
 
