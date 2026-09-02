@@ -48,6 +48,18 @@ class ApiSmokeTest extends TestCase
         return ['Authorization' => "Bearer {$token}"];
     }
 
+    protected function getAuthed(string $url, string $token): \Illuminate\Testing\TestResponse
+    {
+        $this->app['auth']->forgetGuards();
+        return $this->getJson($url, $this->authed($token));
+    }
+
+    protected function postAuthed(string $url, array $data, string $token): \Illuminate\Testing\TestResponse
+    {
+        $this->app['auth']->forgetGuards();
+        return $this->postJson($url, $data, $this->authed($token));
+    }
+
     /**
      * Get a bearer token for the given seeded user, resolving fresh.
      */
@@ -89,7 +101,7 @@ class ApiSmokeTest extends TestCase
     {
         $token = $this->token('customer@demo.com');
 
-        $this->getJson('/api/auth/me', $this->authed($token))
+        $this->getAuthed('/api/auth/me', $token)
             ->assertStatus(200)
             ->assertJsonPath('success', true)
             ->assertJsonPath('data.user.email', 'customer@demo.com');
@@ -114,7 +126,7 @@ class ApiSmokeTest extends TestCase
         $token = $this->token('customer@demo.com');
 
         // Create a booking for a hotel room
-        $create = $this->postJson('/api/bookings', [
+        $create = $this->postAuthed('/api/bookings', [
             'items' => [[
                 'item_type' => 'hotel',
                 'service_id' => 1,
@@ -130,7 +142,7 @@ class ApiSmokeTest extends TestCase
                 ]],
             ]],
             'currency' => 'INR',
-        ], $this->authed($token));
+        ], $token);
 
         $create->assertStatus(201)->assertJsonPath('success', true);
 
@@ -139,33 +151,33 @@ class ApiSmokeTest extends TestCase
         $this->assertGreaterThan(0, (float) $booking['grand_total'], 'grand_total should be priced');
 
         // Look up by reference
-        $this->getJson("/api/bookings/reference/{$booking['booking_reference']}", $this->authed($token))
+        $this->getAuthed("/api/bookings/reference/{$booking['booking_reference']}", $token)
             ->assertStatus(200)
             ->assertJsonPath('success', true);
 
         // Initiate and process payment — demo gateway captures and confirms
-        $initiate = $this->postJson('/api/payments/initiate', [
+        $initiate = $this->postAuthed('/api/payments/initiate', [
             'booking_id' => $booking['id'],
             'payment_method_id' => 1,
-        ], $this->authed($token));
+        ], $token);
 
         $initiate->assertStatus(200)->assertJsonPath('success', true);
         $paymentId = $initiate->json('data.id');
 
-        $process = $this->postJson("/api/payments/{$paymentId}/process", [], $this->authed($token));
+        $process = $this->postAuthed("/api/payments/{$paymentId}/process", [], $token);
         $process->assertStatus(200)->assertJsonPath('success', true);
 
         // Booking should now be confirmed and paid
-        $this->getJson("/api/bookings/{$booking['id']}", $this->authed($token))
+        $this->getAuthed("/api/bookings/{$booking['id']}", $token)
             ->assertStatus(200)
             ->assertJsonPath('data.status', 'confirmed')
             ->assertJsonPath('data.payment_status', 'paid');
 
         // Voucher and invoice PDFs should stream for confirmed bookings
-        $this->getJson("/api/bookings/{$booking['id']}/voucher", $this->authed($token))
+        $this->getAuthed("/api/bookings/{$booking['id']}/voucher", $token)
             ->assertStatus(200);
 
-        $this->getJson("/api/bookings/{$booking['id']}/invoice", $this->authed($token))
+        $this->getAuthed("/api/bookings/{$booking['id']}/invoice", $token)
             ->assertStatus(200);
     }
 
@@ -174,7 +186,7 @@ class ApiSmokeTest extends TestCase
         $token = $this->token('customer@demo.com');
 
         foreach (['/api/customer/dashboard', '/api/customer/wallet', '/api/customer/loyalty', '/api/customer/coupons'] as $url) {
-            $this->getJson($url, $this->authed($token))
+            $this->getAuthed($url, $token)
                 ->assertStatus(200)
                 ->assertJsonPath('success', true);
         }
@@ -184,13 +196,13 @@ class ApiSmokeTest extends TestCase
     {
         $agentToken = $this->token('agent@demo.com');
 
-        $this->getJson('/api/agent/dashboard', $this->authed($agentToken))
+        $this->getAuthed('/api/agent/dashboard', $agentToken)
             ->assertStatus(200)
             ->assertJsonPath('success', true);
 
         // Customers cannot access agent endpoints
         $customerToken = $this->token('customer@demo.com');
-        $this->getJson('/api/agent/dashboard', $this->authed($customerToken))
+        $this->getAuthed('/api/agent/dashboard', $customerToken)
             ->assertStatus(403);
     }
 
@@ -198,16 +210,16 @@ class ApiSmokeTest extends TestCase
     {
         $adminToken = $this->token('admin@demo.com');
 
-        $this->getJson('/api/admin/dashboard', $this->authed($adminToken))
+        $this->getAuthed('/api/admin/dashboard', $adminToken)
             ->assertStatus(200)
             ->assertJsonPath('success', true);
 
-        $this->getJson('/api/admin/audit-logs', $this->authed($adminToken))
+        $this->getAuthed('/api/admin/audit-logs', $adminToken)
             ->assertStatus(200);
 
         // Agents cannot access admin endpoints
         $agentToken = $this->token('agent@demo.com');
-        $this->getJson('/api/admin/dashboard', $this->authed($agentToken))
+        $this->getAuthed('/api/admin/dashboard', $agentToken)
             ->assertStatus(403);
     }
 }
