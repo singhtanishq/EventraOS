@@ -19,7 +19,7 @@ class DebugTokenTest extends TestCase
         $r1 = $this->postJson('/api/auth/login', ['email' => 'customer@demo.com', 'password' => 'password']);
         $t1 = $r1->json('data.token');
         fwrite(STDERR, "\ncustomer login token: {$t1}\n");
-        fwrite(STDERR, "me says: " . $this->getJson('/api/auth/me', ['Authorization' => "Bearer {$t1}"])->json('data.user.email') . "\n");
+        // SKIPPED me() call for bisect
 
         $r2 = $this->postJson('/api/auth/login', ['email' => 'admin@demo.com', 'password' => 'password']);
         fwrite(STDERR, "admin login full: " . $r2->getContent() . "
