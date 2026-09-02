@@ -105,7 +105,7 @@ class AuthController extends Controller
             'session_user' => $request->hasSession() ? optional($request->session()->get('login_web_59ba36addc2b2f9401580f014c7f58ea4e30989d'))->email : null,
         ]);
 
-        if (!Auth::attempt($credentials, $request->boolean('remember'))) {
+        if (!Auth::guard('web')->attempt($credentials, $request->boolean('remember'))) {
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid credentials',
