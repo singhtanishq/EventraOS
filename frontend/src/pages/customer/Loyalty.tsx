@@ -167,7 +167,7 @@ export function Loyalty() {
               </div>
             </div>
           )}
-        </Card>
+        </div>
       </Card>
 
       {/* Tier Benefits */}
