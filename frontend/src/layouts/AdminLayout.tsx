@@ -1,5 +1,6 @@
-import { Outlet, NavLink, Link, useLocation } from 'react-router-dom'
+import { Outlet, NavLink, Link, useLocation, useNavigate, Navigate } from 'react-router-dom'
 import { useAuthStore } from '@/store/auth'
+import { api } from '@/lib/api'
 import { cn } from '@/lib/utils'
 import {
   LayoutDashboard,
@@ -15,12 +16,10 @@ import {
   Target,
   BarChart3,
   Activity,
-  Settings,
   Menu,
   X,
   ChevronDown,
   LogOut,
-  User,
   Shield,
   Bell,
   Search,
@@ -45,16 +44,26 @@ const adminNav = [
   { name: 'Commissions', href: '/admin/commissions', icon: Target },
   { name: 'Reports', href: '/admin/reports', icon: BarChart3 },
   { name: 'Audit Logs', href: '/admin/audit-logs', icon: Activity },
-  { name: 'Settings', href: '/admin/settings', icon: Settings },
-  { name: 'System Health', href: '/admin/system-health', icon: Activity },
 ]
 
 export default function AdminLayout() {
   const location = useLocation()
+  const navigate = useNavigate()
   const { user, logout, hasRole } = useAuthStore()
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const userMenuRef = useRef<HTMLDivElement>(null)
+
+  const handleSignOut = async () => {
+    try {
+      await api.post('/auth/logout')
+    } catch {
+      // Token may already be invalid — clear locally regardless
+    }
+    logout()
+    setUserMenuOpen(false)
+    navigate('/login')
+  }
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -69,7 +78,7 @@ export default function AdminLayout() {
   const isActive = (href: string) => location.pathname === href || (href !== '/admin/dashboard' && location.pathname.startsWith(href))
 
   if (!hasRole('admin')) {
-    return null
+    return <Navigate to="/" replace />
   }
 
   return (
@@ -174,7 +183,6 @@ export default function AdminLayout() {
             <div className="flex items-center gap-3 shrink-0">
               <button className="relative p-2 rounded-xl text-eventra-slate-600 hover:bg-eventra-slate-100 transition-colors" aria-label="Notifications">
                 <Bell className="w-5 h-5" />
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-eventra-red-600 text-white text-xs font-bold rounded-full flex items-center justify-center">3</span>
               </button>
 
               <div className="relative" ref={userMenuRef}>
@@ -214,16 +222,12 @@ export default function AdminLayout() {
                         <span className="badge badge-danger mt-1.5">Administrator</span>
                       </div>
 
-                      <Link to="/admin/settings" className="dropdown-item" role="menuitem">
-                        <Settings className="w-4 h-4" aria-hidden="true" />
-                        Settings
-                      </Link>
                       <Link to="/customer/security" className="dropdown-item" role="menuitem">
                         <Shield className="w-4 h-4" aria-hidden="true" />
                         Security
                       </Link>
                       <div className="dropdown-divider" role="separator" />
-                      <button onClick={logout} className="dropdown-item w-full text-left text-eventra-red-600 hover:bg-eventra-red-50" role="menuitem">
+                      <button onClick={handleSignOut} className="dropdown-item w-full text-left text-eventra-red-600 hover:bg-eventra-red-50" role="menuitem">
                         <LogOut className="w-4 h-4" aria-hidden="true" />
                         Sign Out
                       </button>
