@@ -570,8 +570,9 @@ export function BookingDetail() {
                           </div>
                         )}
                       </div>
-                    </motion.div>
-                  ))}
+                    </div>
+                  </motion.div>
+                ))}
               </div>
             </Card>
 
