@@ -4,10 +4,11 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
 import { ChevronLeft, Calendar, MapPin, Users, CreditCard, Download, Share2, Mail, AlertCircle, Ticket, Building2, Plane, Utensils, Sparkles, Shield, CheckCircle2, XCircle, Clock, RotateCcw, FileText, MessageSquare, AlertTriangle, Printer } from 'lucide-react'
 import { api } from '@/lib/api'
-import { formatCurrency, formatDate, formatTime, cn } from '@/lib/utils'
+import { formatCurrency, formatDate, formatDateTime, formatTime, cn } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Modal } from '@/components/ui/Modal'
+import { Badge } from '@/components/ui/Badge'
 import { toast } from 'react-hot-toast'
 import { jsPDF } from 'jspdf'
 
@@ -1000,6 +1001,25 @@ function BookingNotFound({ onBack }: { onBack: () => void }) {
           Back to My Trips
         </Button>
       </motion.div>
+    </div>
+  )
+}
+function TimelineItem({ title, description, time, completed, current }: { title: string; description?: string; time?: string; completed?: boolean; current?: boolean }) {
+  return (
+    <div className="timeline-item">
+      <div
+        className={cn(
+          'timeline-marker',
+          completed ? 'timeline-marker-completed' : current ? 'timeline-marker-current' : 'timeline-marker-pending'
+        )}
+      >
+        {completed ? <CheckCircle2 className="w-5 h-5" /> : current ? <Clock className="w-5 h-5" /> : <span />}
+      </div>
+      <div className="timeline-content">
+        <div className="timeline-time">{time || 'Pending'}</div>
+        <div className="timeline-title">{title}</div>
+        {description && <div className="timeline-description">{description}</div>}
+      </div>
     </div>
   )
 }
