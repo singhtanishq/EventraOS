@@ -1,5 +1,6 @@
-import { Outlet, NavLink, Link, useLocation } from 'react-router-dom'
+import { Outlet, NavLink, Link, useLocation, useNavigate, Navigate } from 'react-router-dom'
 import { useAuthStore } from '@/store/auth'
+import { api } from '@/lib/api'
 import { cn } from '@/lib/utils'
 import {
   LayoutDashboard,
@@ -14,10 +15,8 @@ import {
   X,
   ChevronDown,
   LogOut,
-  User,
   Shield,
   Bell,
-  Settings,
   CreditCard,
   Award,
 } from 'lucide-react'
@@ -37,10 +36,22 @@ const agentNav = [
 
 export default function AgentLayout() {
   const location = useLocation()
+  const navigate = useNavigate()
   const { user, logout, hasRole } = useAuthStore()
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const userMenuRef = useRef<HTMLDivElement>(null)
+
+  const handleSignOut = async () => {
+    try {
+      await api.post('/auth/logout')
+    } catch {
+      // Token may already be invalid — clear locally regardless
+    }
+    logout()
+    setUserMenuOpen(false)
+    navigate('/login')
+  }
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -55,7 +66,7 @@ export default function AgentLayout() {
   const isActive = (href: string) => location.pathname === href || (href !== '/agent/dashboard' && location.pathname.startsWith(href))
 
   if (!hasRole('agent')) {
-    return null
+    return <Navigate to="/" replace />
   }
 
   return (
@@ -160,7 +171,6 @@ export default function AgentLayout() {
             <div className="flex items-center gap-3 shrink-0">
               <button className="relative p-2 rounded-xl text-eventra-slate-600 hover:bg-eventra-slate-100 transition-colors" aria-label="Notifications">
                 <Bell className="w-5 h-5" />
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-eventra-red-600 text-white text-xs font-bold rounded-full flex items-center justify-center">3</span>
               </button>
 
               <div className="relative" ref={userMenuRef}>
@@ -200,16 +210,12 @@ export default function AgentLayout() {
                         <span className="badge badge-primary mt-1.5">Travel Agent</span>
                       </div>
 
-                      <Link to="/customer/profile" className="dropdown-item" role="menuitem">
-                        <User className="w-4 h-4" aria-hidden="true" />
-                        Profile
-                      </Link>
                       <Link to="/customer/security" className="dropdown-item" role="menuitem">
                         <Shield className="w-4 h-4" aria-hidden="true" />
                         Security
                       </Link>
                       <div className="dropdown-divider" role="separator" />
-                      <button onClick={logout} className="dropdown-item w-full text-left text-eventra-red-600 hover:bg-eventra-red-50" role="menuitem">
+                      <button onClick={handleSignOut} className="dropdown-item w-full text-left text-eventra-red-600 hover:bg-eventra-red-50" role="menuitem">
                         <LogOut className="w-4 h-4" aria-hidden="true" />
                         Sign Out
                       </button>
