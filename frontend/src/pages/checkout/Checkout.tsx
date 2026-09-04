@@ -345,6 +345,9 @@ export function Checkout() {
         return
       }
 
+      // Cart has been converted into a booking — clear it before payment
+      clearCart()
+
       // Initiate payment against the created booking
       try {
         const payRes = await api.post<any>('/payments/initiate', {
@@ -353,7 +356,6 @@ export function Checkout() {
         })
         const payment = payRes?.data
         if (payRes?.success && payment?.id) {
-          clearCart()
           toast.success(`Booking ${booking.booking_reference} created`)
           navigate(`/booking/payment/${payment.id}`, {
             state: { bookingId: booking.id, bookingReference: booking.booking_reference },
@@ -368,7 +370,6 @@ export function Checkout() {
       }
 
       // Booking exists but payment was not initiated → confirmation page
-      clearCart()
       navigate(`/booking/confirmation/${booking.booking_reference}`)
     } catch (err: any) {
       toast.error(err?.response?.data?.message || 'Booking failed. Please try again.')
