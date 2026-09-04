@@ -1,15 +1,16 @@
 import { useState, useRef, useEffect } from 'react'
-import { Outlet, NavLink, Link, useLocation } from 'react-router-dom'
+import { Outlet, NavLink, Link, useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuthStore } from '@/store/auth'
 import { useCartStore } from '@/store/cart'
+import { api } from '@/lib/api'
 import { cn } from '@/lib/utils'
 import { Avatar } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
 import {
   Home, Search, Building2, Plane, Train, Bus, MapPin, Car, Ship, Briefcase,
   LayoutDashboard, Luggage, Wallet, Award, Heart, Star, MessageSquare, Bell,
-  Shield, LogOut, User, Menu, X, ChevronDown, Settings,
+  Shield, LogOut, Menu, X, ChevronDown, Settings,
 } from 'lucide-react'
 
 const navigation = [
@@ -26,8 +27,20 @@ const navigation = [
 
 export default function Layout() {
   const location = useLocation()
+  const navigate = useNavigate()
   const { user, isAuthenticated, logout, hasRole } = useAuthStore()
   const { items } = useCartStore()
+
+  const handleSignOut = async () => {
+    try {
+      await api.post('/auth/logout')
+    } catch {
+      // Token may already be invalid — clear locally regardless
+    }
+    logout()
+    setUserMenuOpen(false)
+    navigate('/login')
+  }
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const userMenuRef = useRef<HTMLDivElement>(null)
@@ -134,19 +147,19 @@ export default function Layout() {
 
                         {hasRole('customer') && (
                           <>
-                            <Link to="/dashboard" className="dropdown-item" role="menuitem">
+                            <Link to="/customer/dashboard" className="dropdown-item" role="menuitem">
                               <LayoutDashboard className="w-4 h-4" /> Dashboard
                             </Link>
-                            <Link to="/trips" className="dropdown-item" role="menuitem">
+                            <Link to="/customer/trips" className="dropdown-item" role="menuitem">
                               <Luggage className="w-4 h-4" /> My Trips
                             </Link>
-                            <Link to="/wallet" className="dropdown-item" role="menuitem">
+                            <Link to="/customer/wallet" className="dropdown-item" role="menuitem">
                               <Wallet className="w-4 h-4" /> Wallet
                             </Link>
-                            <Link to="/favorites" className="dropdown-item" role="menuitem">
+                            <Link to="/customer/favorites" className="dropdown-item" role="menuitem">
                               <Heart className="w-4 h-4" /> Favorites
                             </Link>
-                            <Link to="/support" className="dropdown-item" role="menuitem">
+                            <Link to="/customer/support" className="dropdown-item" role="menuitem">
                               <MessageSquare className="w-4 h-4" /> Support
                             </Link>
                             <div className="dropdown-divider" />
@@ -164,15 +177,12 @@ export default function Layout() {
                           </Link>
                         )}
 
-                        <Link to="/profile" className="dropdown-item" role="menuitem">
-                          <User className="w-4 h-4" /> Profile
-                        </Link>
-                        <Link to="/security" className="dropdown-item" role="menuitem">
+                        <Link to="/customer/security" className="dropdown-item" role="menuitem">
                           <Shield className="w-4 h-4" /> Security
                         </Link>
                         <div className="dropdown-divider" />
                         <button
-                          onClick={() => { logout(); setUserMenuOpen(false) }}
+                          onClick={handleSignOut}
                           className="dropdown-item w-full text-left text-eventra-red-600 hover:bg-eventra-red-50"
                           role="menuitem"
                         >
@@ -272,8 +282,8 @@ export default function Layout() {
             <div>
               <h4 className="font-semibold text-white mb-4 text-body-sm">Support</h4>
               <ul className="space-y-2 text-body-sm">
-                <li><Link to="/support" className="hover:text-white">Help Center</Link></li>
-                <li><Link to="/support" className="hover:text-white">Contact Us</Link></li>
+                <li><Link to="/customer/support" className="hover:text-white">Help Center</Link></li>
+                <li><Link to="/customer/support" className="hover:text-white">Contact Us</Link></li>
                 <li><Link to="#" className="hover:text-white">Cancellation Policy</Link></li>
                 <li><Link to="#" className="hover:text-white">FAQs</Link></li>
               </ul>
