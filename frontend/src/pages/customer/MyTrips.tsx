@@ -2,12 +2,11 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
-import { ChevronLeft, ChevronRight, Filter, Calendar, MapPin, Users, X, Loader2, Building2, Plane, MapPin as MapPinIcon, Train, Bus, Car, Sparkles, Truck, Package, ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Filter, Calendar, MapPin, Users, X, Loader2, Building2, Plane, MapPin as MapPinIcon, Train, Bus, Car, Sparkles, Truck, Package, ChevronDown, ChevronUp, Luggage, Search } from 'lucide-react'
 import { api } from '@/lib/api'
 import { formatCurrency, formatDate, cn, getRelativeTime } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
-import { Select, SelectOption } from '@/components/ui/Input'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { ListSkeleton } from '@/components/ui/LoadingScreen'
@@ -68,8 +67,7 @@ export function MyTrips() {
       if (typeFilter !== 'all') params.set('type', typeFilter)
       if (search) params.set('search', search)
       params.set('sort', sortBy)
-      const response = await api.get('/customer/trips', { params })
-      return response.data
+      return api.get<any>('/customer/trips', { params })
     },
   })
 
@@ -136,24 +134,23 @@ export function MyTrips() {
           {/* Type Filter & Search */}
           <div className="flex flex-wrap items-center gap-3 lg:ml-auto">
             <div className="relative">
-              <Select
+              <select
                 value={typeFilter}
-                onValueChange={handleTypeFilterChange}
-                options={[
-                  { value: 'all', label: 'All Types' },
-                  { value: 'hotel', label: 'Hotels' },
-                  { value: 'flight', label: 'Flights' },
-                  { value: 'venue', label: 'Venues' },
-                  { value: 'train', label: 'Trains' },
-                  { value: 'bus', label: 'Buses' },
-                  { value: 'car', label: 'Cars' },
-                  { value: 'activity', label: 'Activities' },
-                  { value: 'transfer', label: 'Transfers' },
-                  { value: 'package', label: 'Packages' },
-                ]}
-                className="w-40"
-                placeholder="Filter by type"
-              />
+                onChange={(e) => handleTypeFilterChange(e.target.value as TripType)}
+                className="input form-select w-40"
+                aria-label="Filter by type"
+              >
+                <option value="all">All Types</option>
+                <option value="hotel">Hotels</option>
+                <option value="flight">Flights</option>
+                <option value="venue">Venues</option>
+                <option value="train">Trains</option>
+                <option value="bus">Buses</option>
+                <option value="car">Cars</option>
+                <option value="activity">Activities</option>
+                <option value="transfer">Transfers</option>
+                <option value="package">Packages</option>
+              </select>
             </div>
             <div className="relative flex-1 max-w-xs">
               <Input
@@ -164,18 +161,17 @@ export function MyTrips() {
               />
             </div>
             <div className="relative">
-              <Select
+              <select
                 value={sortBy}
-                onValueChange={handleSortChange}
-                options={[
-                  { value: 'date_desc', label: 'Newest First' },
-                  { value: 'date_asc', label: 'Oldest First' },
-                  { value: 'amount_desc', label: 'Highest Price' },
-                  { value: 'amount_asc', label: 'Lowest Price' },
-                ]}
-                className="w-40"
-                placeholder="Sort by"
-              />
+                onChange={(e) => handleSortChange(e.target.value as typeof sortBy)}
+                className="input form-select w-40"
+                aria-label="Sort trips"
+              >
+                <option value="date_desc">Newest First</option>
+                <option value="date_asc">Oldest First</option>
+                <option value="amount_desc">Highest Price</option>
+                <option value="amount_asc">Lowest Price</option>
+              </select>
             </div>
             {activeFiltersCount > 0 && (
               <Button variant="ghost" size="sm" onClick={clearFilters}>
@@ -352,10 +348,3 @@ function Pagination({ currentPage, totalPages }: { currentPage: number; totalPag
   )
 }
 
-const activeFiltersCount = (filter !== 'all' ? 1 : 0) + (typeFilter !== 'all' ? 1 : 0) + (search ? 1 : 0)
-
-const clearFilters = () => {
-  setFilter('all')
-  setTypeFilter('all')
-  setSearch('')
-}
