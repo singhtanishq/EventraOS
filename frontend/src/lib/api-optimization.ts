@@ -283,7 +283,7 @@ export function createCachedApi<T extends Record<string, any>>(
             return cached.data
           }
 
-          const result = await (value as Function).apply(target, args)
+          const result = await (value as (...args: unknown[]) => unknown).apply(target, args)
 
           cache.set(cacheKey, {
             data: result,
