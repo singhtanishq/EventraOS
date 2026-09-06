@@ -43,7 +43,11 @@ class ApiClient {
       (error: AxiosError) => {
         if (error.response?.status === 401) {
           clearAuth()
-          if (window.location.pathname !== '/login') {
+          // Session-verification calls handle their own logout gracefully —
+          // only hard-redirect for actual data requests from a protected context.
+          const requestUrl = (error.config?.url as string) || ''
+          const isSessionCheck = requestUrl.includes('/auth/me')
+          if (!isSessionCheck && window.location.pathname !== '/login') {
             window.location.href = '/login?expired=1'
           }
         }
