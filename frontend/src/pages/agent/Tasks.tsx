@@ -114,7 +114,7 @@ export function AgentTasks() {
   })
 
   const updateTask = useMutation({
-    mutationFn: async ({ id, payload }: { id: number; payload: Record<string, unknown> }) => {
+    mutationFn: async ({ id, payload }: { id: number; payload: TaskUpdatePayload }) => {
       return api.put<any>(`/agent/tasks/${id}`, payload)
     },
     onSuccess: (body: any) => {
@@ -471,11 +471,19 @@ function TasksSkeleton() {
   )
 }
 
-interface TaskFormPayload {
+type TaskFormPayload = {
   title: string
   description?: string
   due_date: string
   priority: string
+}
+
+type TaskUpdatePayload = {
+  title?: string
+  description?: string
+  due_date?: string
+  priority?: string
+  status?: string
 }
 
 function TaskForm({ initial, onSubmit, onCancel, isSubmitting, submitLabel = 'Create Task' }: {
@@ -488,7 +496,7 @@ function TaskForm({ initial, onSubmit, onCancel, isSubmitting, submitLabel = 'Cr
   const [title, setTitle] = useState(initial?.title || '')
   const [description, setDescription] = useState(initial?.description || '')
   const [dueDate, setDueDate] = useState(initial?.due_date ? String(initial.due_date).slice(0, 10) : '')
-  const [priority, setPriority] = useState(initial?.priority || 'normal')
+  const [priority, setPriority] = useState<string>(initial?.priority || 'normal')
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
