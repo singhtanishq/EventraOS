@@ -341,7 +341,7 @@
 
 /* Loading Spinner */
 .spinner {
-  @apply animate-spin rounded-full border-3 border-eventra-slate-200 border-t-eventra-navy-900;
+  @apply animate-spin rounded-full border-4 border-eventra-slate-200 border-t-eventra-navy-900;
 }
 
 /* Table Styles */
