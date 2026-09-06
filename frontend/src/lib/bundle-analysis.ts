@@ -253,10 +253,10 @@ export const webpackBundleAnalyzer = {
   ],
 }
 
-// Visualize bundle with webpack-bundle-analyzer
-export function visualizeBundle(statsPath: string) {
-  const fs = require('fs')
-  const path = require('path')
+// Visualize bundle with webpack-bundle-analyzer (Node-only utility — run via a script, not in the browser)
+export async function visualizeBundle(statsPath: string) {
+  const fs = await import('fs')
+  const path = await import('path')
 
   if (!fs.existsSync(statsPath)) {
     console.error('Stats file not found:', statsPath)
