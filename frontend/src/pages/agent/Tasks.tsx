@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { ClipboardList, Clock, RefreshCw, CheckSquare, Plus, Calendar, Users, AlertTriangle, Edit2, Square, FileText, Trash2 } from 'lucide-react'
+import { ClipboardList, Clock, RefreshCw, CheckSquare, Plus, Calendar, Users, AlertTriangle, Edit2, Square, FileText, Trash2, Search } from 'lucide-react'
 import { api } from '@/lib/api'
 import { formatDate, cn } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
