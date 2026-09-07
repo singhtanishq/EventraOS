@@ -80,8 +80,6 @@ export function initPerformanceMonitoring() {
 }
 
 function handlePerformanceEntry(entry: PerformanceEntry) {
-  const metric = entry as unknown as WebVitalsMetric
-
   // Only process web-vital entries
   if (!['CLS', 'FID', 'LCP', 'FCP', 'TTFB', 'INP'].includes(entry.name)) {
     return
