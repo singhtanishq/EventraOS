@@ -97,7 +97,7 @@ export function CarResults() {
     queryKey: ['cars', queryParams],
     queryFn: async () => {
       const response = await api.get<any>('/search/cars', { params: queryParams })
-      return response.data
+      return response
     },
     placeholderData: (previousData) => previousData,
   })
