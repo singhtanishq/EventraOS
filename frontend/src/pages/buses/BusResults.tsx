@@ -384,12 +384,16 @@ function BusResultCard({ bus, formatDuration, onSelect }: { bus: BusResult; form
             <span className={cn('inline-flex items-center gap-1 px-2 py-1 rounded-full text-body-xs font-medium', metadata.is_ac ? 'bg-eventra-blue-100 text-eventra-blue-700' : 'bg-eventra-slate-100 text-eventra-slate-700')}>
               {metadata.is_ac ? 'AC' : 'Non-AC'}
             </span>
-            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-body-xs font-medium bg-eventra-teal-100 text-eventra-teal-700">
-              {metadata.layout.replace('x', '×')}
-            </span>
-            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-body-xs font-medium bg-eventra-purple-100 text-eventra-purple-700">
-              {metadata.berth_type.charAt(0).toUpperCase() + metadata.berth_type.slice(1)}
-            </span>
+            {metadata.layout && (
+              <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-body-xs font-medium bg-eventra-teal-100 text-eventra-teal-700">
+                {metadata.layout.replace('x', '×')}
+              </span>
+            )}
+            {metadata.berth_type && (
+              <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-body-xs font-medium bg-eventra-slate-100 text-eventra-slate-700">
+                {metadata.berth_type.charAt(0).toUpperCase() + metadata.berth_type.slice(1)}
+              </span>
+            )}
           </div>
         </div>
         <div className="flex flex-col items-end gap-2 w-48">
