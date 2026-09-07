@@ -367,7 +367,7 @@ function ActivityResultCard({ activity, onSelect }: { activity: ActivityResult; 
           </span>
         </div>
         <div className="absolute bottom-3 left-3 flex gap-2">
-          <span className="badge badge-primary">★ {activity.rating.toFixed(1)}</span>
+          <span className="badge badge-primary">★ {(activity.rating ?? 0).toFixed(1)}</span>
           <span className="badge badge-neutral">({activity.review_count} reviews)</span>
         </div>
       </div>
