@@ -235,25 +235,19 @@ export function getRelativeTime(date: Date | string): string {
   const d = typeof date === 'string' ? new Date(date) : date
   const now = new Date()
   const diffMs = d.getTime() - now.getTime()
-  const diffMins = Math.floor(diffMs / 60000)
-  const diffHours = Math.floor(diffMs / 3600000)
-  const diffDays = Math.floor(diffMs / 86400000)
+  // Work from the absolute difference so negative-floor rounding cannot
+  // promote an hour-old timestamp into the day tier
+  const absMs = Math.abs(diffMs)
+  const mins = Math.floor(absMs / 60000)
+  const hours = Math.floor(absMs / 3600000)
+  const days = Math.floor(absMs / 86400000)
+  const past = diffMs < 0
 
-  if (diffMs < 0) {
-    if (diffDays < -1) return `${Math.abs(diffDays)} days ago`
-    if (diffDays === -1) return 'Yesterday'
-    if (diffHours < -1) return `${Math.abs(diffHours)} hours ago`
-    if (diffHours === -1) return 'An hour ago'
-    if (diffMins < -1) return `${Math.abs(diffMins)} minutes ago`
-    return 'Just now'
-  } else {
-    if (diffDays > 1) return `In ${diffDays} days`
-    if (diffDays === 1) return 'Tomorrow'
-    if (diffHours > 1) return `In ${diffHours} hours`
-    if (diffHours === 1) return 'In an hour'
-    if (diffMins > 1) return `In ${diffMins} minutes`
-    return 'Just now'
-  }
+  if (mins < 1) return 'Just now'
+  if (hours < 1) return past ? `${mins} minute${mins === 1 ? '' : 's'} ago` : `In ${mins} minute${mins === 1 ? '' : 's'}`
+  if (days < 1) return past ? (hours === 1 ? 'An hour ago' : `${hours} hours ago`) : (hours === 1 ? 'In an hour' : `In ${hours} hours`)
+  if (days === 1) return past ? 'Yesterday' : 'Tomorrow'
+  return past ? `${days} days ago` : `In ${days} days`
 }
 /**
  * Resolve a date for a search query: returns the provided date if it is a
