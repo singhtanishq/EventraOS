@@ -165,7 +165,7 @@ export function PackageResults() {
   ).length
 
   const handleSelect = (pkg: PackageResult) => {
-    const tierPrices = pkg.metadata.pricing_tiers.map(t => t.price)
+    const tierPrices = (pkg.metadata.pricing_tiers || []).map(t => t.price)
     const basePrice = tierPrices.length > 0 ? Math.min(...tierPrices) : (pkg.pricing.per_person ?? pkg.pricing.total ?? 0)
     addItem({
       type: 'package',
@@ -370,7 +370,7 @@ function PackageResultCard({ pkg, onSelect }: { pkg: PackageResult; onSelect: ()
   const metadata = pkg.metadata
 
   // Calculate savings if there are multiple tiers
-  const tierPrices = metadata.pricing_tiers.map(t => t.price)
+  const tierPrices = (metadata.pricing_tiers || []).map(t => t.price)
   const minPrice = tierPrices.length > 0 ? Math.min(...tierPrices) : 0
   const maxPrice = tierPrices.length > 0 ? Math.max(...tierPrices) : 0
   const savings = maxPrice > minPrice ? maxPrice - minPrice : 0
@@ -405,7 +405,7 @@ function PackageResultCard({ pkg, onSelect }: { pkg: PackageResult; onSelect: ()
       <div className="p-4 flex-1 flex flex-col">
         <h3 className="text-heading-sm font-semibold text-eventra-navy-900 line-clamp-1">{pkg.name}</h3>
         <p className="text-body-sm text-eventra-slate-600 mt-1 flex items-center gap-1 flex-wrap">
-          {pkg.location.destinations.map((d, i) => (
+          {(pkg.location.destinations || []).map((d, i) => (
             <span key={i} className="flex items-center gap-1">
               {i > 0 && <span className="text-eventra-slate-400">→</span>}
               <MapPinIcon className="w-3 h-3" />
