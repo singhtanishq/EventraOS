@@ -359,8 +359,8 @@ function ActivityResultCard({ activity, onSelect }: { activity: ActivityResult; 
         />
         <div className="absolute top-3 left-3 right-3 flex justify-between">
           <span className="badge badge-primary">
-            {getCategoryIcon(metadata.category_name)}
-            {metadata.category_name}
+            {getCategoryIcon(metadata.category_name || '')}
+            {metadata.category_name || 'Experience'}
           </span>
           <span className={`badge px-3 py-1 ${activity.availability.available ? 'badge-success' : 'badge-danger'}`}>
             {activity.availability.available ? 'Available' : 'Sold Out'}
@@ -391,11 +391,11 @@ function ActivityResultCard({ activity, onSelect }: { activity: ActivityResult; 
           )}
         </div>
         <div className="flex flex-wrap gap-1.5 mb-4">
-          {metadata.highlights.slice(0, 3).map((highlight) => (
+          {(metadata.highlights || []).slice(0, 3).map((highlight) => (
             <span key={highlight} className="tag text-body-xs px-2 py-0.5">{highlight}</span>
           ))}
-          {metadata.highlights.length > 3 && (
-            <span className="tag text-body-xs px-2 py-0.5 text-eventra-slate-500">+{metadata.highlights.length - 3} more</span>
+          {(metadata.highlights || []).length > 3 && (
+            <span className="tag text-body-xs px-2 py-0.5 text-eventra-slate-500">+{(metadata.highlights || []).length - 3} more</span>
           )}
         </div>
         <div className="mt-auto pt-4 border-t border-eventra-slate-200 flex items-center justify-between">
