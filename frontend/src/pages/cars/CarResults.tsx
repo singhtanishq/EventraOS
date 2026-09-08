@@ -357,7 +357,7 @@ function CarResultCard({ car, days, onSelect }: { car: CarResult; days: number; 
           loading="lazy"
         />
         <div className="absolute top-3 left-3 right-3 flex justify-between">
-          <span className="badge badge-primary">★ {car.rating.toFixed(1)}</span>
+          <span className="badge badge-primary">★ {(car.rating ?? 0).toFixed(1)}</span>
           <span className={`badge px-3 py-1 ${car.availability.available ? 'badge-success' : 'badge-danger'}`}>
             {car.availability.available ? 'Available' : 'Unavailable'}
           </span>
@@ -375,10 +375,10 @@ function CarResultCard({ car, days, onSelect }: { car: CarResult; days: number; 
             <Users className="w-3 h-3" /> {metadata.seats} seats
           </span>
           <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-body-xs font-medium bg-eventra-green-100 text-eventra-green-700">
-            <Settings className="w-3 h-3" /> {metadata.transmission.charAt(0).toUpperCase() + metadata.transmission.slice(1)}
+            <Settings className="w-3 h-3" /> {metadata.transmission ? metadata.transmission.charAt(0).toUpperCase() + metadata.transmission.slice(1) : '—'}
           </span>
           <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-body-xs font-medium bg-eventra-amber-100 text-eventra-amber-700">
-            <Fuel className="w-3 h-3" /> {metadata.fuel_type.charAt(0).toUpperCase() + metadata.fuel_type.slice(1)}
+            <Fuel className="w-3 h-3" /> {metadata.fuel_type ? metadata.fuel_type.charAt(0).toUpperCase() + metadata.fuel_type.slice(1) : '—'}
           </span>
           {metadata.is_ac && (
             <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-body-xs font-medium bg-eventra-blue-100 text-eventra-blue-700">
