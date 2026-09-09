@@ -373,7 +373,7 @@ function ActivityResultCard({ activity, onSelect }: { activity: ActivityResult; 
     <Card variant="interactive" onClick={onSelect} className="h-full flex flex-col">
       <div className="relative aspect-[4/3] overflow-hidden">
         <img 
-          src={activity.images[0] || '/placeholder-activity.jpg'} 
+          src={activity.images[0] || '/placeholder.svg'} 
           alt={activity.name} 
           className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
           loading="lazy"
