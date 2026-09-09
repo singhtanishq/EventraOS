@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { PageSkeleton } from '@/components/ui/LoadingScreen'
 import { Modal } from '@/components/ui/Modal'
+import { useCartStore } from '@/store/cart'
+import { toast } from 'react-hot-toast'
 
 interface SearchParams {
   city_id?: string
@@ -296,13 +298,31 @@ export function CarResults() {
                             car={car}
                             days={days}
                             onSelect={() => {
-                              navigate(`/cars/${car.provider_item_id}`, {
-                                state: { 
-                                  pickup_date: searchParams.get('pickup_date'),
-                                  return_date: searchParams.get('return_date'),
-                                  passengers: searchParams.get('passengers')
-                                }
+                              const pickup = searchParams.get('pickup_date') || new Date().toISOString().split('T')[0]
+                              useCartStore.getState().addItem({
+                                type: 'car',
+                                serviceId: car.provider_item_id,
+                                providerId: car.provider_code,
+                                name: car.name,
+                                image: car.images?.[0],
+                                dates: { start: pickup, end: searchParams.get('return_date') || undefined },
+                                passengers: parseInt(searchParams.get('passengers') || '1'),
+                                options: [],
+                                pricing: {
+                                  basePrice: car.pricing?.total ?? car.pricing?.base_price ?? 0,
+                                  taxes: 0,
+                                  fees: 0,
+                                  serviceFee: 0,
+                                  discount: 0,
+                                  optionsTotal: 0,
+                                  total: car.pricing?.total ?? 0,
+                                  currency: car.pricing?.currency || 'INR',
+                                  breakdown: [],
+                                },
+                                availability: { available: car.availability?.available ?? true },
                               })
+                              toast.success('Added to cart')
+                              navigate('/checkout')
                             }}
                           />
                         ))}
