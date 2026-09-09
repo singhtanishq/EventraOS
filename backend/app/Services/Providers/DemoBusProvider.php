@@ -171,10 +171,10 @@ class DemoBusProvider extends BaseProvider
                         'change_fee' => (float) $f->change_fee,
                         'cancel_fee' => (float) $f->cancel_fee,
                         'pricing' => [
-                            'base_price' => $f->inventory()->min('sell_price') ?? 0,
+                            'base_price' => $f->inventory()->min('current_fare') ?? 0,
                             'currency' => 'INR',
-                            'total' => (float) $f->inventory()->min('sell_price') ?? 0,
-                            'per_passenger' => $f->inventory()->min('sell_price') ?? 0,
+                            'total' => (float) $f->inventory()->min('current_fare') ?? 0,
+                            'per_passenger' => $f->inventory()->min('current_fare') ?? 0,
                         ],
                         'availability' => [
                             'available' => $f->inventory()->where('available_seats', '>', 0)->exists(),
