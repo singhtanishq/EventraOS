@@ -281,7 +281,11 @@ export function Checkout() {
 
   const handleNextStep = () => {
     if (currentStepIndex < STEPS.length - 1) {
-      setCurrentStep(STEPS[currentStepIndex + 1].id)
+      const next = STEPS[currentStepIndex + 1].id
+      setCurrentStep((prev) => {
+        document.title = 'STEP:' + String(prev) + '->' + String(next)
+        return next
+      })
     }
   }
 
