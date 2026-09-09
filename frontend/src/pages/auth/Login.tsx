@@ -66,7 +66,7 @@ export function Login() {
 
   return (
     <div className="w-full">
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         {!showSuccess ? (
           <motion.form
             key="login-form"
