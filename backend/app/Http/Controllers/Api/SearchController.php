@@ -291,6 +291,9 @@ class SearchController extends Controller
             'luggage' => 'sometimes|integer|min:0|max:20',
             'vehicle_type_id' => 'sometimes|integer|exists:transfer_vehicle_types,id',
             'transfer_type' => 'sometimes|in:airport_to_hotel,hotel_to_airport,point_to_point,hourly,city_tour',
+            'price_min' => 'sometimes|numeric|min:0',
+            'price_max' => 'sometimes|numeric|min:0',
+            'sort' => 'sometimes|in:recommended,price_low,price_high,rating,fastest',
             'page' => 'sometimes|integer|min:1',
             'per_page' => 'sometimes|integer|min:1|max:50',
         ]);
@@ -323,6 +326,7 @@ class SearchController extends Controller
             'participants' => 'sometimes|integer|min:1|max:20',
             'price_min' => 'sometimes|numeric|min:0',
             'price_max' => 'sometimes|numeric|min:0',
+            'sort' => 'sometimes|in:recommended,price_low,price_high,rating,duration',
             'page' => 'sometimes|integer|min:1',
             'per_page' => 'sometimes|integer|min:1|max:50',
         ]);
