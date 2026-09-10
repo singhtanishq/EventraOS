@@ -195,10 +195,8 @@ export function Register() {
           <Checkbox
             label={
               <>
-                I agree to the{' '}
-                <Link to="/terms" className="link">Terms of Service</Link>{' '}
-                and{' '}
-                <Link to="/privacy" className="link">Privacy Policy</Link>
+                I agree to the <span className="font-medium">Terms of Service</span> and{' '}
+                <span className="font-medium">Privacy Policy</span>
               </>
             }
             {...register('terms')}
