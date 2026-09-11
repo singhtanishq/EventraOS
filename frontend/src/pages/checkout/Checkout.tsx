@@ -465,7 +465,9 @@ export function Checkout() {
               </div>
             )}
 
-            <AnimatePresence mode="wait">
+            {/* NOTE: no mode="wait" — combined with React StrictMode the exiting step
+                never unmounts in dev, freezing the checkout on the first step */}
+            <AnimatePresence>
               {currentStep === 'review' && (
                 <motion.div
                   key="review"
