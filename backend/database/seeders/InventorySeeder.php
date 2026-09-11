@@ -15,6 +15,7 @@ use App\Models\CarRentalCompany;
 use App\Models\Car;
 use App\Models\CarRate;
 use App\Models\CarInventory;
+use App\Models\CarPickupLocation;
 use App\Models\Activity;
 use App\Models\ActivityCategory;
 use App\Models\ActivityPricing;
@@ -537,6 +538,32 @@ class InventorySeeder extends Seeder
     private function seedCars(): void
     {
         $company = CarRentalCompany::create(['name' => 'EventraDrive Rentals', 'code' => 'EDR', 'is_active' => true, 'is_demo' => true]);
+
+        // Pickup locations across the demo cities
+        $pickupCityMap = [
+            'Delhi' => 'Indira Gandhi International Airport (DEL)',
+            'Mumbai' => 'Chhatrapati Shivaji Maharaj Intl Airport (BOM)',
+            'Goa' => 'Dabolim Airport (GOI)',
+            'Dubai' => 'Dubai International Airport (DXB)',
+            'Singapore' => 'Singapore Changi Airport (SIN)',
+            'Bangkok' => 'Suvarnabhumi Airport (BKK)',
+            'London' => 'Heathrow Airport (LHR)',
+            'New York' => 'John F. Kennedy International Airport (JFK)',
+        ];
+        foreach ($pickupCityMap as $cityName => $locationName) {
+            if (isset($this->cityIds[$cityName])) {
+                CarPickupLocation::create([
+                    'company_id' => $company->id,
+                    'city_id' => $this->cityIds[$cityName],
+                    'name' => $locationName,
+                    'address' => $locationName,
+                    'phone' => '+91 98200 00000',
+                    'operating_hours' => '06:00 - 23:00',
+                    'is_airport' => true,
+                    'is_active' => true,
+                ]);
+            }
+        }
 
         $categories = [
             ['name' => 'Economy', 'code' => 'ECO', 'seats' => 5, 'doors' => 4, 'bags' => 2],
