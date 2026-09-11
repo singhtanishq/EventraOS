@@ -46,7 +46,12 @@ class DemoHotelProvider extends BaseProvider
         }
 
         if (!empty($criteria['star_rating'])) {
-            $query->where('star_rating', '>=', $criteria['star_rating']);
+            // Frontend sends a comma-separated selection, e.g. "4,5" — match any of them
+            $stars = collect(explode(',', (string) $criteria['star_rating']))
+                ->map(fn ($v) => (int) trim($v))->filter()->values();
+            if ($stars->isNotEmpty()) {
+                $query->whereIn('star_rating', $stars->all());
+            }
         }
 
         if (!empty($criteria['price_min']) || !empty($criteria['price_max'])) {
