@@ -541,22 +541,24 @@ class InventorySeeder extends Seeder
 
         // Pickup locations across the demo cities
         $pickupCityMap = [
-            'Delhi' => 'Indira Gandhi International Airport (DEL)',
-            'Mumbai' => 'Chhatrapati Shivaji Maharaj Intl Airport (BOM)',
-            'Goa' => 'Dabolim Airport (GOI)',
-            'Dubai' => 'Dubai International Airport (DXB)',
-            'Singapore' => 'Singapore Changi Airport (SIN)',
-            'Bangkok' => 'Suvarnabhumi Airport (BKK)',
-            'London' => 'Heathrow Airport (LHR)',
-            'New York' => 'John F. Kennedy International Airport (JFK)',
+            ['Delhi', 'Indira Gandhi International Airport (DEL)', 28.5562, 77.1],
+            ['Mumbai', 'Chhatrapati Shivaji Maharaj Intl Airport (BOM)', 19.0896, 72.8656],
+            ['Goa', 'Dabolim Airport (GOI)', 15.3808, 73.8314],
+            ['Dubai', 'Dubai International Airport (DXB)', 25.2532, 55.3657],
+            ['Singapore', 'Singapore Changi Airport (SIN)', 1.3644, 103.9915],
+            ['Bangkok', 'Suvarnabhumi Airport (BKK)', 13.69, 100.7501],
+            ['London', 'Heathrow Airport (LHR)', 51.47, -0.4543],
+            ['New York', 'John F. Kennedy International Airport (JFK)', 40.6413, -73.7781],
         ];
-        foreach ($pickupCityMap as $cityName => $locationName) {
+        foreach ($pickupCityMap as [$cityName, $locationName, $lat, $lng]) {
             if (isset($this->cityIds[$cityName])) {
                 CarPickupLocation::create([
                     'company_id' => $company->id,
                     'city_id' => $this->cityIds[$cityName],
                     'name' => $locationName,
                     'address' => $locationName,
+                    'latitude' => $lat,
+                    'longitude' => $lng,
                     'phone' => '+91 98200 00000',
                     'operating_hours' => '06:00 - 23:00',
                     'is_airport' => true,
