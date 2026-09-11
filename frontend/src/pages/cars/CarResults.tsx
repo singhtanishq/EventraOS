@@ -377,7 +377,7 @@ function CarResultCard({ car, days, onSelect }: { car: CarResult; days: number; 
     <Card variant="interactive" onClick={onSelect} className="h-full flex flex-col">
       <div className="relative aspect-[4/3] overflow-hidden">
         <img 
-          src={car.images[0] || '/placeholder-car.jpg'} 
+          src={car.images[0] || '/placeholder.svg'} 
           alt={car.name} 
           className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
           loading="lazy"
