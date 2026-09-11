@@ -100,6 +100,13 @@ class DemoCarProvider extends BaseProvider
             );
         })->toArray();
 
+                $sort = $criteria['sort'] ?? 'recommended';
+        if ($sort === 'price_low' || $sort === 'price_high') {
+            usort($results, fn ($a, $b) => $sort === 'price_low'
+                ? ($a->pricing['base_price'] ?? 0) <=> ($b->pricing['base_price'] ?? 0)
+                : ($b->pricing['base_price'] ?? 0) <=> ($a->pricing['base_price'] ?? 0));
+        }
+
         return new SearchResultCollection($results, $cars->count(), $this->getCode());
     }
 
