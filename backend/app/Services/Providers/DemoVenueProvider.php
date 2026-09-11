@@ -60,7 +60,15 @@ class DemoVenueProvider extends BaseProvider
             });
         }
 
-        $venues = $query->with(['city', 'packages'])->orderBy('rating', 'desc')->limit(20)->get();
+                $sort = $criteria['sort'] ?? 'recommended';
+        $venues = $query->with(['city', 'packages']);
+        $venues = match ($sort) {
+            'price_low' => $venues->orderBy('base_price', 'asc'),
+            'price_high' => $venues->orderBy('base_price', 'desc'),
+            'rating' => $venues->orderBy('rating', 'desc'),
+            'capacity' => $venues->orderBy('total_capacity', 'desc'),
+            default => $venues->orderBy('rating', 'desc'),
+        }->limit(20)->get();
 
         $results = $venues->map(function ($venue) {
             $minPrice = $venue->packages->min('price_per_guest') ?? 
