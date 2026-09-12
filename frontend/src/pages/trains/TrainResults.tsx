@@ -197,7 +197,7 @@ export function TrainResults() {
       },
       availability: { available: train.availability.available },
     })
-    toast.success('Added to cart')
+    toast.success('Added to your booking')
     navigate('/checkout')
   }
 
