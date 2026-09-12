@@ -321,7 +321,7 @@ export function CarResults() {
                                 },
                                 availability: { available: car.availability?.available ?? true },
                               })
-                              toast.success('Added to cart')
+                              toast.success('Added to your booking')
                               navigate('/checkout')
                             }}
                           />
