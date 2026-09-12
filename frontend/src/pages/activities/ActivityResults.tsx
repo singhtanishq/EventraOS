@@ -323,7 +323,7 @@ export function ActivityResults() {
                                 },
                                 availability: { available: activity.availability?.available ?? true },
                               })
-                              toast.success('Added to cart')
+                              toast.success('Added to your booking')
                               navigate('/checkout')
                             }}
                           />
