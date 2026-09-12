@@ -268,7 +268,7 @@ export function PaymentProcessing() {
         <Card variant="elevated" padding="lg" className="text-center">
           {/* Header */}
           <div className="mb-8">
-            <AnimatePresence mode="wait">
+            <AnimatePresence>
               {phase === 'processing' ? (
                 <motion.div
                   key="processing"
