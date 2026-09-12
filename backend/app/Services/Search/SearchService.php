@@ -24,7 +24,7 @@ class SearchService
     protected function rememberCollection(string $cacheKey, string $serviceMethod, array $criteria): SearchResultCollection
     {
         $payload = Cache::remember($cacheKey, config('search.cache_ttl', 300), function () use ($serviceMethod, $criteria) {
-            return $this->{$serviceMethod}($criteria)->toArray();
+            return $this->providerManager->search($serviceMethod, $criteria)->toArray();
         });
 
         $results = array_map(
@@ -57,15 +57,15 @@ class SearchService
     public function searchHotels(array $criteria): SearchResultCollection
     {
         $cacheKey = $this->generateCacheKey('hotels', $criteria);
-        
-        return $this->rememberCollection($1, 'searchViaManager', $2);
+
+        return $this->rememberCollection($cacheKey, 'hotel', $criteria);
     }
 
     public function searchFlights(array $criteria): SearchResultCollection
     {
         $cacheKey = $this->generateCacheKey('flights', $criteria);
-        
-        return $this->rememberCollection($1, 'searchViaManager', $2);
+
+        return $this->rememberCollection($cacheKey, 'flight', $criteria);
     }
 
     public function searchTrains(array $criteria): SearchResultCollection
