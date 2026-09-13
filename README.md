@@ -1,4 +1,4 @@
-# StayOS: A Hotel Booking System
+# EventraOS: An Event Booking System
 
 StayOS is a state-of-the-art hotel booking platform designed to simplify and enhance the booking experience for travelers and hospitality businesses. With a focus on seamless usability, real-time room availability, secure payment processing, and data-driven performance, StayOS sets a new standard for hotel management systems.
 
