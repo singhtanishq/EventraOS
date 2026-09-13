@@ -209,7 +209,7 @@ export function CustomerDashboard() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 + index * 0.05 }}
-                    className="card p-4 flex items-center gap-4"
+                    className="card p-4 flex flex-wrap items-center gap-4"
                   >
                     <div className="w-16 h-16 rounded-xl bg-eventra-slate-100 flex items-center justify-center flex-shrink-0">
                       {trip.image ? (
@@ -229,7 +229,7 @@ export function CustomerDashboard() {
                         <MapPin className="w-4 h-4" />
                         {trip.location.city}, {trip.location.country}
                       </p>
-                      <div className="flex items-center gap-4 mt-2 text-body-sm text-eventra-slate-500">
+                      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-body-sm text-eventra-slate-500">
                         <span className="flex items-center gap-1">
                           <Calendar className="w-4 h-4" />
                           {formatDate(trip.start_date)} - {formatDate(trip.end_date || trip.start_date)}
@@ -279,7 +279,7 @@ export function CustomerDashboard() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 + index * 0.05 }}
-                    className="card p-4 flex items-center gap-4"
+                    className="card p-4 flex flex-wrap items-center gap-4"
                   >
                     <div className="w-12 h-12 rounded-xl bg-eventra-slate-100 flex items-center justify-center flex-shrink-0">
                       {typeIcons[booking.type] || <Package className="w-6 h-6 text-eventra-slate-400" />}
