@@ -12,7 +12,6 @@ import { Input } from '@/components/ui/Input'
 import { Badge } from '@/components/ui/Badge'
 import { toast } from 'react-hot-toast'
 import { CardSkeleton } from '@/components/ui/LoadingScreen'
-import { jsPDF } from 'jspdf'
 
 interface BookingDetailData {
   booking: {
@@ -199,8 +198,27 @@ export function BookingDetail() {
     enabled: !!id,
   })
 
-  // The backend returns the booking object directly in `data`
-  const booking = data?.data
+  // The backend returns the booking object directly in `data`;
+  // normalize nullable collections so item rendering cannot crash on nulls
+  const booking = (() => {
+    const raw = data?.data
+    if (!raw) return raw
+    return {
+      ...raw,
+      items: (raw.items ?? []).map((item: any) => ({
+        ...item,
+        travelers: item.travelers ?? [],
+        cancellation_policy: item.cancellation_policy ?? [],
+        change_policy: item.change_policy ?? [],
+      })),
+      payments: raw.payments ?? [],
+      refunds: raw.refunds ?? [],
+      cancellations: raw.cancellations ?? [],
+      reschedules: raw.reschedules ?? [],
+      vouchers: raw.vouchers ?? [],
+      invoices: raw.invoices ?? [],
+    }
+  })()
   const customer = booking?.customer
   const items = booking?.items || []
   const payments = booking?.payments || []
@@ -211,7 +229,7 @@ export function BookingDetail() {
   const invoices = booking?.invoices || []
 
   const primaryPayment = payments.find(p => p.status === 'captured') || payments[0]
-  const primaryTraveler = items.flatMap(i => i.travelers).find(t => t.is_lead_guest) || items[0]?.travelers[0]
+  const primaryTraveler = items.flatMap(i => i.travelers).filter(Boolean).find(t => t.is_lead_guest) || items[0]?.travelers?.filter(Boolean)[0]
 
   const handleCancel = async () => {
     if (!cancelReason.trim()) {
@@ -242,34 +260,33 @@ export function BookingDetail() {
     setShowRescheduleModal(true)
   }
 
-  const downloadVoucher = async (voucher: Voucher) => {
+  const downloadVoucher = async (_voucher: Voucher) => {
     try {
-      const response = await fetch(`/api/vouchers/${voucher.id}/download`)
-      if (response.ok) {
-        const blob = await response.blob()
-        const url = window.URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = url
-        a.download = `voucher-${booking.booking_reference}.pdf`
-        a.click()
-        window.URL.revokeObjectURL(url)
-      } else {
-        toast.error('Failed to download voucher')
-      }
+      const response = await api.getClient().get(`/bookings/${booking.id}/voucher`, { responseType: 'blob' })
+      const blob = new Blob([response.data as unknown as BlobPart], { type: 'application/pdf' })
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `voucher-${booking.booking_reference}.pdf`
+      a.click()
+      window.URL.revokeObjectURL(url)
     } catch {
       toast.error('Failed to download voucher')
     }
   }
 
-  const downloadInvoice = async (invoice: Invoice) => {
-    if (invoice.pdf_path) {
-      const url = `/storage/${invoice.pdf_path}`
+  const downloadInvoice = async (_invoice: Invoice) => {
+    try {
+      const response = await api.getClient().get(`/bookings/${booking.id}/invoice`, { responseType: 'blob' })
+      const blob = new Blob([response.data as unknown as BlobPart], { type: 'application/pdf' })
+      const url = window.URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
       a.download = `invoice-${booking.booking_reference}.pdf`
       a.click()
-    } else {
-      toast.error('Invoice PDF not available')
+      window.URL.revokeObjectURL(url)
+    } catch {
+      toast.error('Failed to download invoice')
     }
   }
 
@@ -528,8 +545,8 @@ export function BookingDetail() {
                           <div className="mt-4 pt-4 border-t border-eventra-slate-200">
                             <p className="text-body-xs text-eventra-slate-500 mb-2">Travelers</p>
                             <div className="flex flex-wrap gap-2">
-                              {item.travelers.map((traveler, i) => (
-                                <span key={traveler.id} className={cn(
+                              {item.travelers.filter(Boolean).map((traveler, i) => (
+                                <span key={traveler.id ?? i} className={cn(
                                   'badge px-3 py-1 text-body-xs',
                                   traveler.is_lead_guest ? 'badge-primary' : 'badge-neutral'
                                 )}>
@@ -582,7 +599,7 @@ export function BookingDetail() {
             <Card variant="elevated" padding="lg">
               <h2 className="text-heading-lg font-semibold text-eventra-navy-900 mb-6">Travelers</h2>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {items.flatMap(i => i.travelers).map((traveler, index) => (
+                {items.flatMap(i => i.travelers).filter(Boolean).map((traveler, index) => (
                   <motion.div
                     key={traveler.id}
                     initial={{ opacity: 0, y: 20 }}
