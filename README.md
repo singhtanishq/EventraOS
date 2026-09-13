@@ -130,6 +130,6 @@ The development of StayOS leverages cutting-edge technologies across the stack:
 
 ## Conclusion
 
-StayOS is a transformative platform for modern hotel booking needs, combining efficiency, scalability, and security. Whether you're a traveler looking for a stress-free booking experience or a hotel administrator aiming to streamline operations, StayOS has everything you need to stay ahead.
+EventraOS is a transformative platform for modern event manageme booking needs, combining efficiency, scalability, and security. Whether you're a traveler looking for a stress-free booking experience or a hotel administrator aiming to streamline operations, StayOS has everything you need to stay ahead.
 
 Join the future of hotel booking with StayOS: The smart, secure, and scalable solution for the hospitality industry.
