@@ -122,7 +122,7 @@ Route::middleware('auth:sanctum')->group(function () {
         ->only(['index', 'store', 'show', 'update', 'destroy']);
 
     // Agent routes (role:agent)
-    Route::middleware('role:agent')->prefix('agent')->group(function () {
+    Route::middleware('role:agent,admin')->prefix('agent')->group(function () {
         Route::get('/dashboard', [AgentController::class, 'dashboard']);
         Route::get('/customers', [AgentController::class, 'customers']);
         Route::post('/customers', [AgentController::class, 'createCustomer']);
