@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
 import { ChevronLeft, ChevronRight, SlidersHorizontal, MapPin, Car, Shield, Fuel, Settings, Zap, Users, Luggage, CheckCircle2, Cpu, Leaf, Snowflake, Calendar } from 'lucide-react'
 import { api } from '@/lib/api'
-import { formatCurrency, formatDate, cn, debounce } from '@/lib/utils'
+import { formatCurrency, formatDate, cn, debounce, toSearchDate } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { PageSkeleton } from '@/components/ui/LoadingScreen'
@@ -90,6 +90,8 @@ export function CarResults() {
 
   const queryParams = {
     ...filters,
+    pickup_date: pickupDate,
+    return_date: returnDate,
     sort: sortBy,
     page: parseInt(searchParams.get('page') || '1'),
     per_page: 20,
@@ -153,8 +155,13 @@ export function CarResults() {
     key => !['city_id', 'pickup_date', 'return_date', 'passengers', 'pickup_time', 'return_time'].includes(key)
   ).length
 
-  const pickupDate = searchParams.get('pickup_date')
-  const returnDate = searchParams.get('return_date')
+  // Both dates are required by the API - default pickup to today and return to
+  // pickup + 3, clamping past dates so shared/bookmarked URLs keep working
+  const pickupDate = toSearchDate(searchParams.get('pickup_date'), 0)
+  const returnDateRaw = toSearchDate(searchParams.get('return_date'), 3)
+  const returnDate = returnDateRaw > pickupDate
+    ? returnDateRaw
+    : new Date(new Date(pickupDate).getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0]
   const days = pickupDate && returnDate 
     ? Math.ceil((new Date(returnDate).getTime() - new Date(pickupDate).getTime()) / (1000 * 60 * 60 * 24))
     : 1
@@ -185,12 +192,10 @@ export function CarResults() {
                   {searchParams.get('city')}
                 </span>
               )}
-              {pickupDate && returnDate && (
-                <span className="badge badge-neutral">
-                  <Calendar className="w-3 h-3 mr-1" />
-                  {formatDate(pickupDate)} - {formatDate(returnDate)} ({days} days)
-                </span>
-              )}
+              <span className="badge badge-neutral">
+                <Calendar className="w-3 h-3 mr-1" />
+                {formatDate(pickupDate)} - {formatDate(returnDate)} ({Math.max(1, days)} days)
+              </span>
             </div>
 
             <div className="flex items-center gap-3">
