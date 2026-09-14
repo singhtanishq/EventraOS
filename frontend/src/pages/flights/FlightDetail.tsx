@@ -53,7 +53,11 @@ interface FlightDetailData {
   }
   rating: number
   review_count: number
-  fare_options: FareOption[]
+  fare_options?: FareOption[]
+  pricing?: {
+    currency: string
+    fare_options?: FareOption[]
+  }
 }
 
 interface FareOption {
@@ -113,7 +117,16 @@ export function FlightDetail() {
     enabled: !!id,
   })
 
-  const flight = data?.data as FlightDetailData | undefined
+  // The API nests fare options under `pricing` — normalize once so the rest
+  // of the page reads a single shape.
+  const flight = (() => {
+    const raw = data?.data as FlightDetailData | undefined
+    if (!raw) return raw
+    return {
+      ...raw,
+      fare_options: raw.fare_options ?? raw.pricing?.fare_options ?? [],
+    } as FlightDetailData
+  })()
   const passengers = adults + children + infants
 
   // Auto-select first available fare (kept above early returns to preserve hook order)
@@ -195,6 +208,7 @@ export function FlightDetail() {
           : 'Non-refundable',
       metadata: {
         fare: selectedFare.name,
+        fare_id: selectedFare.fare_id,
         cabin_class: selectedFare.cabin_class || cabinClass,
         seats: selectedSeats.join(', '),
         flight_number: metadata.flight_number,
