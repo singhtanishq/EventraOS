@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
 import { ChevronLeft, ChevronRight, SlidersHorizontal, MapPin, Bus, Clock, Shield, CheckCircle2, Bed, Armchair, Calendar } from 'lucide-react'
 import { api } from '@/lib/api'
-import { formatCurrency, formatDate, cn, debounce } from '@/lib/utils'
+import { formatCurrency, formatDate, cn, debounce, toSearchDate } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { PageSkeleton } from '@/components/ui/LoadingScreen'
@@ -92,8 +92,12 @@ export function BusResults() {
     setFilters(initialFilters)
   }, [searchParams])
 
+  // journey_date is required by the API - default to today and clamp past dates
+  const journeyDate = toSearchDate(filters.journey_date ?? searchParams.get('journey_date'), 0)
+
   const queryParams = {
     ...filters,
+    journey_date: journeyDate,
     sort: sortBy,
     page: parseInt(searchParams.get('page') || '1'),
     per_page: 20,
@@ -185,12 +189,10 @@ export function BusResults() {
                   {searchParams.get('origin')} → {searchParams.get('destination')}
                 </span>
               )}
-              {searchParams.get('journey_date') && (
-                <span className="badge badge-neutral">
-                  <Calendar className="w-3 h-3 mr-1" />
-                  {formatDate(searchParams.get('journey_date')!)}
-                </span>
-              )}
+              <span className="badge badge-neutral">
+                <Calendar className="w-3 h-3 mr-1" />
+                {formatDate(journeyDate)}
+              </span>
             </div>
 
             <div className="flex items-center gap-3">
