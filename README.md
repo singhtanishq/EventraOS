@@ -24,7 +24,7 @@ EventraOS is a complete OTA-style (Online Travel Agency) platform built with a *
 Plus `GET /api/search/suggestions` (autocomplete) and `GET /api/search/popular` (trending destinations).
 
 ### Platform Features
-- **Unified Cart** — combine any service types in one booking (persisted client-side, re-priced server-side)
+- **Unified Booking Builder** — combine any service types into one booking (persisted client-side, re-priced server-side)
 - **Multi-step Checkout** — cart review → traveler details → payment method → pay
 - **Booking Lifecycle** — draft → payment_pending → confirmed, with inventory holds, cancellation, reschedule, refunds
 - **Payment Engine** — pluggable gateway layer with a fully working **demo gateway** (initiate → process → capture → auto-confirm), retries and payment history
