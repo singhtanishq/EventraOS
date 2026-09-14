@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
 import { ChevronLeft, ChevronRight, Filter, Calendar, MapPin, Users, X, Loader2, Building2, Plane, MapPin as MapPinIcon, Train, Bus, Car, Sparkles, Truck, Package, ChevronDown, ChevronUp, Luggage, Search } from 'lucide-react'
@@ -53,7 +53,10 @@ const getStatusColor = (status: string) => {
 
 export function MyTrips() {
   const navigate = useNavigate()
-  const [filter, setFilter] = useState<TripFilter>('all')
+  const [searchParams] = useSearchParams()
+  // Deep links (e.g. the dashboard's "upcoming trips" card) preselect a tab
+  const urlFilter = searchParams.get('filter') as TripFilter | null
+  const [filter, setFilter] = useState<TripFilter>(urlFilter || 'all')
   const [typeFilter, setTypeFilter] = useState<TripType>('all')
   const [search, setSearch] = useState('')
   const [sortBy, setSortBy] = useState<'date_desc' | 'date_asc' | 'amount_desc' | 'amount_asc'>('date_desc')
@@ -236,7 +239,7 @@ function TripCard({ trip, onClick }: { trip: Trip; onClick: () => void }) {
       <div className="flex gap-4">
         <div className="relative w-24 h-24 rounded-xl overflow-hidden flex-shrink-0">
           <img 
-            src={trip.image || '/placeholder-trip.jpg'} 
+            src={trip.image || '/placeholder.svg'} 
             alt={trip.name} 
             className="w-full h-full object-cover"
             loading="lazy"
@@ -262,7 +265,9 @@ function TripCard({ trip, onClick }: { trip: Trip; onClick: () => void }) {
           <div className="flex flex-wrap items-center gap-4 mt-3 text-body-sm text-eventra-slate-600">
             <span className="flex items-center gap-1">
               <Calendar className="w-4 h-4" />
-              {formatDate(trip.start_date)} - {formatDate(trip.end_date || trip.start_date)}
+              {trip.start_date
+                ? `${formatDate(trip.start_date)} - ${formatDate(trip.end_date || trip.start_date)}`
+                : 'Dates on request'}
             </span>
             <span className="flex items-center gap-1">
               <MapPinIcon className="w-4 h-4" />
