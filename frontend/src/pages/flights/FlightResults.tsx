@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
 import { ChevronLeft, ChevronRight, SlidersHorizontal, Plane, Clock, ArrowRight, Shield } from 'lucide-react'
 import { api } from '@/lib/api'
-import { formatCurrency, formatDate, cn, debounce } from '@/lib/utils'
+import { formatCurrency, formatDate, cn, debounce, toSearchDate } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { PageSkeleton } from '@/components/ui/LoadingScreen'
@@ -95,7 +95,7 @@ export function FlightResults() {
   }, [searchParams])
 
   // departure_date is required by the API - default when missing
-  const departureDate = filters.departure_date || searchParams.get('departure_date') || addDaysISO(3)
+  const departureDate = toSearchDate(filters.departure_date ?? searchParams.get('departure_date'), 3)
 
   const queryParams = {
     ...filters,
