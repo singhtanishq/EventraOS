@@ -379,7 +379,7 @@ function PackageResultCard({ pkg, onSelect }: { pkg: PackageResult; onSelect: ()
     <Card variant="interactive" onClick={onSelect} className="h-full flex flex-col">
       <div className="relative aspect-[4/3] overflow-hidden">
         <img
-          src={pkg.images[0] || '/placeholder-package.jpg'}
+          src={pkg.images[0] || '/placeholder.svg'}
           alt={pkg.name}
           className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
           loading="lazy"
