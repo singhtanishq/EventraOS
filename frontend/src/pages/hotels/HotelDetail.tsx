@@ -49,8 +49,14 @@ interface HotelDetailData {
   metadata: {
     star_rating: number
     property_type: string
+    rating?: number
+    review_count?: number
   }
-  room_types: RoomType[]
+  room_types?: RoomType[]
+  pricing?: {
+    currency: string
+    room_types?: RoomType[]
+  }
 }
 
 interface RoomType {
@@ -113,7 +119,19 @@ export function HotelDetail() {
     enabled: !!id,
   })
 
-  const hotel = data?.data as HotelDetailData | undefined
+  // The API nests room types under `pricing` and rating under `metadata` —
+  // normalize once so the rest of the page can read a single shape.
+  const hotel = (() => {
+    const raw = data?.data as HotelDetailData | undefined
+    if (!raw) return raw
+    const roomTypes = raw.room_types ?? raw.pricing?.room_types ?? []
+    return {
+      ...raw,
+      room_types: roomTypes,
+      rating: typeof raw.rating === 'number' ? raw.rating : Number(raw.metadata?.rating ?? 0),
+      review_count: raw.review_count ?? raw.metadata?.review_count ?? 0,
+    } as HotelDetailData
+  })()
   const nights = Math.max(
     1,
     Math.ceil((new Date(checkOut).getTime() - new Date(checkIn).getTime()) / (1000 * 60 * 60 * 24))
