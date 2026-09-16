@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   Building2,
   Plane,
@@ -98,6 +98,23 @@ const testimonials = [
 ]
 
 export function Home() {
+  const navigate = useNavigate()
+  const [widgetDestination, setWidgetDestination] = useState('')
+  const [widgetCheckIn, setWidgetCheckIn] = useState('')
+  const [widgetCheckOut, setWidgetCheckOut] = useState('')
+  const [widgetGuests, setWidgetGuests] = useState('2 Adults')
+
+  const handleWidgetSearch = () => {
+    const params = new URLSearchParams()
+    if (widgetDestination.trim()) params.set('destination', widgetDestination.trim())
+    if (widgetCheckIn) params.set('start_date', widgetCheckIn)
+    if (widgetCheckOut) params.set('end_date', widgetCheckOut)
+    const adults = parseInt(widgetGuests, 10)
+    if (!Number.isNaN(adults) && adults !== 2) params.set('guests', String(adults))
+    const qs = params.toString()
+    navigate(qs ? `/search?${qs}` : '/search')
+  }
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -179,21 +196,23 @@ export function Home() {
                         id="global-destination"
                         className="input bg-white/10 border-white/20 text-white placeholder-eventra-slate-400 pl-12 pr-4 py-4"
                         placeholder="City, hotel, airport, venue..."
+                        value={widgetDestination}
+                        onChange={(e) => setWidgetDestination(e.target.value)}
                       />
                     </div>
                   </div>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
                     <div className="space-y-2">
                       <label htmlFor="checkin" className="label text-white">Check-in / Departure</label>
-                      <input type="date" id="checkin" className="input bg-white/10 border-white/20 text-white" />
+                      <input type="date" id="checkin" className="input bg-white/10 border-white/20 text-white" value={widgetCheckIn} onChange={(e) => setWidgetCheckIn(e.target.value)} />
                     </div>
                     <div className="space-y-2">
                       <label htmlFor="checkout" className="label text-white">Check-out / Return</label>
-                      <input type="date" id="checkout" className="input bg-white/10 border-white/20 text-white" />
+                      <input type="date" id="checkout" className="input bg-white/10 border-white/20 text-white" value={widgetCheckOut} onChange={(e) => setWidgetCheckOut(e.target.value)} />
                     </div>
                     <div className="space-y-2">
                       <label htmlFor="guests" className="label text-white">Guests / Passengers</label>
-                      <select id="guests" className="input form-select bg-white/10 border-white/20 text-white">
+                      <select id="guests" className="input form-select bg-white/10 border-white/20 text-white" value={widgetGuests} onChange={(e) => setWidgetGuests(e.target.value)}>
                         <option>1 Adult</option>
                         <option>2 Adults</option>
                         <option>2 Adults, 1 Child</option>
@@ -202,10 +221,10 @@ export function Home() {
                     </div>
                     <div className="space-y-2">
                       <label className="label text-white">&nbsp;</label>
-                      <Link to="/search" className="btn-primary w-full btn-lg inline-flex items-center justify-center gap-2">
+                      <button onClick={handleWidgetSearch} className="btn-primary w-full btn-lg inline-flex items-center justify-center gap-2">
                         <Zap className="w-5 h-5" />
                         Search
-                      </Link>
+                      </button>
                     </div>
                   </div>
                 </div>
