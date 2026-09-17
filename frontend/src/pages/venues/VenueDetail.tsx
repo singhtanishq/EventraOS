@@ -134,8 +134,63 @@ interface VenueAvailability {
   price_override: number
 }
 
-function AddonCategoryIcon({ category, size = 'md' }: { category: VenueAddon['category']; size?: 'sm' | 'md' }) {
-  const iconClass = size === 'sm' ? 'w-5 h-5' : 'w-6 h-6'
+// The API nests packages/addons/rooms under `pricing` and capacity/rating
+// under `metadata`, with a leaner field set than the page's rich interfaces.
+// Normalize the provider response once so the page reads a single shape.
+const normalizeVenue = (raw: any): VenueDetailData | undefined => {
+  if (!raw) return undefined
+  const pricing = raw.pricing ?? {}
+  const metadata = raw.metadata ?? {}
+  const num = (v: unknown) => (v == null || v === '' ? 0 : Number(v))
+
+  const packages: VenuePackage[] = (raw.venue_packages ?? pricing.packages ?? []).map((p: any) => ({
+    ...p,
+    type: p.type ?? 'standard',
+    description: p.description ?? '',
+    includes: p.includes ?? [],
+    excludes: p.excludes ?? [],
+    min_guests: num(p.min_guests),
+    max_guests: p.max_guests ?? 0,
+    price_per_guest: num(p.price_per_guest),
+    fixed_price: num(p.fixed_price ?? p.price),
+    price_per_hour: num(p.price_per_hour),
+    currency: p.currency ?? pricing.currency ?? 'INR',
+    is_active: p.is_active ?? true,
+  }))
+
+  const addons: VenueAddon[] = (raw.venue_addons ?? pricing.addons ?? []).map((a: any) => ({
+    ...a,
+    category: a.category ?? 'other',
+    description: a.description ?? '',
+    pricing_type: a.pricing_type ?? 'fixed',
+    price: num(a.price),
+    currency: a.currency ?? pricing.currency ?? 'INR',
+    min_quantity: num(a.min_quantity),
+    max_quantity: a.max_quantity ?? 0,
+    is_required: a.is_required ?? false,
+    is_active: a.is_active ?? true,
+  }))
+
+  return {
+    ...raw,
+    capacity: raw.capacity ?? num(metadata.capacity),
+    capacity_breakdown: raw.capacity_breakdown ?? {},
+    venue_types: raw.venue_types ?? metadata.venue_types ?? [],
+    has_parking: raw.has_parking ?? metadata.has_parking ?? false,
+    has_catering: raw.has_catering ?? metadata.has_catering ?? false,
+    has_av: raw.has_av ?? metadata.has_av ?? false,
+    rating: typeof raw.rating === 'number' ? raw.rating : num(metadata.rating),
+    review_count: raw.review_count ?? num(metadata.review_count),
+    venue_rooms: raw.venue_rooms ?? pricing.rooms ?? [],
+    venue_packages: packages,
+    venue_addons: addons,
+    venue_availability: raw.venue_availability ?? [],
+    check_in: raw.check_in ?? raw.availability?.check_in,
+    check_out: raw.check_out ?? raw.availability?.check_out,
+  } as VenueDetailData
+}
+
+function AddonCategoryIcon({ category, size = 'md' }: { category: VenueAddon['category']; size?: 'sm' | 'md' }) {  const iconClass = size === 'sm' ? 'w-5 h-5' : 'w-6 h-6'
   switch (category) {
     case 'catering': return <Utensils className={`${iconClass} text-eventra-blue-600`} />
     case 'decor': return <Sparkles className={`${iconClass} text-eventra-amber-600`} />
@@ -183,7 +238,7 @@ export function VenueDetail() {
     enabled: !!id,
   })
 
-  const venue = data?.data
+  const venue = normalizeVenue(data?.data)
 
   // Auto-select first available package (kept above early returns to preserve hook order)
   useEffect(() => {
@@ -283,25 +338,15 @@ export function VenueDetail() {
       },
       dates: { start: eventDate, end: eventDate },
       guests: { adults: guestCount, children: 0 },
-      options: [
-        {
-          id: `package-${selectedPackage.id}`,
-          name: selectedPackage.name,
-          type: 'other' as const,
-          price: total,
-          currency: selectedPackage.currency,
-          quantity: 1,
-        },
-        ...selectedAddons.map(addon => ({
-          id: `addon-${addon.id}`,
-          name: addon.name,
-          type: 'addon' as const,
-          price: addon.pricing_type === 'per_guest' ? addon.price * guestCount :
-                 addon.pricing_type === 'per_hour' ? addon.price * duration : addon.price,
-          currency: addon.currency,
-          quantity: 1,
-        }))
-      ],
+      options: selectedAddons.map(addon => ({
+        id: `addon-${addon.id}`,
+        name: addon.name,
+        type: 'addon' as const,
+        price: addon.pricing_type === 'per_guest' ? addon.price * guestCount :
+               addon.pricing_type === 'per_hour' ? addon.price * duration : addon.price,
+        currency: addon.currency,
+        quantity: 1,
+      })),
       pricing: {
         basePrice: total,
         taxes: 0,
@@ -318,6 +363,12 @@ export function VenueDetail() {
         quantity: 1,
       },
       cancellationPolicy: 'Venue cancellation policy applies',
+      metadata: {
+        package: selectedPackage.name,
+        package_id: selectedPackage.id,
+        event_type: eventType,
+        duration_hours: duration,
+      },
     })
 
     toast.success('Added to your booking')
