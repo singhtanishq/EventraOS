@@ -14,7 +14,6 @@ import {
   Calendar,
   Users,
   Search,
-  ChevronRight,
   X,
   ChevronDown,
   ChevronUp,
@@ -68,10 +67,81 @@ export function SearchPage() {
     setSearchParams(params)
   }, [startDate, endDate, guests, rooms, destination, origin, selectedService, setSearchParams])
 
+  // Each results page has its own query-param contract — translate the unified
+  // search form into the params the target page actually reads.
+  const buildServiceParams = (serviceId: string): Record<string, string> => {
+    const params: Record<string, string> = {}
+    switch (serviceId) {
+      case 'hotels':
+        if (destination) params.destination = destination
+        if (startDate) params.check_in = startDate
+        if (endDate) params.check_out = endDate
+        if (rooms && rooms !== '1') params.rooms = rooms
+        if (guests && guests !== '2') params.adults = guests
+        break
+      case 'flights':
+        if (origin) params.origin = origin
+        if (destination) params.destination = destination
+        if (startDate) params.departure_date = startDate
+        if (endDate) params.return_date = endDate
+        if (guests) params.adults = guests
+        break
+      case 'trains':
+      case 'buses':
+        if (startDate) params.journey_date = startDate
+        if (guests) params.passengers = guests
+        if (origin) params.origin = origin
+        if (destination) params.destination = destination
+        break
+      case 'venues':
+        if (destination) params.city = destination
+        if (startDate) params.event_date = startDate
+        if (guests) params.guest_count = guests
+        break
+      case 'cars':
+        if (destination) params.city = destination
+        if (startDate) params.pickup_date = startDate
+        if (endDate) params.return_date = endDate
+        if (guests) params.passengers = guests
+        break
+      case 'activities':
+        if (destination) params.city = destination
+        if (startDate) params.date = startDate
+        if (guests) params.participants = guests
+        break
+      case 'transfers':
+        if (origin) params.pickup = origin
+        if (destination) params.dropoff = destination
+        if (startDate) params.date = startDate
+        if (guests) params.passengers = guests
+        break
+      case 'packages':
+        if (destination) params.destination = destination
+        if (startDate) params.start_date = startDate
+        if (endDate) params.end_date = endDate
+        if (guests) params.participants = guests
+        break
+      default:
+        if (destination) params.destination = destination
+        if (origin) params.origin = origin
+        if (startDate) params.start_date = startDate
+        if (endDate) params.end_date = endDate
+        if (guests && guests !== '2') params.guests = guests
+        if (rooms && rooms !== '1') params.rooms = rooms
+    }
+    return params
+  }
+
+  const navigateToService = (serviceId: string) => {
+    const service = serviceTypes.find((s) => s.id === serviceId)
+    const target = service?.href || '/search'
+    const qs = new URLSearchParams(buildServiceParams(serviceId)).toString()
+    navigate(qs ? `${target}?${qs}` : target)
+  }
+
   const handleSearch = () => {
     setIsLoading(true)
-    const service = serviceTypes.find((s) => s.id === selectedService)
-    navigate(service?.href || '/search')
+    navigateToService(selectedService)
     setTimeout(() => setIsLoading(false), 300)
   }
 
@@ -206,9 +276,6 @@ export function SearchPage() {
                 >
                   {isLoading ? 'Searching...' : 'Search'}
                 </Button>
-                <Button variant="outline" size="lg" className="px-6">
-                  <ChevronRight className="w-5 h-5" />
-                </Button>
               </div>
             </Card>
           </motion.div>
@@ -235,7 +302,7 @@ export function SearchPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.1 * index }}
                 className="group cursor-pointer"
-                onClick={() => navigate(service.href)}
+                onClick={() => navigateToService(service.id)}
               >
                 <Card variant="outlined" padding="lg" className="h-full text-center transition-all hover:shadow-xl hover:border-eventra-blue-500">
                   <div className={cn('w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 transition-colors group-hover:scale-110', `bg-${service.color}-100`)}>
