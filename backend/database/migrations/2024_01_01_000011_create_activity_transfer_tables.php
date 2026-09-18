@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('icon')->nullable();
             $table->integer('sort_order')->default(0);
             $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
         });
 
@@ -59,6 +60,7 @@ return new class extends Migration
             $table->boolean('is_demo')->default(false);
             $table->integer('sort_order')->default(0);
             $table->json('metadata')->nullable();
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['city_id', 'is_active']);
@@ -69,7 +71,7 @@ return new class extends Migration
 
         Schema::create('activity_schedules', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('activity_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('activity_id')->constrained('activities')->cascadeOnDelete();
             $table->foreignId('provider_id')->nullable()->constrained()->nullOnDelete();
             $table->string('name'); // Morning Tour, Evening Tour, etc.
             $table->time('start_time');
@@ -79,6 +81,7 @@ return new class extends Migration
             $table->date('valid_to')->nullable();
             $table->unsignedInteger('max_participants')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['activity_id', 'is_active']);
@@ -86,7 +89,7 @@ return new class extends Migration
 
         Schema::create('activity_pricing', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('activity_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('activity_id')->constrained('activities')->cascadeOnDelete();
             $table->foreignId('schedule_id')->nullable()->constrained('activity_schedules')->nullOnDelete();
             $table->foreignId('provider_id')->nullable()->constrained()->nullOnDelete();
             $table->string('name'); // Adult, Child, Senior, Private Group
@@ -96,6 +99,7 @@ return new class extends Migration
             $table->decimal('price', 15, 4);
             $table->string('currency', 3)->default('INR');
             $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['activity_id', 'schedule_id', 'is_active']);
@@ -103,7 +107,7 @@ return new class extends Migration
 
         Schema::create('activity_inventory', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('activity_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('activity_id')->constrained('activities')->cascadeOnDelete();
             $table->foreignId('schedule_id')->nullable()->constrained('activity_schedules')->nullOnDelete();
             $table->foreignId('pricing_id')->constrained('activity_pricing')->cascadeOnDelete();
             $table->date('date');
@@ -112,6 +116,7 @@ return new class extends Migration
             $table->unsignedInteger('booked_slots')->default(0);
             $table->decimal('price_override', 15, 4)->nullable();
             $table->boolean('is_closed')->default(false);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->unique(['schedule_id', 'pricing_id', 'date']);
@@ -131,6 +136,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->boolean('is_demo')->default(false);
             $table->json('metadata')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
 
@@ -144,6 +150,7 @@ return new class extends Migration
             $table->boolean('has_driver')->default(true);
             $table->integer('sort_order')->default(0);
             $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
         });
 
@@ -171,6 +178,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->boolean('is_demo')->default(false);
             $table->json('metadata')->nullable();
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['transfer_type', 'is_active']);
@@ -192,6 +200,7 @@ return new class extends Migration
             $table->string('currency', 3)->default('INR');
             $table->json('conditions')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['transfer_id', 'is_active']);
@@ -208,6 +217,7 @@ return new class extends Migration
             $table->unsignedInteger('booked_vehicles')->default(0);
             $table->decimal('price_override', 15, 4)->nullable();
             $table->boolean('is_closed')->default(false);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->unique(['transfer_id', 'pricing_id', 'date', 'time_slot']);
