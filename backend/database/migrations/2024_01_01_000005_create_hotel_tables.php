@@ -44,6 +44,7 @@ return new class extends Migration
             $table->boolean('is_demo')->default(false);
             $table->integer('sort_order')->default(0);
             $table->json('metadata')->nullable(); // Flexible extra data
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['city_id', 'is_active']);
@@ -54,7 +55,7 @@ return new class extends Migration
 
         Schema::create('hotel_room_types', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('hotel_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('hotel_id')->constrained('hotels')->cascadeOnDelete();
             $table->uuid('uuid')->unique();
             $table->foreignId('provider_id')->nullable()->constrained()->nullOnDelete();
             $table->string('provider_room_type_id')->nullable();
@@ -75,6 +76,7 @@ return new class extends Migration
             $table->boolean('is_accessible')->default(false);
             $table->boolean('is_active')->default(true);
             $table->integer('sort_order')->default(0);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['hotel_id', 'is_active']);
@@ -83,8 +85,8 @@ return new class extends Migration
 
         Schema::create('hotel_rates', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('hotel_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('room_type_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('hotel_id')->constrained('hotels')->cascadeOnDelete();
+            $table->foreignId('room_type_id')->constrained('hotel_room_types')->cascadeOnDelete();
             $table->foreignId('provider_id')->nullable()->constrained()->nullOnDelete();
             $table->string('provider_rate_id')->nullable();
             $table->string('name'); // e.g., "Standard Rate", "Non-refundable", "Breakfast Included"
@@ -97,6 +99,7 @@ return new class extends Migration
             $table->boolean('is_prepaid')->default(false);
             $table->boolean('requires_guarantee')->default(true);
             $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['hotel_id', 'room_type_id', 'is_active']);
@@ -104,9 +107,9 @@ return new class extends Migration
 
         Schema::create('hotel_inventory', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('hotel_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('room_type_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('rate_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('hotel_id')->constrained('hotels')->cascadeOnDelete();
+            $table->foreignId('room_type_id')->constrained('hotel_room_types')->cascadeOnDelete();
+            $table->foreignId('rate_id')->constrained('hotel_rates')->cascadeOnDelete();
             $table->date('date');
             $table->unsignedInteger('total_rooms')->default(0);
             $table->unsignedInteger('available_rooms')->default(0);
@@ -119,6 +122,7 @@ return new class extends Migration
             $table->decimal('fee_amount', 15, 4)->default(0);
             $table->boolean('is_closed')->default(false); // Hotel closed on this date
             $table->json('restrictions')->nullable(); // Min stay, max stay, closed to arrival/departure
+            $table->softDeletes();
             $table->timestamps();
 
             $table->unique(['room_type_id', 'rate_id', 'date']);
@@ -128,7 +132,7 @@ return new class extends Migration
 
         Schema::create('hotel_availability_cache', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('hotel_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('hotel_id')->constrained('hotels')->cascadeOnDelete();
             $table->date('check_in');
             $table->date('check_out');
             $table->unsignedInteger('adults')->default(2);
@@ -136,6 +140,7 @@ return new class extends Migration
             $table->unsignedInteger('rooms')->default(1);
             $table->json('result'); // Cached availability result
             $table->timestamp('expires_at');
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['hotel_id', 'check_in', 'check_out']);
