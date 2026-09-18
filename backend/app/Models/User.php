@@ -7,13 +7,10 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasApiTokens, HasRoles, LogsActivity, SoftDeletes;
+    use HasFactory, Notifiable, HasApiTokens, HasRoles;
 
     protected $fillable = [
         'uuid',
@@ -55,14 +52,6 @@ class User extends Authenticatable
                 $user->uuid = (string) \Illuminate\Support\Str::uuid();
             }
         });
-    }
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logOnly(['name', 'email', 'phone', 'role', 'is_active'])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
     }
 
     public function customer()
