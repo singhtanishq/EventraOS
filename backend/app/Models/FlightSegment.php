@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class FlightSegment extends Model
 {
+    protected $table = 'flight_segments';
+
     protected $fillable = [
         'flight_id', 'segment_number', 'departure_airport_id', 'arrival_airport_id',
         'departure_date', 'departure_time', 'arrival_date', 'arrival_time',
