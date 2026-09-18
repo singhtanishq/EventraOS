@@ -34,6 +34,7 @@ return new class extends Migration
             $table->boolean('is_demo')->default(false);
             $table->integer('sort_order')->default(0);
             $table->json('metadata')->nullable();
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['is_active', 'is_featured']);
@@ -53,6 +54,7 @@ return new class extends Migration
             $table->string('location')->nullable();
             $table->text('notes')->nullable();
             $table->integer('sort_order')->default(0);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['package_id', 'day_number']);
@@ -69,6 +71,7 @@ return new class extends Migration
             $table->json('includes')->nullable(); // What's included at this price tier
             $table->json('room_configuration')->nullable(); // For hotel components
             $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['package_id', 'occupancy', 'is_active']);
@@ -85,6 +88,7 @@ return new class extends Migration
             $table->unsignedInteger('booked_slots')->default(0);
             $table->decimal('price_override', 15, 4)->nullable();
             $table->boolean('is_closed')->default(false);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->unique(['package_id', 'pricing_id', 'start_date']);
