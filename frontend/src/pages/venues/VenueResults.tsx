@@ -396,7 +396,7 @@ function VenueResultCard({ venue, onSelect }: { venue: VenueResult; onSelect: ()
     <Card variant="interactive" onClick={onSelect} className="h-full flex flex-col">
       <div className="relative aspect-[4/3] overflow-hidden">
         <img
-          src={venue.images[0] || '/placeholder-venue.jpg'}
+          src={venue.images[0] || '/placeholder.svg'}
           alt={venue.name}
           className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
           loading="lazy"
@@ -446,7 +446,7 @@ function VenueListCard({ venue, onSelect }: { venue: VenueResult; onSelect: () =
     <Card variant="interactive" onClick={onSelect} className="flex flex-col sm:flex-row overflow-hidden">
       <div className="relative w-full sm:w-64 h-48 sm:h-auto flex-shrink-0">
         <img
-          src={venue.images[0] || '/placeholder-venue.jpg'}
+          src={venue.images[0] || '/placeholder.svg'}
           alt={venue.name}
           className="w-full h-full object-cover"
           loading="lazy"
