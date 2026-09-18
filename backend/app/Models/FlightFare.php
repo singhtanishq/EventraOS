@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class FlightFare extends Model
 {
+    protected $table = 'flight_fares';
+
     protected $fillable = [
         'flight_id', 'provider_id', 'provider_fare_id', 'name', 'code',
         'cabin_class', 'baggage_allowance', 'fare_rules', 'is_refundable',
@@ -21,5 +23,5 @@ class FlightFare extends Model
     ];
 
     public function flight(): BelongsTo { return $this->belongsTo(Flight::class); }
-    public function inventory(): HasMany { return $this->hasMany(FlightInventory::class); }
+    public function inventory(): HasMany { return $this->hasMany(FlightInventory::class, 'fare_id'); }
 }
