@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TrainClass extends Model
 {
+    protected $table = 'train_classes';
+
     protected $fillable = ['train_route_id', 'provider_id', 'provider_class_id', 'name', 'code', 'capacity', 'amenities', 'has_berth', 'is_ac', 'is_active'];
     protected $casts = ['amenities' => 'array', 'has_berth' => 'boolean', 'is_ac' => 'boolean', 'is_active' => 'boolean'];
 
