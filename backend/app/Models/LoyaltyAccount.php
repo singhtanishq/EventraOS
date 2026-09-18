@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class LoyaltyAccount extends Model
 {
+    protected $table = 'loyalty_accounts';
+
     protected $fillable = [
         'customer_id', 'points_balance', 'points_pending', 'points_lifetime_earned',
         'points_lifetime_redeemed', 'points_expired', 'tier', 'tier_achieved_at', 'tier_expires_at',
