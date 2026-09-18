@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class RecentlyViewed extends Model
 {
+    protected $table = 'recently_viewed';
+
     protected $fillable = ['customer_id', 'session_id', 'viewable_type', 'viewable_id', 'metadata'];
     protected $casts = ['metadata' => 'array'];
 
