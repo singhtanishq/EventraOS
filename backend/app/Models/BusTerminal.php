@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class BusTerminal extends Model
 {
+    protected $table = 'bus_terminals';
+
     protected $fillable = ['city_id', 'name', 'code', 'address', 'latitude', 'longitude', 'amenities', 'is_active'];
     protected $casts = ['latitude' => 'decimal:7', 'longitude' => 'decimal:7', 'amenities' => 'array', 'is_active' => 'boolean'];
 
