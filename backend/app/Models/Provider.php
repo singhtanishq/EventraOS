@@ -6,13 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
 
 class Provider extends Model
 {
-    use HasFactory, LogsActivity, SoftDeletes;
+    use HasFactory;
 
     protected $fillable = [
         'name',
@@ -53,14 +50,6 @@ class Provider extends Model
 
     public static array $modes = ['demo', 'live'];
     public static array $statuses = ['active', 'inactive', 'maintenance', 'error'];
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logOnly(['name', 'code', 'type', 'mode', 'status', 'priority', 'is_default'])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
-    }
 
     public function hotels(): HasMany
     {
