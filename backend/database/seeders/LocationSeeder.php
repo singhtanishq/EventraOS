@@ -34,8 +34,8 @@ class LocationSeeder extends Seeder
                     ['city' => 'Jaipur', 'name' => 'Jaipur Junction', 'code' => 'JP', 'latitude' => 26.9196, 'longitude' => 75.7878, 'timezone' => 'Asia/Kolkata'],
                 ],
                 'bus_terminals' => [
-                    ['city' => 'Delhi', 'name' => 'Kashmere Gate ISBT', 'code' => 'DEL-ISBT'],
-                    ['city' => 'Jaipur', 'name' => 'Sindhi Camp Bus Stand', 'code' => 'JPR-SC'],
+                    ['city' => 'Delhi', 'name' => 'Kashmere Gate ISBT', 'code' => 'DEL-ISBT', 'latitude' => 28.6673, 'longitude' => 77.2283],
+                    ['city' => 'Jaipur', 'name' => 'Sindhi Camp Bus Stand', 'code' => 'JPR-SC', 'latitude' => 26.9287, 'longitude' => 75.7900],
                 ],
             ],
             [
