@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class SupportTicket extends Model
 {
+    protected $table = 'support_tickets';
+
     protected $fillable = [
         'uuid', 'ticket_number', 'customer_id', 'booking_id', 'booking_item_id',
         'subject', 'description', 'category', 'priority', 'status',
