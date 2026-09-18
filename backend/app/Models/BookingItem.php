@@ -6,13 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
 
 class BookingItem extends Model
 {
-    use HasFactory, LogsActivity, SoftDeletes;
+    protected $table = 'booking_items';
+
+    use HasFactory;
 
     protected $fillable = [
         'uuid',
@@ -86,14 +85,6 @@ class BookingItem extends Model
                 $item->uuid = (string) \Illuminate\Support\Str::uuid();
             }
         });
-    }
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logOnly(['item_type', 'item_status', 'total_price', 'provider_booking_reference'])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
     }
 
     public function booking(): BelongsTo
