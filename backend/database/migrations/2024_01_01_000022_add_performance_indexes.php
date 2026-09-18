@@ -237,12 +237,6 @@ return new class extends Migration
             $table->index('transaction_reference', 'wallet_transactions_reference_idx');
         });
 
-        // Loyalty transaction indexes
-        Schema::table('loyalty_transactions', function (Blueprint $table) {
-            $table->index(['loyalty_account_id', 'status'], 'loyalty_transactions_account_status_idx');
-            $table->index('transaction_reference', 'loyalty_transactions_reference_idx');
-        });
-
         // Invoice indexes
         Schema::table('invoices', function (Blueprint $table) {
             $table->index(['booking_id', 'status'], 'invoices_booking_status_idx');
