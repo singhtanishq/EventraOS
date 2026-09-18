@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ActivityCategory extends Model
 {
+    protected $table = 'activity_categories';
+
     protected $fillable = ['name', 'slug', 'description', 'icon', 'sort_order', 'is_active'];
     protected $casts = ['is_active' => 'boolean'];
 
