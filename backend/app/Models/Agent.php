@@ -7,13 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
 
 class Agent extends Model
 {
-    use HasFactory, LogsActivity, SoftDeletes;
+    use HasFactory;
 
     protected $fillable = [
         'uuid',
@@ -64,14 +61,6 @@ class Agent extends Model
                 $agent->agent_number = 'AGT-' . strtoupper(\Illuminate\Support\Str::random(8));
             }
         });
-    }
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logOnly(['agent_number', 'agency_name', 'commission_rate', 'status', 'monthly_target'])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
     }
 
     public function user(): BelongsTo
