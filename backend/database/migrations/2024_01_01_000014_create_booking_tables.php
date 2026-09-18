@@ -88,7 +88,7 @@ return new class extends Migration
             $table->enum('item_type', [
                 'hotel', 'flight', 'train', 'bus', 'venue', 'car', 'activity', 'transfer', 'package', 'insurance', 'addon'
             ]);
-            $table->foreignId('service_id')->nullable()->constrained()->nullOnDelete(); // Polymorphic reference
+            $table->unsignedBigInteger('service_id')->nullable()->index(); // Polymorphic reference
             $table->string('service_name');
             $table->json('service_details')->nullable(); // Full snapshot of service at booking time
             $table->json('configuration')->nullable(); // Selected options, room, seat, etc.
