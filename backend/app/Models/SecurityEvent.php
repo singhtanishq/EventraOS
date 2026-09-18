@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class SecurityEvent extends Model
 {
+    protected $table = 'security_events';
+
     protected $fillable = [
         'uuid', 'user_id', 'event_type', 'severity', 'ip_address', 'user_agent',
         'location', 'details', 'is_resolved', 'resolved_by', 'resolved_at', 'resolution_notes',
