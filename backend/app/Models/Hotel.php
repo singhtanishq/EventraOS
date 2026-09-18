@@ -7,15 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Hotel extends Model implements HasMedia
+class Hotel extends Model
 {
-    use HasFactory, LogsActivity, SoftDeletes, InteractsWithMedia;
+    use HasFactory;
 
     protected $fillable = [
         'uuid',
@@ -85,14 +80,6 @@ class Hotel extends Model implements HasMedia
         });
     }
 
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logOnly(['name', 'star_rating', 'is_active', 'is_featured', 'rating'])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
-    }
-
     public function provider(): BelongsTo
     {
         return $this->belongsTo(Provider::class);
@@ -155,25 +142,12 @@ class Hotel extends Model implements HasMedia
 
     public function getMainImage(): ?string
     {
-        if ($this->getFirstMedia('images')) {
-            return $this->getFirstMediaUrl('images');
-        }
         return $this->images[0] ?? null;
     }
 
     public function getGalleryImages(): array
     {
-        $media = $this->getMedia('images');
-        if ($media->isNotEmpty()) {
-            return $media->map(fn($m) => $m->getUrl())->toArray();
-        }
         return $this->images ?? [];
     }
 
-    public function registerMediaCollections(): void
-    {
-        $this->addMediaCollection('images')
-            ->useDisk('public')
-            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp']);
-    }
 }
