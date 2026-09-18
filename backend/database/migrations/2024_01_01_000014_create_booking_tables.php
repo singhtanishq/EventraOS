@@ -57,7 +57,7 @@ return new class extends Migration
             $table->decimal('exchange_rate', 15, 6)->default(1);
             $table->json('exchange_rate_details')->nullable();
             $table->string('promo_code')->nullable();
-            $table->foreignId('promotion_id')->nullable()->constrained('promotions')->nullOnDelete();
+            $table->unsignedBigInteger('promotion_id')->nullable()->index();
             $table->json('price_snapshot')->nullable(); // Full price breakdown at booking time
             $table->json('policy_snapshot')->nullable(); // Cancellation, change policies
             $table->json('special_requests')->nullable();
