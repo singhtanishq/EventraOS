@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AgentTask extends Model
 {
+    protected $table = 'agent_tasks';
+
     protected $fillable = [
         'uuid', 'agent_id', 'title', 'description', 'due_date', 'priority',
         'status', 'customer_id', 'booking_id', 'assigned_by', 'completed_at', 'metadata',
