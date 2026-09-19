@@ -30,6 +30,16 @@ export default defineConfig({
       },
     },
   },
+  // `vite preview` serves the production bundle — give it the same API proxy as dev
+  preview: {
+    port: 4173,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+    },
+  },
   build: {
     outDir: 'dist',
     sourcemap: true,
