@@ -568,12 +568,12 @@ function ActivityFilters({ filters, onChange, onClearAll }: { filters: Partial<S
         <div>
           <label className="label">Features</label>
           <div className="space-y-2">
-            ['Private Tour', 'Guide Included', 'Meals Included', 'Transport Included', 'Wheelchair Accessible', 'Family Friendly'].map((feature) => (
+            {(['Private Tour', 'Guide Included', 'Meals Included', 'Transport Included', 'Wheelchair Accessible', 'Family Friendly'] as const).map((feature) => (
               <label key={feature} className="flex items-center gap-3 cursor-pointer">
                 <input type="checkbox" className="form-checkbox" />
                 <span className="text-body-sm text-eventra-navy-700">{feature}</span>
               </label>
-            ))
+            ))}
           </div>
         </div>
       </div>
