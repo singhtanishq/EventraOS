@@ -759,7 +759,7 @@ class InventorySeeder extends Seeder
         ];
 
         foreach ($packages as $data) {
-            TravelPackage::create([
+            $package = TravelPackage::create([
                 'provider_id' => $this->demoProvider->id,
                 'name' => $data['name'],
                 'slug' => Str::slug($data['name']) . '-' . Str::random(4),
@@ -782,6 +782,38 @@ class InventorySeeder extends Seeder
                 'is_featured' => true,
                 'is_demo' => true,
             ]);
+
+            // Create PackagePricing for this package
+            $pricing = PackagePricing::create([
+                'package_id' => $package->id,
+                'provider_id' => $this->demoProvider->id,
+                'name' => 'Standard',
+                'occupancy' => 'double',
+                'price' => $data['price'],
+                'currency' => 'INR',
+                'includes' => $data['highlights'],
+                'room_configuration' => 'Double Room',
+                'is_active' => true,
+            ]);
+
+            // Create PackageInventory for this package
+            $dates = collect(range(0, 180))->map(fn ($i) => Carbon::today()->addDays($i));
+
+            foreach ($dates as $date) {
+                if (rand(1, 10) <= 8) {
+                    PackageInventory::create([
+                        'package_id' => $package->id,
+                        'pricing_id' => $pricing->id,
+                        'start_date' => $date->toDateString(),
+                        'end_date' => $date->copy()->addDays($data['nights'])->toDateString(),
+                        'total_slots' => 10,
+                        'available_slots' => rand(1, 10),
+                        'booked_slots' => 0,
+                        'price_override' => null,
+                        'is_closed' => false,
+                    ]);
+                }
+            }
         }
     }
 }
