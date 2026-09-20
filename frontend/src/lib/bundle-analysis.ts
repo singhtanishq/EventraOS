@@ -168,12 +168,14 @@ export function reportBundleSize() {
       },
 
       // Send to analytics
-      if (navigator.sendBeacon) {
+      const shouldSend = navigator.sendBeacon
+      if (shouldSend) {
         navigator.sendBeacon('/api/analytics/bundle-size', JSON.stringify(report))
       }
 
       return report
     }
+  }
 
   return null
 }
