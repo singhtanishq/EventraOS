@@ -14,4 +14,5 @@ class BusType extends Model
     protected $casts = ['amenities' => 'array', 'seat_map' => 'array', 'is_ac' => 'boolean', 'is_active' => 'boolean'];
 
     public function busRoute(): BelongsTo { return $this->belongsTo(BusRoute::class); }
+    public function fares(): HasMany { return $this->hasMany(BusFare::class); }
 }
