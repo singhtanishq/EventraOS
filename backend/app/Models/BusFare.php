@@ -15,4 +15,5 @@ class BusFare extends Model
 
     public function busRoute(): BelongsTo { return $this->belongsTo(BusRoute::class); }
     public function busType(): BelongsTo { return $this->belongsTo(BusType::class); }
+    public function inventory(): HasMany { return $this->hasMany(BusInventory::class, 'fare_id'); }
 }
