@@ -514,7 +514,7 @@ function BusFilters({ filters, onChange, onClearAll }: { filters: Partial<Search
         <div>
           <label className="label">Operator</label>
           <div className="space-y-2">
-            ['RedBus', 'KSRTC', 'MSRTC', 'APSRTC', 'TSRTC', 'Private Operators'].map((op) => (
+            {(['RedBus', 'KSRTC', 'MSRTC', 'APSRTC', 'TSRTC', 'Private Operators'] as const).map((op) => (
               <label key={op} className="flex items-center gap-3 cursor-pointer">
                 <input
                   type="checkbox"
@@ -524,7 +524,7 @@ function BusFilters({ filters, onChange, onClearAll }: { filters: Partial<Search
                 />
                 <span className="text-body-sm text-eventra-navy-700">{op}</span>
               </label>
-            ))
+            ))}
           </div>
         </div>
 
