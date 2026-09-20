@@ -336,8 +336,9 @@ export function BusResults() {
                       </div>
                     )}
                   </>
-                )}
               )}
+            </> 
+            )}
           </main>
         </div>
       </div>
