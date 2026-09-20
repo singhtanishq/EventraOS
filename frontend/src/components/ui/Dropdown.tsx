@@ -2,7 +2,8 @@ import { forwardRef, ReactNode, useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { createPortal } from 'react-dom'
 import { cn } from '@/lib/utils'
-import { ChevronDown, ChevronUp, Check, X } from 'lucide-react'
+import { ChevronDown, ChevronUp, Check, X, Search, CheckCircle2 } from 'lucide-react'
+import { Input } from '@/components/ui/Input'
 
 interface DropdownOption {
   value: string
