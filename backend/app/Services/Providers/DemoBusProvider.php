@@ -71,12 +71,7 @@ class DemoBusProvider extends BaseProvider
             default => $query->orderBy('types.fares.inventory.sell_price', 'asc'),
         };
 
-        $buses = \App\Models\BusRoute::query()
-            ->where('is_active', true)
-            ->where('is_demo', true)
-            ->with(['operator', 'types.fares.inventory'])
-            ->limit(20)
-            ->get();
+        $buses = $query->limit(20)->get();
 
         $results = $buses->map(function ($bus) {
             $fare = $bus->busTypes->flatMap->fares->firstWhere('is_active', true);
