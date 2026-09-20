@@ -851,6 +851,25 @@ class InventorySeeder extends Seeder
                     ]);
                 }
             }
+
+            // Create PackageItems for this package
+            $destinations = [
+                ['service_type' => 'hotel', 'service_name' => $data['city'], 'quantity' => 1, 'description' => "Hotel stay in {$data['city']}"],
+                ['service_type' => 'flight', 'service_name' => "Flight to {$data['city']}", 'quantity' => 1, 'description' => "Round trip flight to {$data['city']}"],
+                ['service_type' => 'transfer', 'service_name' => "Airport transfer in {$data['city']}", 'quantity' => 2, 'description' => "Airport pickup and drop"],
+                ['service_type' => 'activity', 'service_name' => "City tour in {$data['city']}", 'quantity' => 1, 'description' => "Guided city tour"],
+            ];
+            foreach ($destinations as $item) {
+                \App\Models\PackageItem::create([
+                    'package_id' => $package->id,
+                    'provider_id' => $this->demoProvider->id,
+                    'service_type' => $item['service_type'],
+                    'service_name' => $item['service_name'],
+                    'quantity' => $item['quantity'],
+                    'description' => $item['description'],
+                    'is_included' => true,
+                ]);
+            }
         }
     }
 }
