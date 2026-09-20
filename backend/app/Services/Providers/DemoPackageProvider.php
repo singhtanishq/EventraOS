@@ -84,9 +84,9 @@ class DemoPackageProvider extends BaseProvider
                 providerCode: $this->getCode(),
                 providerItemId: (string)$pkg->id,
                 location: [
-                    'destinations' => $pkg->destinations->map(fn ($d) => [
-                        'city' => $d['city'],
-                        'country' => $d['country'],
+                    'destinations' => collect($pkg->destinations ?? [])->map(fn ($d) => [
+                        'city' => $d['city'] ?? '',
+                        'country' => $d['country'] ?? '',
                     ])->toArray(),
                 ],
                 pricing: [
