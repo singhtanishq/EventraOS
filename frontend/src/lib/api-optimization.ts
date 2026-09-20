@@ -302,10 +302,9 @@ export function createCachedApi<T extends Record<string, any>>(
 
           return result
         }
-
+      }
       return value
-    },
-  }) as T
+    }) as T
 }
 
 // Request/Response transformation
