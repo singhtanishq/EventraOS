@@ -718,6 +718,25 @@ class InventorySeeder extends Seeder
                     'currency' => 'INR',
                     'is_active' => true,
                 ]);
+
+                // Create TransferInventory for this transfer (next 180 days)
+                $dates = collect(range(0, 180))->map(fn ($i) => Carbon::today()->addDays($i));
+                foreach ($dates as $date) {
+                    // 80% chance of availability
+                    if (rand(1, 10) <= 8) {
+                        TransferInventory::create([
+                            'transfer_id' => $transfer->id,
+                            'provider_id' => $this->demoProvider->id,
+                            'pricing_id' => \App\Models\TransferPricing::latest()->first()->id,
+                            'date' => $date->toDateString(),
+                            'total_slots' => 10,
+                            'available_slots' => rand(1, 10),
+                            'booked_slots' => 0,
+                            'price_override' => null,
+                            'is_closed' => false,
+                        ]);
+                    }
+                }
             }
         }
     }
