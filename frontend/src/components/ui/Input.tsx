@@ -1,6 +1,5 @@
 import { forwardRef, InputHTMLAttributes, TextareaHTMLAttributes, SelectHTMLAttributes } from 'react'
 import { cn } from '@/lib/utils'
-import { motion } from 'framer-motion'
 import { X, Search, ChevronDown } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
 
