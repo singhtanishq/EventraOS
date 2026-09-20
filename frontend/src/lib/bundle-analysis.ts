@@ -165,7 +165,7 @@ export function reportBundleSize() {
           gzippedSize: cssResources.reduce((sum, r) => sum + ((r as any).encodedBodySize || 0), 0),
         },
         totalSize: totalJsSize + totalCssSize,
-      }
+      },
 
       // Send to analytics
       if (navigator.sendBeacon) {
