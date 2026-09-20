@@ -12,5 +12,4 @@ class VenueAvailability extends Model
 
     public function venue(): BelongsTo { return $this->belongsTo(Venue::class); }
     protected $table = 'venue_availability';
-    protected $table = 'venue_availability';
 }
