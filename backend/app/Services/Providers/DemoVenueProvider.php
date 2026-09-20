@@ -31,7 +31,7 @@ class DemoVenueProvider extends BaseProvider
 
         if (!empty($criteria['event_date'])) {
             $query->whereHas('availability', function ($q) use ($criteria) {
-                $q->where('date', $criteria['event_date'])
+                $q->whereDate('date', $criteria['event_date'])
                     ->where('status', 'available');
             });
         }
