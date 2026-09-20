@@ -28,4 +28,5 @@ class BusRoute extends Model
     public function originTerminal(): BelongsTo { return $this->belongsTo(BusTerminal::class, 'origin_terminal_id'); }
     public function destinationTerminal(): BelongsTo { return $this->belongsTo(BusTerminal::class, 'destination_terminal_id'); }
     public function types(): HasMany { return $this->hasMany(BusType::class); }
+    public function inventory(): HasMany { return $this->hasMany(BusInventory::class); }
 }
