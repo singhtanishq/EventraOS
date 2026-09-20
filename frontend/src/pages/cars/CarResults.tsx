@@ -524,7 +524,7 @@ function CarFilters({ filters, onChange, onClearAll }: { filters: Partial<Search
         <div>
           <label className="label">Fuel Type</label>
           <div className="space-y-2">
-            ['petrol', 'diesel', 'electric', 'hybrid'].map((fuel) => (
+            {(['petrol', 'diesel', 'electric', 'hybrid'] as const).map((fuel) => (
               <label key={fuel} className="flex items-center gap-3 cursor-pointer">
                 <input
                   type="checkbox"
@@ -534,7 +534,7 @@ function CarFilters({ filters, onChange, onClearAll }: { filters: Partial<Search
                 />
                 <span className="text-body-sm text-eventra-navy-700 capitalize">{fuel}</span>
               </label>
-            ))
+            ))}
           </div>
         </div>
 
