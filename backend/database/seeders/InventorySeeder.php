@@ -43,6 +43,7 @@ use App\Models\Provider;
 use App\Models\TravelPackage;
 use App\Models\PackagePricing;
 use App\Models\PackageInventory;
+use App\Models\PackageItem;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
