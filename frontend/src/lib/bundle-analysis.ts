@@ -166,14 +166,15 @@ export function reportBundleSize() {
         },
         totalSize: totalJsSize + totalCssSize,
       },
+    }
 
-      // Send to analytics
-      const shouldSend = navigator.sendBeacon
-      if (shouldSend) {
-        navigator.sendBeacon('/api/analytics/bundle-size', JSON.stringify(report))
-      }
+    // Send to analytics
+    const shouldSend = navigator.sendBeacon
+    if (shouldSend) {
+      navigator.sendBeacon('/api/analytics/bundle-size', JSON.stringify(report))
+    }
 
-      return report
+    return report
   }
 
   return null
