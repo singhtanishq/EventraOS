@@ -321,7 +321,7 @@ export function ContextMenu({
                 <span className="flex-1 text-body-sm">{item.label}</span>
               </button>
             ))
-          ))}
+          )}
         </motion.div>
       </AnimatePresence>
     </>
