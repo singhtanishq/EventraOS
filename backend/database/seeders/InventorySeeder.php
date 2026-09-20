@@ -39,6 +39,8 @@ use App\Models\VenuePackage;
 use App\Models\VenueAddon;
 use App\Models\Provider;
 use App\Models\TravelPackage;
+use App\Models\PackagePricing;
+use App\Models\PackageInventory;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
