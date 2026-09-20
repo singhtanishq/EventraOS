@@ -3,7 +3,13 @@ import { motion } from 'framer-motion'
 import Link from 'react-router-dom'
 import { Building2 } from 'lucide-react'
 
-export default function AuthLayout() {
+import { ReactNode } from 'react'
+
+interface AuthLayoutProps {
+  children?: ReactNode
+}
+
+export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
     <div className="min-h-screen flex">
       {/* Brand Side */}
@@ -72,7 +78,7 @@ export default function AuthLayout() {
           </div>
 
           <div className="bg-white rounded-2xl border border-eventra-slate-200 shadow-card p-8">
-            <Outlet />
+            {children || <Outlet />}
           </div>
 
           <p className="text-center text-body-sm text-eventra-slate-500 mt-6">
