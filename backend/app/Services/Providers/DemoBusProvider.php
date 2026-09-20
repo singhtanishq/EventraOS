@@ -159,7 +159,7 @@ class DemoBusProvider extends BaseProvider
             pricing: [
                 'currency' => 'INR',
                 'fare_options' => $bus->busTypes->flatMap->fares->filter(fn ($f) => $f->is_active)->map(function ($f) {
-                    return [
+                    $fareData = [
                         'fare_id' => $f->id,
                         'name' => $f->name,
                         'bus_type' => $f->busType?->name,
@@ -180,7 +180,9 @@ class DemoBusProvider extends BaseProvider
                             'available' => $f->inventory()->where('available_seats', '>', 0)->exists(),
                             'seats_available' => $f->inventory()->where('available_seats', '>', 0)->sum('available_seats'),
                         ],
-                    ])->toArray(),
+                    ];
+                    return $fareData;
+                })->toArray(),
             ],
             policies: [
                 'cancellation' => $fare?->fare_rules ?? [],
