@@ -202,7 +202,6 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
                     )}
                   </button>
                 ))}
-              )}
             </div>
           </motion.div>
         )}
