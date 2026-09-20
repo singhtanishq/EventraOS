@@ -64,11 +64,11 @@ class DemoBusProvider extends BaseProvider
 
         $sort = $criteria['sort'] ?? 'recommended';
         match ($sort) {
-            'cheapest' => $query->orderBy('types.fares.inventory.sell_price', 'asc'),
+            'cheapest' => $query->orderBy('departure_time', 'asc'),
             'fastest' => $query->orderBy('duration_minutes', 'asc'),
             'earliest' => $query->orderBy('departure_time', 'asc'),
             'latest' => $query->orderBy('departure_time', 'desc'),
-            default => $query->orderBy('types.fares.inventory.sell_price', 'asc'),
+            default => $query->orderBy('departure_time', 'asc'),
         };
 
         $buses = $query->limit(20)->get();
