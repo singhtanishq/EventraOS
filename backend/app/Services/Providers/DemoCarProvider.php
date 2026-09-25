@@ -44,11 +44,19 @@ class DemoCarProvider extends BaseProvider
         }
 
         if (!empty($criteria['transmission'])) {
-            $query->where('transmission', $criteria['transmission']);
+            $transmissions = collect(explode(',', (string) $criteria['transmission']))
+                ->map(fn ($v) => strtolower(trim($v)))->filter()->values();
+            if ($transmissions->isNotEmpty()) {
+                $query->whereIn('transmission', $transmissions->all());
+            }
         }
 
         if (!empty($criteria['fuel_type'])) {
-            $query->where('fuel_type', $criteria['fuel_type']);
+            $fuelTypes = collect(explode(',', (string) $criteria['fuel_type']))
+                ->map(fn ($v) => strtolower(trim($v)))->filter()->values();
+            if ($fuelTypes->isNotEmpty()) {
+                $query->whereIn('fuel_type', $fuelTypes->all());
+            }
         }
 
         $cars = \App\Models\Car::query()
