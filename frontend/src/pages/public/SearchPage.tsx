@@ -18,25 +18,29 @@ import {
   X,
   ChevronDown,
   ChevronUp,
+  Shield,
+  Star,
+  Globe,
+  Clock,
+  Zap,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Card } from '@/components/ui/Card'
-import { Dropdown, DropdownOption } from '@/components/ui/Dropdown'
 import { Badge } from '@/components/ui/Badge'
 
 const serviceTypes = [
-  { id: 'all', name: 'All Services', icon: null, description: 'Search across all service types' },
-  { id: 'hotels', name: 'Hotels', icon: Building2, description: 'Hotels, resorts, apartments' },
-  { id: 'flights', name: 'Flights', icon: Plane, description: 'Domestic & international flights' },
-  { id: 'trains', name: 'Trains', icon: Train, description: 'Rail journeys & passes' },
-  { id: 'buses', name: 'Buses', icon: Bus, description: 'Intercity & local buses' },
-  { id: 'venues', name: 'Venues', icon: MapPin, description: 'Event venues & halls' },
-  { id: 'cars', name: 'Car Rentals', icon: Car, description: 'Self-drive & chauffeur cars' },
-  { id: 'activities', name: 'Activities', icon: Ship, description: 'Tours, experiences & tickets' },
-  { id: 'transfers', name: 'Transfers', icon: MapPinCheck, description: 'Airport & city transfers' },
-  { id: 'packages', name: 'Packages', icon: Briefcase, description: 'Complete travel packages' },
+  { id: 'all', name: 'All Services', icon: Search, description: 'Search across all service types', color: 'blue', href: '/search' },
+  { id: 'hotels', name: 'Hotels', icon: Building2, description: 'Hotels, resorts, apartments', color: 'blue', href: '/hotels' },
+  { id: 'flights', name: 'Flights', icon: Plane, description: 'Domestic & international flights', color: 'cyan', href: '/flights' },
+  { id: 'trains', name: 'Trains', icon: Train, description: 'Rail journeys & passes', color: 'teal', href: '/trains' },
+  { id: 'buses', name: 'Buses', icon: Bus, description: 'Intercity & local buses', color: 'amber', href: '/buses' },
+  { id: 'venues', name: 'Venues', icon: MapPin, description: 'Event venues & halls', color: 'red', href: '/venues' },
+  { id: 'cars', name: 'Car Rentals', icon: Car, description: 'Self-drive & chauffeur cars', color: 'green', href: '/cars' },
+  { id: 'activities', name: 'Activities', icon: Ship, description: 'Tours, experiences & tickets', color: 'blue', href: '/activities' },
+  { id: 'transfers', name: 'Transfers', icon: MapPinCheck, description: 'Airport & city transfers', color: 'cyan', href: '/transfers' },
+  { id: 'packages', name: 'Packages', icon: Briefcase, description: 'Complete travel packages', color: 'teal', href: '/packages' },
 ]
 
 export function SearchPage() {
