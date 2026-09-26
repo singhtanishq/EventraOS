@@ -132,76 +132,77 @@ class DemoBusProvider extends BaseProvider
 
     public function getDetails(string $itemId, array $options = []): ?\App\Services\Providers\DTO\ProviderItemDetails
     {
-        $bus = \App\Models\BusRoute::with(['operator', 'types.fares.inventory'])->find($itemId);
+        $bus = \App\Models\BusRoute::with(['operator', 'originTerminal.city', 'destinationTerminal.city', 'types.fares.inventory'])->find($itemId);
         if (! $bus) return null;
 
-        $fare = $bus->types->flatMap->fares->firstWhere('is_active', true);
-        $inventory = $fare?->inventory()->where('available_seats', '>', 0)->first();
+        $fareOptions = $bus->types->flatMap(function ($type) {
+            return $type->fares->filter(fn ($f) => $f->is_active)->map(function ($f) use ($type) {
+                $inv = $f->inventory();
+                $sellPrice = (float) ($inv->min('current_fare') ?? $f->base_fare ?? 0);
+
+                return [
+                    'fare_id' => 'bustype_' . $type->id,
+                    'name' => $type->name,
+                    'bus_type' => $type->name,
+                    'code' => $type->code,
+                    'layout' => $type->layout,
+                    'berth_type' => $type->berth_type,
+                    'is_ac' => $type->is_ac,
+                    'is_refundable' => true,
+                    'fare_rules' => $f->cancellation_policy ?? [],
+                    'pricing' => [
+                        'base_price' => $sellPrice,
+                        'currency' => $f->currency ?? 'INR',
+                        'total' => $sellPrice,
+                        'per_passenger' => $sellPrice,
+                    ],
+                    'availability' => [
+                        'available' => $inv->where('available_seats', '>', 0)->exists(),
+                        'seats_available' => $inv->where('available_seats', '>', 0)->sum('available_seats'),
+                    ],
+                ];
+            });
+        })->values();
+
+        $firstPrice = $fareOptions->first()['pricing']['total'] ?? 0;
 
         return new \App\Services\Providers\DTO\ProviderItemDetails(
             id: (string) $itemId,
             name: $bus->operator->name . ' ' . $bus->route_name,
-            description: "Bus route from {$bus->originTerminal->name} to {$bus->destinationTerminal->name}",
+            description: "Bus route from {$bus->originTerminal?->name} to {$bus->destinationTerminal?->name}",
             images: [$bus->operator->logo ?? ''],
             location: [
                 'origin' => [
-                    'terminal' => $bus->originTerminal->name ?? '',
-                    'code' => $bus->originTerminal->code ?? '',
-                    'city' => $bus->originTerminal->city->name ?? '',
+                    'terminal' => $bus->originTerminal?->name ?? '',
+                    'code' => $bus->originTerminal?->code ?? '',
+                    'city' => $bus->originTerminal?->city?->name ?? '',
                 ],
                 'destination' => [
-                    'terminal' => $bus->destinationTerminal->name ?? '',
-                    'code' => $bus->destinationTerminal->code ?? '',
-                    'city' => $bus->destinationTerminal->city->name ?? '',
+                    'terminal' => $bus->destinationTerminal?->name ?? '',
+                    'code' => $bus->destinationTerminal?->code ?? '',
+                    'city' => $bus->destinationTerminal?->city?->name ?? '',
                 ],
             ],
-            amenities: $bus->busTypes->first()?->amenities ?? [],
+            amenities: $bus->types->first()?->amenities ?? [],
             pricing: [
                 'currency' => 'INR',
-                'fare_options' => $bus->busTypes->flatMap->fares->filter(fn ($f) => $f->is_active)->map(function ($f) {
-                    $fareData = [
-                        'fare_id' => $f->id,
-                        'name' => $f->name,
-                        'bus_type' => $f->busType?->name,
-                        'code' => $f->code,
-                        'baggage_allowance' => $f->baggage_allowance,
-                        'fare_rules' => $f->fare_rules,
-                        'is_refundable' => $f->is_refundable,
-                        'is_changeable' => $f->is_changeable,
-                        'change_fee' => (float) $f->change_fee,
-                        'cancel_fee' => (float) $f->cancel_fee,
-                        'pricing' => [
-                            'base_price' => $f->inventory()->min('current_fare') ?? 0,
-                            'currency' => 'INR',
-                            'total' => (float) $f->inventory()->min('current_fare') ?? 0,
-                            'per_passenger' => $f->inventory()->min('current_fare') ?? 0,
-                        ],
-                        'availability' => [
-                            'available' => $f->inventory()->where('available_seats', '>', 0)->exists(),
-                            'seats_available' => $f->inventory()->where('available_seats', '>', 0)->sum('available_seats'),
-                        ],
-                    ];
-                    return $fareData;
-                })->toArray(),
+                'base_price' => $firstPrice,
+                'total' => $firstPrice,
+                'per_passenger' => $firstPrice,
+                'fare_options' => $fareOptions->toArray(),
             ],
-            policies: [
-                'cancellation' => $fare?->fare_rules ?? [],
-                'change' => $fare?->fare_rules ?? [],
-            ],
+            policies: [],
             availability: [
-                'departure_time' => $this->departure_time,
-                'arrival_time' => $this->arrival_time,
-                'duration_minutes' => $this->duration_minutes,
+                'available' => $fareOptions->contains(fn ($o) => ($o['availability']['available'] ?? false) === true),
+                'seats_available' => $fareOptions->sum(fn ($o) => $o['availability']['seats_available'] ?? 0),
             ],
             metadata: [
-                'operator' => $this->operator->name ?? 'Unknown',
-                'bus_type' => $this->busTypes->first()?->name ?? 'Unknown',
-                'departure_time' => $this->departure_time,
-                'arrival_time' => $this->arrival_time,
-                'duration_minutes' => $this->duration_minutes,
+                'departure_time' => $bus->departure_time,
+                'arrival_time' => $bus->arrival_time,
+                'duration_minutes' => $bus->duration_minutes,
+                'boarding_points' => $bus->boarding_points ?? [],
+                'dropping_points' => $bus->dropping_points ?? [],
             ],
-            rating: 0,
-            reviewCount: 0,
         );
     }
 
