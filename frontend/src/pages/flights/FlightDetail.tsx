@@ -130,7 +130,7 @@ export function FlightDetail() {
 
   const fareOptions: FareOption[] = Array.isArray(flight.fare_options) ? flight.fare_options : []
   const availableFares = fareOptions.filter((fare) => fare.availability?.available)
-  const metadata = flight.metadata || {}
+  const metadata: FlightDetailData['metadata'] = flight.metadata ?? ({} as FlightDetailData['metadata'])
   const origin = flight.location?.origin
   const destination = flight.location?.destination
 
