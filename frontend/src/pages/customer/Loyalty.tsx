@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
-import { Medal, Trophy, Crown, Gift, Shield, Target, RotateCcw, ArrowUpRight, User, X } from 'lucide-react'
+import { Medal, Trophy, Crown, Gift, Shield, Target, RotateCcw, ArrowUpRight, ArrowDownRight, User, X } from 'lucide-react'
 import { api } from '@/lib/api'
 import { formatCurrency, formatDate, cn } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
