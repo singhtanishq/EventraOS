@@ -20,13 +20,6 @@ const queryClient = new QueryClient({
 
 
 
-window.addEventListener('error', (e) => {
-  const el = document.createElement('pre');
-  el.id = 'fatal-error';
-  el.textContent = 'FATAL: ' + e.message + ' @ ' + e.filename + ':' + e.lineno;
-  document.body.appendChild(el);
-});
-
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
