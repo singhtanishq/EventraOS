@@ -152,7 +152,7 @@ export function ActivityResults() {
   }
 
   const getCategoryIcon = (category: string) => {
-    switch (category.toLowerCase()) {
+    switch ((category || '').toLowerCase()) {
       case 'sightseeing': return <Building2 className="w-4 h-4" />
       case 'adventure': return <Mountain className="w-4 h-4" />
       case 'cultural': return <Sparkles className="w-4 h-4" />
@@ -412,7 +412,7 @@ function ActivityResultCard({ activity, onSelect }: { activity: ActivityResult; 
   )
 
   function getCategoryIcon(category: string) {
-    switch (category.toLowerCase()) {
+    switch ((category || '').toLowerCase()) {
       case 'sightseeing': return <Building2 className="w-3 h-3" />
       case 'adventure': return <Mountain className="w-3 h-3" />
       case 'cultural': return <Sparkles className="w-3 h-3" />
