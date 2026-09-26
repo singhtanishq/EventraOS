@@ -15,7 +15,7 @@ export default function LoadingScreen({ message = 'Loading...' }: { message?: st
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-            className="absolute -inset-3 border-3 border-eventra-blue-500/20 border-t-eventra-blue-500 rounded-3xl"
+            className="absolute -inset-3 border-4 border-eventra-blue-500/20 border-t-eventra-blue-500 rounded-3xl"
           />
         </div>
         <div className="text-center">
