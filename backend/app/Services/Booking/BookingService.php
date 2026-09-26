@@ -190,7 +190,8 @@ class BookingService
         }
 
         // Get service details and pricing
-        $details = $provider->getDetails(
+        $details = $this->providerManager->getDetails(
+            $itemData['item_type'],
             $itemData['item_type'] . '_' . $itemData['service_id'],
             $itemData['configuration'] ?? []
         );
@@ -200,7 +201,8 @@ class BookingService
         }
 
         // Check availability
-        $availability = $provider->checkAvailability(
+        $availability = $this->providerManager->checkAvailability(
+            $itemData['item_type'],
             $itemData['item_type'] . '_' . $itemData['service_id'],
             $itemData['configuration'] ?? []
         );
