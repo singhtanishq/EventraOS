@@ -25,7 +25,6 @@ import {
   Truck,
   Package,
   ChevronRight,
-  RefreshCw,
 } from 'lucide-react'
 import { api } from '@/lib/api'
 import { formatCurrency, formatDate, cn } from '@/lib/utils'
