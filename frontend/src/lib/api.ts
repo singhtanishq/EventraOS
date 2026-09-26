@@ -69,8 +69,16 @@ class ApiClient {
     return `req_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`
   }
 
-  async get<T>(url: string, params?: Record<string, unknown>) {
-    const response = await this.client.get<T>(url, { params })
+  /**
+   * GET request. Returns the response body directly.
+   * Accepts either `api.get(url, paramsObject)` or axios-style `api.get(url, { params })`.
+   */
+  async get<T>(url: string, paramsOrConfig?: Record<string, unknown> | { params?: Record<string, unknown> }) {
+    const config =
+      paramsOrConfig && typeof paramsOrConfig === 'object' && 'params' in paramsOrConfig
+        ? (paramsOrConfig as { params?: Record<string, unknown> })
+        : { params: paramsOrConfig }
+    const response = await this.client.get<T>(url, config)
     return response.data
   }
 
