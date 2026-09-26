@@ -17,6 +17,9 @@ interface SearchParams {
   passengers?: string
   page?: number
   per_page?: number
+  price_min?: string
+  price_max?: string
+
 }
 
 interface BusResult {
@@ -81,7 +84,7 @@ export function BusResults() {
     const initialFilters: Partial<SearchParams> = {}
     searchParams.forEach((value, key) => {
       if (key !== 'page' && key !== 'per_page') {
-        initialFilters[key as keyof SearchParams] = value
+        (initialFilters as Record<string, string>)[key] = value
       }
     })
     setFilters(initialFilters)
@@ -97,7 +100,7 @@ export function BusResults() {
   const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ['buses', queryParams],
     queryFn: async () => {
-      const response = await api.get('/search/buses', { params: queryParams })
+      const response = await api.get<any>('/search/buses', { params: queryParams })
       return response.data
     },
     placeholderData: (previousData) => previousData,
