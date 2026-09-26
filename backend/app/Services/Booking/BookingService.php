@@ -217,8 +217,6 @@ class BookingService
 
         return array_merge($itemData, [
             'service_name' => $itemData['service_name'] ?? $details->getName(),
-            'provider_code' => $provider->getCode(),
-            'provider_item_id' => $itemData['item_type'] . '_' . $itemData['service_id'],
             'base_price' => $basePrice,
             'tax_amount' => $taxAmount,
             'fee_amount' => $feeAmount,
