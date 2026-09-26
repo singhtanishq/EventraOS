@@ -2,17 +2,13 @@ import { useEffect, useState } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
-import { ChevronLeft, ChevronRight, Filter, SlidersHorizontal, MapPin, Star, Tag, X, Loader2, Car, Shield, Fuel, Settings, Zap, Users, Luggage, CheckCircle2 } from 'lucide-react'
+import { ChevronLeft, ChevronRight, SlidersHorizontal, MapPin, Car, Shield, Fuel, Settings, Zap, Users, Luggage, CheckCircle2, Cpu, Leaf, Snowflake, Calendar } from 'lucide-react'
 import { api } from '@/lib/api'
 import { formatCurrency, formatDate, cn, debounce } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
-import { Input } from '@/components/ui/Input'
-import { Select, SelectOption } from '@/components/ui/Input'
 import { Card } from '@/components/ui/Card'
-import { Badge } from '@/components/ui/Button'
 import { PageSkeleton } from '@/components/ui/LoadingScreen'
 import { Modal } from '@/components/ui/Modal'
-import { toast } from 'react-hot-toast'
 
 interface SearchParams {
   city_id?: string
@@ -194,18 +190,17 @@ export function CarResults() {
 
             <div className="flex items-center gap-3">
               <div className="relative">
-                <Select
+                <select
                   value={sortBy}
-                  onValueChange={handleSortChange}
-                  options={[
-                    { value: 'recommended', label: 'Recommended' },
-                    { value: 'price_low', label: 'Price: Low to High' },
-                    { value: 'price_high', label: 'Price: High to Low' },
-                    { value: 'rating', label: 'Top Rated' },
-                  ]}
-                  className="w-48"
-                  placeholder="Sort by"
-                />
+                  onChange={(e) => handleSortChange(e.target.value)}
+                  className="input form-select w-48"
+                  aria-label="Sort cars"
+                >
+                  <option value="recommended">Recommended</option>
+                  <option value="price_low">Price: Low to High</option>
+                  <option value="price_high">Price: High to Low</option>
+                  <option value="rating">Top Rated</option>
+                </select>
               </div>
 
               <Button
@@ -336,8 +331,8 @@ export function CarResults() {
                       </div>
                     )}
                   </>
-              )}
-            </> 
+                )}
+              </>
             )}
           </main>
         </div>
