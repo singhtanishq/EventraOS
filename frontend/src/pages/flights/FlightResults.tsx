@@ -367,7 +367,7 @@ export function FlightResults() {
 function FlightResultCard({ flight, getAirlineLogo, formatDuration, onSelect }: { flight: FlightResult; getAirlineLogo: (code: string) => string; formatDuration: (minutes: number) => string; onSelect: () => void }) {
   const dep = flight.location?.origin
   const arr = flight.location?.destination
-  const metadata = flight.metadata || {}
+  const metadata: FlightResult['metadata'] = flight.metadata ?? ({} as FlightResult['metadata'])
   const stops = metadata.stops ?? 0
 
   return (
