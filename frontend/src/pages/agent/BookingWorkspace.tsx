@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
 import { Search, Users, Briefcase, ClipboardList, CreditCard, PlusCircle, FileText, DollarSign, Shield, CheckCircle2, UserPlus, RefreshCw, Target, ArrowRight } from 'lucide-react'
