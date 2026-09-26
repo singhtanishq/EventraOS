@@ -348,6 +348,7 @@ function BusResultCard({ bus, formatDuration, onSelect }: { bus: BusResult; form
   const metadata = bus.metadata
   const dep = bus.location.origin
   const arr = bus.location.destination
+  const boardingPoints = metadata.boarding_points || []
 
   return (
     <Card variant="interactive" onClick={onSelect} className="p-5">
@@ -398,11 +399,11 @@ function BusResultCard({ bus, formatDuration, onSelect }: { bus: BusResult; form
         </div>
         <div className="flex flex-col items-end gap-2 w-48">
           <div className="flex items-center gap-2">
-            {metadata.boarding_points.slice(0, 2).map((point, i) => (
+            {boardingPoints.slice(0, 2).map((point, i) => (
               <BoardingPointBadge key={i} point={point} />
             ))}
-            {metadata.boarding_points.length > 2 && (
-              <span className="badge badge-neutral">+{metadata.boarding_points.length - 2} more</span>
+            {boardingPoints.length > 2 && (
+              <span className="badge badge-neutral">+{boardingPoints.length - 2} more</span>
             )}
           </div>
           <div className="text-right">
