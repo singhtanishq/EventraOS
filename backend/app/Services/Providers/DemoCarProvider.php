@@ -105,7 +105,7 @@ class DemoCarProvider extends BaseProvider
 
     public function getDetails(string $itemId, array $options = []): ?\App\Services\Providers\DTO\ProviderItemDetails
     {
-        $car = \App\Models\Car::with(['company', 'category', 'rates', 'pickupLocations'])->find($itemId);
+        $car = \App\Models\Car::with(['company.city', 'category', 'rates'])->find($itemId);
         if (! $car) return null;
 
         $dailyRate = $car->rates->firstWhere('rate_type', 'daily');
@@ -132,7 +132,7 @@ class DemoCarProvider extends BaseProvider
             policies: $dailyRate?->cancellation_policy ?? [],
             availability: [
                 'available' => true,
-                'locations' => $car->pickupLocations->pluck('name')->toArray() ?: [],
+                'locations' => $car->company?->pickupLocations()->pluck('name')->toArray() ?? [],
             ],
             metadata: [
                 'seats' => $car->seats,
