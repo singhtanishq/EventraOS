@@ -75,7 +75,7 @@ export function ActivityResults() {
     const initialFilters: Partial<SearchParams> = {}
     searchParams.forEach((value, key) => {
       if (key !== 'page' && key !== 'per_page') {
-        initialFilters[key as keyof SearchParams] = value
+        (initialFilters as Record<string, string>)[key] = value
       }
     })
     setFilters(initialFilters)
@@ -91,7 +91,7 @@ export function ActivityResults() {
   const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ['activities', queryParams],
     queryFn: async () => {
-      const response = await api.get('/search/activities', { params: queryParams })
+      const response = await api.get<any>('/search/activities', { params: queryParams })
       return response.data
     },
     placeholderData: (previousData) => previousData,
