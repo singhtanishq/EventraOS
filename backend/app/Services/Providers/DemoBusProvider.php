@@ -217,14 +217,14 @@ class DemoBusProvider extends BaseProvider
             : \App\Models\BusFare::where('bus_route_id', $bus->id)->where('is_active', true)->first();
 
         $available = $fare?->inventory()
-            ->where('date', $criteria['journey_date'] ?? now()->toDateString())
+            ->where('journey_date', $criteria['journey_date'] ?? now()->toDateString())
             ->where('available_seats', '>', 0)
             ->exists();
 
         return new AvailabilityResult(
             available: $available ?? false,
             availableQuantity: $available ? 1 : 0,
-            price: $fare?->pricing['per_passenger'] ?? 0,
+            price: (float) ($fare?->base_fare ?? 0),
             currency: 'INR',
             holdExpiresAt: now()->addMinutes(15)
         );
