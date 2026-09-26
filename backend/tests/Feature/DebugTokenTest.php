@@ -12,6 +12,8 @@ class DebugTokenTest extends TestCase
 
     public function test_debug_token_resolution(): void
     {
+        fwrite(STDERR, "\nTEST default guard: " . config('auth.defaults.guard') . "\n");
+        fwrite(STDERR, "TEST AUTH_GUARD env: " . env('AUTH_GUARD', '(unset)') . "\n");
         $this->artisan('db:seed', ['--force' => true]);
 
         $r1 = $this->postJson('/api/auth/login', ['email' => 'customer@demo.com', 'password' => 'password']);
