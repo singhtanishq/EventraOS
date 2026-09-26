@@ -426,7 +426,7 @@ function TrainResultCard({ train, formatDuration, getAvailabilityStatus, onSelec
         </div>
         <div className="flex flex-col items-end gap-2 w-48">
           <div className="flex items-center gap-2">
-            {metadata.classes.map((cls) => (
+            {(metadata.classes || []).map((cls) => (
               <TrainClassBadge key={cls.class_id} classInfo={cls} />
             ))}
           </div>
