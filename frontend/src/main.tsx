@@ -20,6 +20,20 @@ const queryClient = new QueryClient({
 
 
 
+
+window.addEventListener('error', (e) => {
+  const el = document.createElement('pre');
+  el.id = 'fatal-error';
+  el.textContent = 'FATAL: ' + e.message + ' @ ' + e.filename + ':' + e.lineno;
+  document.body.appendChild(el);
+});
+window.addEventListener('unhandledrejection', (e) => {
+  const el = document.createElement('pre');
+  el.id = 'fatal-error2';
+  el.textContent = 'REJECTION: ' + String(e.reason && e.reason.stack ? e.reason.stack : e.reason).slice(0, 400);
+  document.body.appendChild(el);
+});
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
