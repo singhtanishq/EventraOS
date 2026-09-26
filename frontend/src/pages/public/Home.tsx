@@ -413,7 +413,7 @@ export function Home() {
   )
 }
 
-function MoreServicesDropdown({ services }: { services: typeof services }) {
+function MoreServicesDropdown({ services: moreServices }: { services: HomeService[] }) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
