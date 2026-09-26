@@ -190,19 +190,18 @@ export function BusResults() {
 
             <div className="flex items-center gap-3">
               <div className="relative">
-                <Select
+                <select
                   value={sortBy}
-                  onValueChange={handleSortChange}
-                  options={[
-                    { value: 'recommended', label: 'Recommended' },
-                    { value: 'cheapest', label: 'Cheapest' },
-                    { value: 'fastest', label: 'Fastest' },
-                    { value: 'earliest', label: 'Earliest Departure' },
-                    { value: 'latest', label: 'Latest Departure' },
-                  ]}
-                  className="w-48"
-                  placeholder="Sort by"
-                />
+                  onChange={(e) => handleSortChange(e.target.value)}
+                  className="input form-select w-48"
+                  aria-label="Sort buses"
+                >
+                  <option value="recommended">Recommended</option>
+                  <option value="cheapest">Cheapest</option>
+                  <option value="fastest">Fastest</option>
+                  <option value="earliest">Earliest Departure</option>
+                  <option value="latest">Latest Departure</option>
+                </select>
               </div>
 
               <Button
@@ -332,8 +331,8 @@ export function BusResults() {
                       </div>
                     )}
                   </>
-              )}
-            </> 
+                )}
+              </>
             )}
           </main>
         </div>
