@@ -95,16 +95,8 @@ class AuthController extends Controller
 
         $credentials = $request->only('email', 'password');
 
-        \Log::debug('LOGIN_DEBUG', [
-            'email' => $credentials['email'] ?? null,
-            'cfg_guard' => config('auth.defaults.guard'),
-            'env_guard' => env('AUTH_GUARD', '(unset)'),
-            'default_driver' => auth()->getDefaultDriver(),
-            'has_session' => $request->hasSession(),
-            'session_id' => $request->hasSession() ? $request->session()->getId() : null,
-            'session_user' => $request->hasSession() ? optional($request->session()->get('login_web_59ba36addc2b2f9401580f014c7f58ea4e30989d'))->email : null,
-        ]);
-
+        // Explicit web guard: Sanctum can flip the process-wide default guard
+        // to 'sanctum' after any bearer-authenticated request in the same worker.
         if (!Auth::guard('web')->attempt($credentials, $request->boolean('remember'))) {
             return response()->json([
                 'success' => false,
