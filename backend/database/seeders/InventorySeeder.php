@@ -672,7 +672,7 @@ class InventorySeeder extends Seeder
             ]);
 
             ActivityPricing::create([
-                'activity_id' => \App\Models\Activity::latest()->first()->id,
+                'activity_id' => $activity->id,
                 'provider_id' => $this->demoProvider->id,
                 'name' => 'Adult',
                 'participant_type' => 'adult',
