@@ -52,9 +52,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               error && 'input-error',
               className
             )}
-            onFocus={(e) => { setFocused(true); props.onFocus?.(e) }}
-            onBlur={(e) => { setFocused(false); onBlur?.(e); props.onBlur?.(e) }}
-            onChange={(e) => { onChange?.(e); props.onChange?.(e) }}
+            onFocus={(e) => { setFocused(true) }}
+            onBlur={(e) => { setFocused(false); onBlur?.(e) }}
+            onChange={(e) => { onChange?.(e) }}
             aria-invalid={error ? 'true' : 'false'}
             aria-describedby={error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined}
             {...props}
