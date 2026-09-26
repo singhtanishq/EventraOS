@@ -45,11 +45,11 @@ export function Register() {
     },
   })
 
-  const password = watch('password')
+  const password = watch('password') || ''
 
   const onSubmit = async (data: RegisterFormData) => {
     setIsSubmitting(true)
-    
+
     try {
       const result = await registerUser({
         name: data.name,
@@ -58,17 +58,12 @@ export function Register() {
         password: data.password,
         password_confirmation: data.password_confirmation,
       })
-      
+
       if (result.success) {
         toast.success('Account created successfully!')
-        navigate('/customer/dashboard', { replace: true })
+        navigate('/search', { replace: true })
       } else {
         toast.error(result.message || 'Registration failed. Please try again.')
-        if (result.errors) {
-          Object.entries(result.errors).forEach(([field, messages]) => {
-            messages.forEach(msg => toast.error(`${field}: ${msg}`))
-          })
-        }
       }
     } catch {
       toast.error('An unexpected error occurred. Please try again.')
