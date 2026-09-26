@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   Headphones, Mail, Phone, MessageSquare, Plus, Calendar, Building2,
-  ChevronRight, User, Bell,
+  ChevronRight, Bell,
 } from 'lucide-react'
 import { api } from '@/lib/api'
 import { formatDate, getRelativeTime, cn } from '@/lib/utils'
@@ -488,5 +488,3 @@ function ActionCard({ icon, title, description, onClick }: { icon: React.ReactNo
   )
 }
 
-// Kept for future per-ticket message threads; references sender shape used by the API
-void User
