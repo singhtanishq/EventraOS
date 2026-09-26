@@ -49,7 +49,7 @@ export function useBookings(options: UseBookingsOptions = {}) {
       params.set('page', pageNum.toString())
       params.set('per_page', per_page.toString())
 
-      const { data } = await api.get(`/bookings?${params.toString()}`)
+      const { data } = await api.get<any>(`/bookings?${params.toString()}`)
       setBookings(data.data || data.bookings || [])
       if (data.pagination) {
         setPagination(data.pagination)
@@ -62,7 +62,7 @@ export function useBookings(options: UseBookingsOptions = {}) {
 
   const cancelBooking = useCallback(async (bookingId: string, reason: string, requestRefund = false) => {
     try {
-      const { data } = await api.post(`/bookings/${bookingId}/cancel`, { reason, request_refund: requestRefund })
+      const { data } = await api.post<any>(`/bookings/${bookingId}/cancel`, { reason, request_refund: requestRefund })
       return { success: true, message: data.message || 'Booking cancelled successfully' }
     } catch (err: any) {
       const message = err.response?.data?.message || 'Failed to cancel booking'
@@ -72,7 +72,7 @@ export function useBookings(options: UseBookingsOptions = {}) {
 
   const rescheduleBooking = useCallback(async (bookingId: string, newStartDate: string, newEndDate?: string) => {
     try {
-      const { data } = await api.post(`/bookings/${bookingId}/reschedule`, { new_start_date: newStartDate, new_end_date: newEndDate })
+      const { data } = await api.post<any>(`/bookings/${bookingId}/reschedule`, { new_start_date: newStartDate, new_end_date: newEndDate })
       return { success: true, message: data.message || 'Booking rescheduled successfully' }
     } catch (err: any) {
       const message = err.response?.data?.message || 'Failed to reschedule booking'
@@ -82,7 +82,7 @@ export function useBookings(options: UseBookingsOptions = {}) {
 
   const getBooking = useCallback(async (bookingId: string) => {
     try {
-      const { data } = await api.get(`/bookings/${bookingId}`)
+      const { data } = await api.get<any>(`/bookings/${bookingId}`)
       return data.data || data
     } catch (err: any) {
       const message = err.response?.data?.message || 'Failed to load booking'
@@ -117,7 +117,7 @@ export function useBooking(bookingId: string) {
   const fetchBooking = useCallback(async () => {
     setIsLoading(true)
     try {
-      const { data } = await api.get(`/bookings/${bookingId}`)
+      const { data } = await api.get<any>(`/bookings/${bookingId}`)
       setBooking(data.data || data)
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to load booking')
@@ -140,7 +140,7 @@ export function useUpcomingBookings(limit = 5) {
   const fetchUpcoming = useCallback(async () => {
     setIsLoading(true)
     try {
-      const { data } = await api.get('/bookings/upcoming', { params: { limit } })
+      const { data } = await api.get<any>('/bookings', { params: { limit } })
       setBookings(data.data || data.bookings || [])
     } catch {
       setBookings([])
