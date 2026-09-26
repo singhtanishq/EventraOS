@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect } from 'react'
 import { Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useAuthStore } from '@/store/auth'
+import { api } from '@/lib/api'
 import { Toaster } from 'react-hot-toast'
 import LoadingScreen from '@/components/ui/LoadingScreen'
 
@@ -45,6 +46,25 @@ function ScrollToTop() {
 }
 
 function App() {
+  // Restore session once on boot: verify persisted token against the API
+  useEffect(() => {
+    const initAuth = async () => {
+      const { token, isAuthenticated, logout, setLoading } = useAuthStore.getState()
+      if (!isAuthenticated || !token) {
+        setLoading(false)
+        return
+      }
+      try {
+        await api.get('/auth/me')
+        // Token still valid — keep persisted session
+      } catch {
+        logout()
+      }
+      setLoading(false)
+    }
+    initAuth()
+  }, [])
+
   return (
     <div className="min-h-screen bg-white">
       <ScrollToTop />
