@@ -300,11 +300,11 @@ export function SearchPage() {
             Join millions of travelers who trust EventraOS for their travel needs. Search, compare, and book with confidence.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="btn-lg bg-eventra-gold-400 hover:bg-eventra-gold-500 text-eventra-navy-900 w-full sm:w-auto">
+            <Button size="lg" className="btn-lg bg-eventra-gold-400 hover:bg-eventra-gold-500 text-eventra-navy-900 w-full sm:w-auto" onClick={() => navigate('/search')}>
               <Search className="w-5 h-5 mr-2" />
               Start Searching
             </Button>
-            <Button variant="outline" size="lg" className="btn-lg border-white text-white hover:bg-white/10 w-full sm:w-auto">
+            <Button variant="outline" size="lg" className="btn-lg border-white text-white hover:bg-white/10 w-full sm:w-auto" onClick={() => navigate('/register')}>
               <Users className="w-5 h-5 mr-2" />
               Become an Agent
             </Button>
