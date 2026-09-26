@@ -193,10 +193,10 @@ export function Home() {
                     </div>
                     <div className="space-y-2">
                       <label className="label text-white">&nbsp;</label>
-                      <Button className="btn-primary w-full btn-lg" size="lg">
-                        <Zap className="w-5 h-5 mr-2" />
+                      <Link to="/search" className="btn-primary w-full btn-lg inline-flex items-center justify-center gap-2">
+                        <Zap className="w-5 h-5" />
                         Search
-                      </Button>
+                      </Link>
                     </div>
                   </div>
                 </div>
