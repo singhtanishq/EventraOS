@@ -6,7 +6,7 @@ import {
   Smartphone, Monitor, Globe, HardDrive, Calendar, UserCheck, UserX, CheckCircle2,
 } from 'lucide-react'
 import { api } from '@/lib/api'
-import { getRelativeTime, formatDate, cn } from '@/lib/utils'
+import { getRelativeTime, cn } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Card } from '@/components/ui/Card'
@@ -685,9 +685,3 @@ function ActionCard({ icon, title, description, onClick }: { icon: React.ReactNo
     </button>
   )
 }
-
-// Re-exported for type clarity: login history rows reuse the SecurityEvent shape
-export type { SecurityEvent }
-
-// formatDate is used implicitly by login history relative times
-void formatDate
