@@ -406,16 +406,18 @@ export function AdminPromotions() {
   )
 }
 
-function PageHeader({ onCreate }: { onCreate: () => void }) {
+function PageHeader({ onCreate }: { onCreate?: () => void }) {
   return (
     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
       <div>
         <h1 className="text-display-sm font-display font-bold text-eventra-navy-900">Promotions</h1>
         <p className="text-eventra-slate-600 mt-1">Manage promotional campaigns and discount codes</p>
       </div>
-      <Button onClick={onCreate} leftIcon={<Plus className="w-5 h-5" />}>
-        Create Promotion
-      </Button>
+      {onCreate && (
+        <Button onClick={onCreate} leftIcon={<Plus className="w-5 h-5" />}>
+          Create Promotion
+        </Button>
+      )}
     </div>
   )
 }
