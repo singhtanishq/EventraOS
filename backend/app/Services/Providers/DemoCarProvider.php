@@ -108,35 +108,41 @@ class DemoCarProvider extends BaseProvider
         $car = \App\Models\Car::with(['company', 'category', 'rates', 'pickupLocations'])->find($itemId);
         if (! $car) return null;
 
+        $dailyRate = $car->rates->firstWhere('rate_type', 'daily');
+
         return new \App\Services\Providers\DTO\ProviderItemDetails(
             id: (string) $itemId,
-            name: $this->name,
-            description: $this->description,
-            images: $this->images ?? [],
+            name: $car->name . ($car->year ? ' (' . $car->year . ')' : ''),
+            description: ($car->company?->name ? $car->company->name . ' - ' : '') . $car->name,
+            images: $car->images ?? [],
             location: [
-                'city' => $this->city?->name ?? 'Multiple locations',
+                'city' => $car->pickupLocations->first()->city_name ?? 'Multiple locations',
                 'country' => 'India',
             ],
-            amenities: $this->features ?? [],
+            amenities: $car->features ?? [],
             pricing: [
                 'currency' => 'INR',
-                'daily_rate' => $this->rates->firstWhere('rate_type', 'daily')?->base_rate ?? 0,
-                'km_included' => $this->rates->firstWhere('rate_type', 'daily')?->km_included ?? 200,
-                'extra_km_rate' => $this->rates->firstWhere('rate_type', 'daily')?->extra_km_rate ?? 12,
-                'driver_allowance' => $this->rates->firstWhere('rate_type', 'daily')?->driver_allowance ?? 1500,
-                'deposit_amount' => $this->rates->firstWhere('rate_type', 'daily')?->deposit_amount ?? 5000,
-                'insurance_options' => $this->rates->firstWhere('rate_type', 'daily')?->insurance_options ?? [],
+                'daily_rate' => $dailyRate?->base_rate ?? 0,
+                'km_included' => $dailyRate?->km_included ?? 200,
+                'extra_km_rate' => $dailyRate?->extra_km_rate ?? 12,
+                'driver_allowance' => $dailyRate?->driver_allowance ?? 1500,
+                'deposit_amount' => $dailyRate?->deposit_amount ?? 5000,
+                'insurance_options' => $dailyRate?->insurance_options ?? [],
             ],
-            policies: $this->cancellation_policy ?? [],
+            policies: [],
             availability: [
                 'available' => true,
-                'locations' => $this->pickupLocations?->pluck('name')->toArray() ?? [],
+                'locations' => $car->pickupLocations->pluck('name')->toArray() ?: [],
             ],
             metadata: [
-                'seats' => $this->seats,
-                'transmission' => $this->transmission,
-                'fuel_type' => $this->fuel_type,
-                'is_ac' => $this->is_ac,
+                'seats' => $car->seats,
+                'transmission' => $car->transmission,
+                'fuel_type' => $car->fuel_type,
+                'is_ac' => $car->is_ac,
+                'model' => $car->model,
+                'year' => $car->year,
+                'doors' => $car->doors,
+                'company' => $car->company?->name,
             ],
         );
     }
