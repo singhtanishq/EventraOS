@@ -149,6 +149,7 @@ class BookingService
             if (!empty($itemData['travelers'])) {
                 foreach ($itemData['travelers'] as $tIndex => $traveler) {
                     $bookingItem->guests()->create([
+                        'booking_id' => $booking->id,
                         'first_name' => $traveler['first_name'],
                         'middle_name' => $traveler['middle_name'] ?? null,
                         'last_name' => $traveler['last_name'],
