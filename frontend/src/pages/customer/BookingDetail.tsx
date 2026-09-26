@@ -8,8 +8,10 @@ import { formatCurrency, formatDate, formatDateTime, formatTime, cn } from '@/li
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Modal } from '@/components/ui/Modal'
+import { Input } from '@/components/ui/Input'
 import { Badge } from '@/components/ui/Badge'
 import { toast } from 'react-hot-toast'
+import { CardSkeleton } from '@/components/ui/LoadingScreen'
 import { jsPDF } from 'jspdf'
 
 interface BookingDetailData {
