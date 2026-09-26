@@ -183,7 +183,7 @@ const getStatusColor = (status: string) => {
 }
 
 export function BookingDetail() {
-  const { reference } = useParams()
+  const { id } = useParams()
   const navigate = useNavigate()
   const [showCancelModal, setShowCancelModal] = useState(false)
   const [showRescheduleModal, setShowRescheduleModal] = useState(false)
@@ -192,24 +192,23 @@ export function BookingDetail() {
   const [isCancelling, setIsCancelling] = useState(false)
 
   const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: ['booking', reference],
+    queryKey: ['booking', id],
     queryFn: async () => {
-      const response = await api.get<any>(`/customer/bookings/${reference}`)
-      return response.data
+      return api.get<any>(`/bookings/${id}`)
     },
-    enabled: !!reference,
+    enabled: !!id,
   })
 
-  const bookingData = data?.data
-  const booking = bookingData?.booking
-  const customer = bookingData?.customer
-  const items = bookingData?.items || []
-  const payments = bookingData?.payments || []
-  const refunds = bookingData?.refunds || []
-  const cancellations = bookingData?.cancellations || []
-  const reschedules = bookingData?.reschedules || []
-  const vouchers = bookingData?.vouchers || []
-  const invoices = bookingData?.invoices || []
+  // The backend returns the booking object directly in `data`
+  const booking = data?.data
+  const customer = booking?.customer
+  const items = booking?.items || []
+  const payments = booking?.payments || []
+  const refunds = booking?.refunds || []
+  const cancellations = booking?.cancellations || []
+  const reschedules = booking?.reschedules || []
+  const vouchers = booking?.vouchers || []
+  const invoices = booking?.invoices || []
 
   const primaryPayment = payments.find(p => p.status === 'captured') || payments[0]
   const primaryTraveler = items.flatMap(i => i.travelers).find(t => t.is_lead_guest) || items[0]?.travelers[0]
@@ -222,14 +221,14 @@ export function BookingDetail() {
 
     setIsCancelling(true)
     try {
-      const response = await api.post<any>(`/customer/bookings/${booking.id}/cancel`, { reason: cancelReason })
-      if (response.data.success) {
+      const response = await api.post<any>(`/bookings/${booking.id}/cancel`, { reason: cancelReason })
+      if (response.success) {
         toast.success('Cancellation requested successfully')
         setShowCancelModal(false)
         setCancelReason('')
         refetch()
       } else {
-        toast.error(response.data.message || 'Failed to cancel booking')
+        toast.error(response.message || 'Failed to cancel booking')
       }
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Failed to cancel booking')
