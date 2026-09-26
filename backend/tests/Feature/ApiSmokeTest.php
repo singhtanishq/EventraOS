@@ -166,6 +166,7 @@ class ApiSmokeTest extends TestCase
 
         $process = $this->postAuthed("/api/payments/{$paymentId}/process", [], $token);
         $process->assertStatus(200)->assertJsonPath('success', true);
+        fwrite(STDERR, "\nPROCESS RESPONSE: " . $process->getContent() . "\n");
 
         // Booking should now be confirmed and paid
         $this->getAuthed("/api/bookings/{$booking['id']}", $token)
