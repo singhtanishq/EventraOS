@@ -92,7 +92,7 @@ export function ActivityResults() {
     queryKey: ['activities', queryParams],
     queryFn: async () => {
       const response = await api.get<any>('/search/activities', { params: queryParams })
-      return response.data
+      return response
     },
     placeholderData: (previousData) => previousData,
   })
