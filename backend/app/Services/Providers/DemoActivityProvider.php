@@ -62,9 +62,7 @@ class DemoActivityProvider extends BaseProvider
             });
         }
 
-        $activities = \App\Models\Activity::query()
-            ->where('is_active', true)
-            ->where('is_demo', true)
+        $activities = $query
             ->with(['category', 'city', 'pricing'])
             ->orderBy('rating', 'desc')
             ->limit(20)
