@@ -385,7 +385,7 @@ function ActivityResultCard({ activity, onSelect }: { activity: ActivityResult; 
             <Users className="w-3 h-3" /> {metadata.min_participants}-{metadata.max_participants || '∞'} people
           </span>
           {metadata.has_guide && (
-            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-body-xs font-medium bg-eventra-purple-100 text-eventra-purple-700">
+            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-body-xs font-medium bg-eventra-slate-100 text-eventra-slate-700">
               <User className="w-3 h-3" /> Guide included
             </span>
           )}
