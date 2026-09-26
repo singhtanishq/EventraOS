@@ -245,7 +245,7 @@ export function Home() {
                 transition={{ delay: i * 0.05 }}
               >
                 <Link to={service.href} className="card h-full group">
-                  <div className={cn('w-14 h-14 rounded-2xl flex items-center justify-center mb-4', `bg-${service.color}-100`, `text-${service.color}-600`, 'group-hover:bg-eventra-navy-900', 'group-hover:text-white', 'transition-colors')}>
+                  <div className={cn('w-14 h-14 rounded-2xl flex items-center justify-center mb-4', colorBgLight[service.color as keyof typeof colorBgLight], colorTextDark[service.color as keyof typeof colorTextDark], 'group-hover:bg-eventra-navy-900', 'group-hover:text-white', 'transition-colors')}>
                     <service.icon className="w-7 h-7" />
                   </div>
                   <h3 className="text-heading-md font-semibold text-eventra-navy-900 mb-2 group-hover:text-eventra-blue-600 transition-colors">{service.name}</h3>
@@ -443,7 +443,7 @@ function MoreServicesDropdown({ services }: { services: typeof services }) {
               onClick={() => setOpen(false)}
               className="flex items-center gap-3 px-4 py-2.5 text-body-sm text-eventra-slate-700 hover:bg-eventra-slate-50 transition-colors"
             >
-              <service.icon className={cn('w-5 h-5', `text-${service.color}-600`)} />
+              <service.icon className={cn('w-5 h-5', colorTextDark[service.color as keyof typeof colorTextDark])} />
               {service.name}
             </Link>
           ))}
