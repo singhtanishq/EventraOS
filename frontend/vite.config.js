@@ -51,7 +51,6 @@ export default defineConfig({
                     ui: ['lucide-react', 'framer-motion', '@headlessui/react'],
                     utils: ['date-fns', 'clsx', 'tailwind-merge'],
                     icons: ['lucide-react'],
-                    charts: ['recharts'],
                     pdf: ['jspdf', 'html2canvas'],
                 },
                 chunkFileNames: 'assets/js/[name]-[hash].js',
