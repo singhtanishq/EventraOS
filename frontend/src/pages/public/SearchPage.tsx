@@ -70,15 +70,8 @@ export function SearchPage() {
 
   const handleSearch = () => {
     setIsLoading(true)
-    if (selectedService === 'all' || selectedService === 'hotels') {
-      navigate(`/buses`)
-    } else if (selectedService === 'flights') {
-      navigate(`/flights`)
-    } else if (selectedService === 'cars') {
-      navigate(`/cars`)
-    } else if (selectedService === 'activities') {
-      navigate(`/activities`)
-    }
+    const service = serviceTypes.find((s) => s.id === selectedService)
+    navigate(service?.href || '/search')
     setTimeout(() => setIsLoading(false), 300)
   }
 
@@ -116,7 +109,7 @@ export function SearchPage() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="max-w-5xl mx-auto"
           >
-            <Card variant="elevated" padding="xl" className="bg-white/95 backdrop-blur-sm">
+            <Card variant="elevated" padding="lg" className="bg-white/95 backdrop-blur-sm">
               {/* Service Type Selector */}
               <div className="mb-6">
                 <label className="label text-eventra-navy-900 mb-3">What are you looking for?</label>
@@ -132,9 +125,7 @@ export function SearchPage() {
                           : 'border-eventra-slate-200 hover:border-eventra-slate-300 hover:bg-eventra-slate-50'
                       )}
                     >
-                      {service.icon && (
-                        <service.icon className={cn('w-6 h-6', selectedService === service.id ? 'text-eventra-navy-900' : 'text-eventra-slate-500')} />
-                      )}
+                      <service.icon className={cn('w-6 h-6', selectedService === service.id ? 'text-eventra-navy-900' : 'text-eventra-slate-500')} />
                       <span className={cn('font-medium text-sm', selectedService === service.id ? 'text-eventra-navy-900' : 'text-eventra-slate-700')}>
                         {service.name}
                       </span>
