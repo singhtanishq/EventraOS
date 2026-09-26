@@ -9,18 +9,21 @@ use App\Models\PaymentMethod;
 use App\Models\CustomerPaymentMethod;
 use App\Models\Provider;
 use App\Services\Providers\ProviderManager;
+use App\Services\Booking\BookingService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Str;
 use Carbon\Carbon;
 
 class PaymentService
 {
     protected ProviderManager $providerManager;
+    protected BookingService $bookingService;
 
-    public function __construct(ProviderManager $providerManager)
+    public function __construct(ProviderManager $providerManager, BookingService $bookingService)
     {
         $this->providerManager = $providerManager;
+        $this->bookingService = $bookingService;
     }
 
     public function initiatePayment(
