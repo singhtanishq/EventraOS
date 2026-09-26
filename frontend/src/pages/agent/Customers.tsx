@@ -181,7 +181,7 @@ export function AgentCustomers() {
       {/* Customers Grid */}
       <div className="space-y-4">
         {filteredCustomers.length === 0 ? (
-          <EmptyCustomersState onAdd={() => setShowCreateModal(true)} />
+          <EmptyCustomersState onAdd={() => setShowCreateModal(true)} hasSearch={!!search.trim()} />
         ) : (
           <>
             <p className="text-body-md text-eventra-slate-600">
@@ -296,7 +296,7 @@ function CustomerCard({ customer, onView }: { customer: AgentCustomer; onView: (
   )
 }
 
-function EmptyCustomersState({ onAdd }: { onAdd: () => void }) {
+function EmptyCustomersState({ onAdd, hasSearch }: { onAdd: () => void; hasSearch?: boolean }) {
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center py-16">
       <div className="w-24 h-24 rounded-full bg-eventra-slate-100 flex items-center justify-center mx-auto mb-6">
@@ -304,7 +304,7 @@ function EmptyCustomersState({ onAdd }: { onAdd: () => void }) {
       </div>
       <h2 className="text-heading-lg font-bold text-eventra-navy-900 mb-2">No customers found</h2>
       <p className="text-eventra-slate-600 mb-6 max-w-md mx-auto">
-        {search ? 'No customers match your search.' : 'Start building your customer base by adding your first customer.'}
+        {hasSearch ? 'No customers match your search.' : 'Start building your customer base by adding your first customer.'}
       </p>
       <Button onClick={onAdd} leftIcon={<UserPlus className="w-5 h-5" />}>
         Add Your First Customer
