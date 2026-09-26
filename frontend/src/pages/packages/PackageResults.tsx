@@ -393,7 +393,7 @@ function PackageResultCard({ pkg, onSelect }: { pkg: PackageResult; onSelect: ()
           </span>
         </div>
         <div className="absolute bottom-3 left-3 flex gap-2">
-          <span className="badge badge-primary">★ {pkg.rating.toFixed(1)}</span>
+          <span className="badge badge-primary">★ {(pkg.rating ?? 0).toFixed(1)}</span>
           <span className="badge badge-neutral">({pkg.review_count} reviews)</span>
         </div>
         {savings > 0 && (
@@ -431,10 +431,10 @@ function PackageResultCard({ pkg, onSelect }: { pkg: PackageResult; onSelect: ()
         </div>
         <div className="mt-auto pt-4 border-t border-eventra-slate-200 flex items-center justify-between">
           <div>
-            {metadata.pricing_tiers.length > 1 ? (
+            {(metadata.pricing_tiers || []).length > 1 ? (
               <>
                 <p className="price-lg text-eventra-navy-900">{formatCurrency(minPrice, pkg.pricing.currency)}</p>
-                <p className="text-body-xs text-eventra-slate-500">starting from / {metadata.pricing_tiers[0]?.occupancy || 'per person'}</p>
+                <p className="text-body-xs text-eventra-slate-500">starting from / {(metadata.pricing_tiers || [])[0]?.occupancy || 'per person'}</p>
               </>
             ) : (
               <>
