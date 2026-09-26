@@ -195,19 +195,18 @@ export function ActivityResults() {
 
             <div className="flex items-center gap-3">
               <div className="relative">
-                <Select
+                <select
                   value={sortBy}
-                  onValueChange={handleSortChange}
-                  options={[
-                    { value: 'recommended', label: 'Recommended' },
-                    { value: 'price_low', label: 'Price: Low to High' },
-                    { value: 'price_high', label: 'Price: High to Low' },
-                    { value: 'rating', label: 'Top Rated' },
-                    { value: 'duration', label: 'Duration' },
-                  ]}
-                  className="w-48"
-                  placeholder="Sort by"
-                />
+                  onChange={(e) => handleSortChange(e.target.value)}
+                  className="input form-select w-48"
+                  aria-label="Sort activities"
+                >
+                  <option value="recommended">Recommended</option>
+                  <option value="price_low">Price: Low to High</option>
+                  <option value="price_high">Price: High to Low</option>
+                  <option value="rating">Top Rated</option>
+                  <option value="duration">Duration</option>
+                </select>
               </div>
 
               <Button
