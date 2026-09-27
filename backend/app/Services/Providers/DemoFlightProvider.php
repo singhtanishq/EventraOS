@@ -43,13 +43,23 @@ class DemoFlightProvider extends BaseProvider
         }
 
         if (!empty($criteria['cabin_class'])) {
-            $query->whereHas('fares', function ($q) use ($criteria) {
-                $q->where('cabin_class', $criteria['cabin_class']);
-            });
+            // Frontend sends a comma-separated selection, e.g. "economy,business"
+            $classes = collect(explode(',', (string) $criteria['cabin_class']))
+                ->map(fn ($v) => trim($v))->filter()->values();
+            if ($classes->isNotEmpty()) {
+                $query->whereHas('fares', function ($q) use ($classes) {
+                    $q->whereIn('cabin_class', $classes->all());
+                });
+            }
         }
 
-        if (!empty($criteria['stops']) && $criteria['stops'] === 0) {
-            $query->where('stops', 0);
+        if (isset($criteria['stops']) && $criteria['stops'] !== '') {
+            // Frontend sends a comma-separated selection, e.g. "0,1"
+            $stops = collect(explode(',', (string) $criteria['stops']))
+                ->map(fn ($v) => (int) trim($v))->values();
+            if ($stops->isNotEmpty()) {
+                $query->whereIn('stops', $stops->all());
+            }
         }
 
         if (!empty($criteria['airline_ids'])) {
