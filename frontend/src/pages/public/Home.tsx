@@ -92,7 +92,7 @@ const stats = [
 ]
 
 const testimonials = [
-  { name: 'Priya Sharma', role: 'Frequent Traveler', avatar: 'PS', content: 'EventraOS made planning our family vacation to Dubai seamless. The unified cart let us book flights, hotel, and transfers in one go!', rating: 5 },
+  { name: 'Priya Sharma', role: 'Frequent Traveler', avatar: 'PS', content: 'EventraOS made planning our family vacation to Dubai seamless. The unified booking flow let us book flights, hotel, and transfers in one go!', rating: 5 },
   { name: 'Rajesh Kumar', role: 'Corporate Travel Manager', avatar: 'RK', content: 'As a travel agent, the booking workspace is a game-changer. I can manage multiple clients, create quotes, and track commissions effortlessly.', rating: 5 },
   { name: 'Anita Desai', role: 'Event Planner', avatar: 'AD', content: 'The venue booking with custom configurator saved us weeks of work. We built our entire wedding package - catering, decor, AV - in one place.', rating: 5 },
 ]
