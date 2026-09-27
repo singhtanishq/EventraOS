@@ -422,7 +422,8 @@ class ApiEdgeCaseTest extends TestCase
             'booking_id' => $bookingId,
             'payment_method_id' => 1,
         ], $token);
-        $this->assertTrue(in_array($second->status(), [422, 500]), 'Second initiation must be rejected once fully paid');
+        $second->assertStatus(422);
+        $this->assertStringContainsString('already fully paid', (string) $second->json('message'));
     }
 
     // ------------------------------------------------------------------
