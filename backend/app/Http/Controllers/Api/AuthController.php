@@ -125,9 +125,13 @@ class AuthController extends Controller
 
         // The API is token-based. Clear the web session so Sanctum's session
         // fallback can never override the bearer token identity on later requests.
-        Auth::guard('web')->logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        if ($request->hasSession()) {
+            Auth::guard('web')->logoutCurrentDevice();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        } else {
+            Auth::guard('web')->logoutCurrentDevice();
+        }
 
         return response()->json([
             'success' => true,
@@ -145,9 +149,13 @@ class AuthController extends Controller
         $request->user()->currentAccessToken()->delete();
 
         // Clear the web session as well so no stale session identity remains
-        Auth::guard('web')->logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        if ($request->hasSession()) {
+            Auth::guard('web')->logoutCurrentDevice();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        } else {
+            Auth::guard('web')->logoutCurrentDevice();
+        }
 
         return response()->json([
             'success' => true,
