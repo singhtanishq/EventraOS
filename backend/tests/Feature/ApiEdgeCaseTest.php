@@ -438,9 +438,10 @@ class ApiEdgeCaseTest extends TestCase
         // Agent cannot reach admin areas
         $this->getAuthed('/api/admin/dashboard', $this->agentToken)->assertStatus(403);
 
-        // Admin can reach everything
+        // Admin reaches admin routes; agent-specific dashboards still require an
+        // agent profile (the data is per-agent), so an admin without one gets 403
         $this->getAuthed('/api/admin/dashboard', $this->adminToken)->assertStatus(200);
-        $this->getAuthed('/api/agent/dashboard', $this->adminToken)->assertStatus(200);
+        $this->getAuthed('/api/agent/dashboard', $this->adminToken)->assertStatus(403);
     }
 
     public function test_unauthenticated_requests_to_protected_groups_are_rejected(): void
