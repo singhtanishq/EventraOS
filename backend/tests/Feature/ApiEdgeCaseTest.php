@@ -128,7 +128,10 @@ class ApiEdgeCaseTest extends TestCase
 
         $tokenId = explode('|', $token)[0];
         $row = \Laravel\Sanctum\PersonalAccessToken::find($tokenId);
-        fwrite(STDERR, "\nDEBUG: token row after logout: " . ($row ? 'STILL EXISTS' : 'deleted') . "\n");
+        $this->assertNull($row, 'The personal access token must be revoked on logout');
+
+        // Reset the per-process memoized guard so the request resolves tokens fresh
+        $this->app['auth']->forgetGuards();
 
         // The token must no longer authenticate
         $this->getJson('/api/auth/me', $this->authed($token))->assertStatus(401);
