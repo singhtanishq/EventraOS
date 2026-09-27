@@ -126,6 +126,10 @@ class ApiEdgeCaseTest extends TestCase
         $this->postJson('/api/auth/logout', [], $this->authed($token))
             ->assertStatus(200);
 
+        $tokenId = explode('|', $token)[0];
+        \$row = \Laravel\Sanctum\PersonalAccessToken::find(\$tokenId);
+        fwrite(STDERR, "\nDEBUG: token row after logout: " . (\$row ? 'STILL EXISTS' : 'deleted') . "\n");
+
         // The token must no longer authenticate
         $this->getJson('/api/auth/me', $this->authed($token))->assertStatus(401);
     }
