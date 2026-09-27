@@ -16,22 +16,56 @@ class SearchService
         $this->providerManager = $providerManager;
     }
 
+
+    /**
+     * Cache search results as plain arrays (never serialized objects) so code
+     * changes can never poison the cache with __PHP_Incomplete_Class entries.
+     */
+    protected function rememberCollection(string $cacheKey, string $serviceMethod, array $criteria): SearchResultCollection
+    {
+        $payload = Cache::remember($cacheKey, config('search.cache_ttl', 300), function () use ($serviceMethod, $criteria) {
+            return $this->{$serviceMethod}($criteria)->toArray();
+        });
+
+        $results = array_map(
+            fn (array $r) => new \App\Services\Providers\DTO\SearchResult(
+                id: (string) ($r['id'] ?? ''),
+                name: (string) ($r['name'] ?? ''),
+                type: (string) ($r['type'] ?? ''),
+                providerCode: (string) ($r['provider_code'] ?? ''),
+                providerItemId: (string) ($r['provider_item_id'] ?? ''),
+                location: $r['location'] ?? [],
+                pricing: $r['pricing'] ?? [],
+                availability: $r['availability'] ?? [],
+                images: $r['images'] ?? [],
+                amenities: $r['amenities'] ?? [],
+                metadata: $r['metadata'] ?? [],
+                rating: (float) ($r['rating'] ?? 0),
+                reviewCount: (int) ($r['review_count'] ?? 0),
+            ),
+            $payload['results'] ?? []
+        );
+
+        return new SearchResultCollection(
+            $results,
+            (int) ($payload['total_count'] ?? count($results)),
+            (string) ($payload['provider_code'] ?? ''),
+            $payload['errors'] ?? []
+        );
+    }
+
     public function searchHotels(array $criteria): SearchResultCollection
     {
         $cacheKey = $this->generateCacheKey('hotels', $criteria);
         
-        return Cache::remember($cacheKey, config('search.cache_ttl', 300), function () use ($criteria) {
-            return $this->providerManager->search('hotel', $criteria);
-        });
+        return $this->rememberCollection($1, 'searchViaManager', $2);
     }
 
     public function searchFlights(array $criteria): SearchResultCollection
     {
         $cacheKey = $this->generateCacheKey('flights', $criteria);
         
-        return Cache::remember($cacheKey, config('search.cache_ttl', 300), function () use ($criteria) {
-            return $this->providerManager->search('flight', $criteria);
-        });
+        return $this->rememberCollection($1, 'searchViaManager', $2);
     }
 
     public function searchTrains(array $criteria): SearchResultCollection
