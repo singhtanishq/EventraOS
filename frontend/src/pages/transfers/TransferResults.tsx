@@ -182,7 +182,7 @@ export function TransferResults() {
       },
       availability: { available: transfer.availability.available },
     })
-    toast.success('Added to cart')
+    toast.success('Added to your booking')
     navigate('/checkout')
   }
 
