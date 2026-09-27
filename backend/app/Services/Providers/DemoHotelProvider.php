@@ -26,6 +26,13 @@ class DemoHotelProvider extends BaseProvider
 
         if (!empty($criteria['city_id'])) {
             $query->where('city_id', $criteria['city_id']);
+        } elseif (!empty($criteria['destination'])) {
+            // Free-text destination: match the city name OR the hotel name
+            $destination = $criteria['destination'];
+            $query->where(function ($q) use ($destination) {
+                $q->whereHas('city', fn ($c) => $c->where('name', 'like', "%{$destination}%"))
+                  ->orWhere('name', 'like', "%{$destination}%");
+            });
         }
 
         if (!empty($criteria['check_in']) && !empty($criteria['check_out'])) {
