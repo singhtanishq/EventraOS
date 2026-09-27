@@ -123,6 +123,12 @@ class AuthController extends Controller
         $token = $user->createToken('api-token', ['*'], $request->boolean('remember') ? now()->addDays(30) : now()->addHours(2))->plainTextToken;
         $refreshToken = $user->createToken('refresh-token', ['refresh'], now()->addDays(90))->plainTextToken;
 
+        // The API is token-based. Clear the web session so Sanctum's session
+        // fallback can never override the bearer token identity on later requests.
+        Auth::guard('web')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return response()->json([
             'success' => true,
             'message' => 'Login successful',
@@ -137,6 +143,11 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
+
+        // Clear the web session as well so no stale session identity remains
+        Auth::guard('web')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return response()->json([
             'success' => true,
