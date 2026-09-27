@@ -323,6 +323,9 @@ class ApiEdgeCaseTest extends TestCase
         // Create booking as customer, then read it as agent-turned-customer is
         // blocked by the authorization check inside show()
         $booking = $this->createBooking($this->customerToken, []);
+        if ($booking->status() !== 201) {
+            fwrite(STDERR, "\nDEBUG createBooking: " . $booking->getContent() . "\n");
+        }
         $booking->assertStatus(201);
         $id = $booking->json('data.id');
 
