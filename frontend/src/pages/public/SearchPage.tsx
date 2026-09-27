@@ -121,8 +121,8 @@ export function SearchPage() {
                       className={cn(
                         'relative p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2 text-left',
                         selectedService === service.id
-                          ? 'border-eventra-navy-900 bg-eventra-navy-50 shadow-lg'
-                          : 'border-eventra-slate-200 hover:border-eventra-slate-300 hover:bg-eventra-slate-50'
+                          ? 'border-eventra-navy-900 bg-eventra-navy-50 shadow-lg text-eventra-navy-900'
+                          : 'border-eventra-slate-200 hover:border-eventra-slate-300 hover:bg-eventra-slate-50 text-eventra-navy-700'
                       )}
                     >
                       <service.icon className={cn('w-6 h-6', selectedService === service.id ? 'text-eventra-navy-900' : 'text-eventra-slate-500')} />
