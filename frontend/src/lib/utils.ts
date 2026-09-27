@@ -1,8 +1,27 @@
 import { clsx, type ClassValue } from 'clsx'
-import { twMerge } from 'tailwind-merge'
+import { extendTailwindMerge } from 'tailwind-merge'
+
+// Teach tailwind-merge that the custom typography scale classes are FONT-SIZE
+// utilities, not text-color utilities. Without this, `cn('text-white', 'text-body-md')`
+// strips `text-white` and renders buttons with invisible (inherited) text.
+const customTwMerge = extendTailwindMerge({
+  extend: {
+    classGroups: {
+      'font-size': [
+        {
+          text: [
+            'display-xl', 'display-lg', 'display-md', 'display-sm',
+            'heading-xl', 'heading-lg', 'heading-md', 'heading-sm',
+            'body-lg', 'body-md', 'body-sm', 'body-xs',
+          ],
+        },
+      ],
+    },
+  },
+})
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return customTwMerge(clsx(inputs))
 }
 
 export function formatCurrency(
