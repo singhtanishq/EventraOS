@@ -173,7 +173,9 @@ class Payment extends Model
             'captured_at' => now(),
         ]);
 
-        // Update booking payment status
+        // Track the captured amount on the booking so the outstanding
+        // balance reflects reality and duplicate charges are impossible.
+        $this->booking->increment('amount_paid', $this->amount);
         $this->booking->update(['payment_status' => 'paid']);
     }
 
