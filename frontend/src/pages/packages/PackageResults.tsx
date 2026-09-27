@@ -189,7 +189,7 @@ export function PackageResults() {
       },
       availability: { available: pkg.availability.available },
     })
-    toast.success('Added to cart')
+    toast.success('Added to your booking')
     navigate('/checkout')
   }
 
