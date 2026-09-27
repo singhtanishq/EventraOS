@@ -165,7 +165,9 @@ class AuthController extends Controller
 
     public function me(Request $request)
     {
-        $user = $request->user()->load(['customer', 'agent', 'admin', 'roles', 'permissions']);
+        $user = $request->user();
+        \Log::debug('ME_DEBUG', ['uid' => $user?->id, 'via' => config('auth.defaults.guard'), 'hasSession' => $request->hasSession(), 'sessionUser' => $request->hasSession() ? optional($request->session()->get('login_web_59ba36addc2b2f9401580f014c7f58ea4e30989d'))->id : null]);
+        $user = $user->load(['customer', 'agent', 'admin', 'roles', 'permissions']);
 
         return response()->json([
             'success' => true,
