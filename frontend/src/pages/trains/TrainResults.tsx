@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
 import { ChevronLeft, ChevronRight, SlidersHorizontal, Train, Calendar, RotateCcw } from 'lucide-react'
 import { api } from '@/lib/api'
-import { formatCurrency, formatDate, cn, debounce } from '@/lib/utils'
+import { formatCurrency, formatDate, cn, debounce, toSearchDate } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { PageSkeleton } from '@/components/ui/LoadingScreen'
@@ -105,7 +105,7 @@ export function TrainResults() {
   }, [searchParams])
 
   // journey_date is required by the API validator - default to today
-  const journeyDate = filters.journey_date || searchParams.get('journey_date') || todayISO
+  const journeyDate = toSearchDate(filters.journey_date ?? searchParams.get('journey_date'), 0)
 
   const queryParams = {
     ...filters,
