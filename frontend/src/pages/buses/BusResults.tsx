@@ -322,7 +322,7 @@ export function BusResults() {
                                 },
                                 availability: { available: bus.availability?.available ?? true },
                               })
-                              toast.success('Added to cart')
+                              toast.success('Added to your booking')
                               navigate('/checkout')
                             }}
                           />
