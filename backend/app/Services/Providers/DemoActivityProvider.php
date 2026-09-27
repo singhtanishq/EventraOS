@@ -114,6 +114,15 @@ class DemoActivityProvider extends BaseProvider
             );
         })->toArray();
 
+                $sort = $criteria['sort'] ?? 'recommended';
+        if ($sort === 'price_low' || $sort === 'price_high') {
+            usort($results, fn ($a, $b) => $sort === 'price_low'
+                ? ($a->pricing['per_person'] ?? 0) <=> ($b->pricing['per_person'] ?? 0)
+                : ($b->pricing['per_person'] ?? 0) <=> ($a->pricing['per_person'] ?? 0));
+        } elseif ($sort === 'duration') {
+            usort($results, fn ($a, $b) => ($a->metadata['duration_minutes'] ?? 0) <=> ($b->metadata['duration_minutes'] ?? 0));
+        }
+
         return new SearchResultCollection($results, $activities->count(), $this->getCode());
     }
 
