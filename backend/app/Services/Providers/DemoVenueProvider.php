@@ -61,14 +61,11 @@ class DemoVenueProvider extends BaseProvider
         }
 
                 $sort = $criteria['sort'] ?? 'recommended';
-        $venues = $query->with(['city', 'packages']);
-        $venues = match ($sort) {
-            'price_low' => $venues->orderBy('base_price', 'asc'),
-            'price_high' => $venues->orderBy('base_price', 'desc'),
-            'rating' => $venues->orderBy('rating', 'desc'),
-            'capacity' => $venues->orderBy('total_capacity', 'desc'),
-            default => $venues->orderBy('rating', 'desc'),
-        }->limit(20)->get();
+        $venues = $query->with(['city', 'packages'])
+            ->when($sort === 'rating', fn ($q) => $q->orderBy('rating', 'desc'))
+            ->when($sort === 'capacity', fn ($q) => $q->orderBy('total_capacity', 'desc'))
+            ->limit(20)
+            ->get();
 
         $results = $venues->map(function ($venue) {
             $minPrice = $venue->packages->min('price_per_guest') ?? 
@@ -109,6 +106,12 @@ class DemoVenueProvider extends BaseProvider
                 reviewCount: $venue->review_count ?? 0,
             );
         })->toArray();
+
+                if ($sort === 'price_low' || $sort === 'price_high') {
+            usort($results, fn ($a, $b) => $sort === 'price_low'
+                ? ($a->pricing['base_price'] ?? 0) <=> ($b->pricing['base_price'] ?? 0)
+                : ($b->pricing['base_price'] ?? 0) <=> ($a->pricing['base_price'] ?? 0));
+        }
 
         return new SearchResultCollection($results, $venues->count(), $this->getCode());
     }
