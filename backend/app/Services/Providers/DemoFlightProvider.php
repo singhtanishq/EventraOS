@@ -37,6 +37,30 @@ class DemoFlightProvider extends BaseProvider
             $query->where('arrival_airport_id', $criteria['destination_airport_id']);
         }
 
+        // Free-text origin/destination: resolve the text against airport IATA
+        // codes, names and city names; unknown text yields no results.
+        if (!empty($criteria['origin']) && empty($criteria['origin_airport_id'])) {
+            $originIds = \App\Models\Airport::where('iata_code', strtoupper(trim($criteria['origin'])))
+                ->orWhere('name', 'like', '%' . $criteria['origin'] . '%')
+                ->orWhereHas('city', fn ($c) => $c->where('name', 'like', '%' . $criteria['origin'] . '%'))
+                ->pluck('id');
+            if ($originIds->isEmpty()) {
+                return new SearchResultCollection([], 0, $this->getCode());
+            }
+            $query->whereIn('departure_airport_id', $originIds->all());
+        }
+
+        if (!empty($criteria['destination']) && empty($criteria['destination_airport_id'])) {
+            $destIds = \App\Models\Airport::where('iata_code', strtoupper(trim($criteria['destination'])))
+                ->orWhere('name', 'like', '%' . $criteria['destination'] . '%')
+                ->orWhereHas('city', fn ($c) => $c->where('name', 'like', '%' . $criteria['destination'] . '%'))
+                ->pluck('id');
+            if ($destIds->isEmpty()) {
+                return new SearchResultCollection([], 0, $this->getCode());
+            }
+            $query->whereIn('arrival_airport_id', $destIds->all());
+        }
+
         if (!empty($criteria['departure_date'])) {
             $date = \Carbon\Carbon::parse($criteria['departure_date']);
             $query->whereDate('departure_date', $date);
