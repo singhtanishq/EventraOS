@@ -138,6 +138,12 @@ class DemoPackageProvider extends BaseProvider
             );
         })->toArray();
 
+                if ($sort === 'price_low' || $sort === 'price_high') {
+            usort($results, fn ($a, $b) => $sort === 'price_low'
+                ? ($a->pricing['per_person'] ?? 0) <=> ($b->pricing['per_person'] ?? 0)
+                : ($b->pricing['per_person'] ?? 0) <=> ($a->pricing['per_person'] ?? 0));
+        }
+
         return new SearchResultCollection($results, $packages->count(), $this->getCode());
     }
 
