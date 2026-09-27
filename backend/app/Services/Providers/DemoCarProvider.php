@@ -55,7 +55,7 @@ class DemoCarProvider extends BaseProvider
             ->where('is_active', true)
             ->where('is_demo', true)
             ->with(['company', 'category', 'rates'])
-            ->orderBy('rating', 'desc')
+            ->when(($criteria['sort'] ?? 'recommended') === 'rating', fn ($q) => $q->orderBy('rating', 'desc'))
             ->limit(20)
             ->get();
 
