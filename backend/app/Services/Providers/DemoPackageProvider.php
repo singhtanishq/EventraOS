@@ -73,12 +73,14 @@ class DemoPackageProvider extends BaseProvider
         }
 
         $sort = $criteria['sort'] ?? 'recommended';
+        // Price sorting happens post-collection on the computed per-person price
+        // (raw SQL orderBy on the hasMany alias is not portable).
         match ($sort) {
-            'price_low' => $query->orderBy('pricing.price', 'asc'),
-            'price_high' => $query->orderBy('pricing.price', 'desc'),
+            'price_low' => $query,
+            'price_high' => $query,
             'rating' => $query->orderBy('rating', 'desc'),
             'duration' => $query->orderBy('duration_nights', 'asc'),
-            default => $query->orderBy('rating', 'desc')->orderBy('pricing.price', 'asc'),
+            default => $query->orderBy('rating', 'desc'),
         };
 
         $packages = $query
