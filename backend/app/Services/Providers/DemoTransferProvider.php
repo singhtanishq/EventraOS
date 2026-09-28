@@ -39,6 +39,15 @@ class DemoTransferProvider extends BaseProvider
             });
         }
 
+        // Free-text city: match transfers departing from locations in that city
+        if (!empty($criteria['city'])) {
+            $query->where(function ($q) use ($criteria) {
+                $q->where('name', 'like', '%' . $criteria['city'] . '%')
+                  ->orWhere('pickup_address', 'like', '%' . $criteria['city'] . '%')
+                  ->orWhereHas('pickupLocation.city', fn ($c) => $c->where('name', 'like', '%' . $criteria['city'] . '%'));
+            });
+        }
+
         if (!empty($criteria['vehicle_type_id'])) {
             // Frontend may send a comma-separated selection of vehicle type ids
             $vehicleTypeIds = collect(explode(',', (string) $criteria['vehicle_type_id']))
