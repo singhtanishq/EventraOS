@@ -71,9 +71,7 @@ class DemoTransferProvider extends BaseProvider
             });
         }
 
-        $transfers = \App\Models\Transfer::query()
-            ->where('is_active', true)
-            ->where('is_demo', true)
+        $transfers = $query
             ->with(['operator', 'vehicleType', 'pricing'])
             ->limit(20)
             ->get();
