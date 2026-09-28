@@ -33,6 +33,27 @@ class DemoBusProvider extends BaseProvider
             $query->where('destination_terminal_id', $criteria['destination_terminal_id']);
         }
 
+        // Free-text origin/destination: resolve against terminal names and city names
+        if (!empty($criteria['origin']) && empty($criteria['origin_terminal_id'])) {
+            $originIds = \App\Models\BusTerminal::where('name', 'like', '%' . $criteria['origin'] . '%')
+                ->orWhereHas('city', fn ($c) => $c->where('name', 'like', '%' . $criteria['origin'] . '%'))
+                ->pluck('id');
+            if ($originIds->isEmpty()) {
+                return new SearchResultCollection([], 0, $this->getCode());
+            }
+            $query->whereIn('origin_terminal_id', $originIds->all());
+        }
+
+        if (!empty($criteria['destination']) && empty($criteria['destination_terminal_id'])) {
+            $destIds = \App\Models\BusTerminal::where('name', 'like', '%' . $criteria['destination'] . '%')
+                ->orWhereHas('city', fn ($c) => $c->where('name', 'like', '%' . $criteria['destination'] . '%'))
+                ->pluck('id');
+            if ($destIds->isEmpty()) {
+                return new SearchResultCollection([], 0, $this->getCode());
+            }
+            $query->whereIn('destination_terminal_id', $destIds->all());
+        }
+
         if (!empty($criteria['departure_date'])) {
             $query->whereHas('types.fares.inventory', function ($q) use ($criteria) {
                 $q->whereDate('journey_date', $criteria['departure_date'])
