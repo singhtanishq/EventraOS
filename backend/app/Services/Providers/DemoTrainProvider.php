@@ -72,9 +72,7 @@ class DemoTrainProvider extends BaseProvider
             default => $query->orderBy('departure_time', 'asc'),
         };
 
-        $trains = \App\Models\TrainRoute::query()
-            ->where('is_active', true)
-            ->where('is_demo', true)
+        $trains = $query
             ->with(['operator', 'fares.inventory'])
             ->limit(20)
             ->get();
