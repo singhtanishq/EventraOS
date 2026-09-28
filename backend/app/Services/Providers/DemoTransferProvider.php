@@ -39,6 +39,15 @@ class DemoTransferProvider extends BaseProvider
             });
         }
 
+        if (!empty($criteria['vehicle_type_id'])) {
+            // Frontend may send a comma-separated selection of vehicle type ids
+            $vehicleTypeIds = collect(explode(',', (string) $criteria['vehicle_type_id']))
+                ->map(fn ($v) => (int) trim($v))->filter()->values();
+            if ($vehicleTypeIds->isNotEmpty()) {
+                $query->whereIn('vehicle_type_id', $vehicleTypeIds->all());
+            }
+        }
+
         if (!empty($criteria['passengers'])) {
             $query->where('max_passengers', '>=', $criteria['passengers']);
         }
