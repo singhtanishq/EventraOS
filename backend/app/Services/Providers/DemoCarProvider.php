@@ -59,9 +59,7 @@ class DemoCarProvider extends BaseProvider
             }
         }
 
-        $cars = \App\Models\Car::query()
-            ->where('is_active', true)
-            ->where('is_demo', true)
+        $cars = $query
             ->with(['company', 'category', 'rates'])
             ->when(($criteria['sort'] ?? 'recommended') === 'rating', fn ($q) => $q->orderBy('rating', 'desc'))
             ->limit(20)
