@@ -2,9 +2,7 @@
 
 **One platform to travel, stay, move & celebrate.** EventraOS is a full-stack, OTA-style (Online Travel Agency) booking platform covering **nine service verticals** — hotels, flights, trains, buses, venues, car rentals, activities, transfers and holiday packages — built as a **Laravel API** plus a **React + TypeScript SPA**, with dedicated workspaces for customers, travel agents and administrators.
 
-![EventraOS application preview](docs/screenshots/01-overview/home-desktop.png)
-
-*The EventraOS home page — hero, unified search widget and navigation.* See the [full screenshot index](docs/screenshot-index.md).
+Every screenshot captured for this project is embedded directly in [Section 3 — Complete Screenshot Gallery](#3-complete-screenshot-gallery) below: 70 images, each with its own heading and description, covering the home page, authentication, all nine search verticals, detail pages, the full checkout flow, all three role workspaces and the responsive layouts.
 
 ---
 
@@ -12,7 +10,7 @@
 
 1. [What EventraOS Does](#1-what-eventraos-does)
 2. [Project Highlights](#2-project-highlights)
-3. [Visual Showcase](#3-visual-showcase)
+3. [Complete Screenshot Gallery](#3-complete-screenshot-gallery)
 4. [Application Route Reference](#4-application-route-reference)
 5. [Technology Stack](#5-technology-stack)
 6. [Architecture & Project Structure](#6-architecture--project-structure)
@@ -52,41 +50,447 @@ The demo seed creates three role accounts (see [Demo Credentials](#demo-credenti
 - **Role-based workspaces** — 12 customer-account pages, 8 agent-workspace pages and 14 admin-console pages, protected by Spatie Laravel Permission middleware.
 - **Platform features** — loyalty points, wallet, coupons, notifications, saved travelers, support ticketing, reviews, favorites, multi-currency scaffolding, audit logs and system health.
 
-## 3. Visual Showcase
+## 3. Complete Screenshot Gallery
 
-### Search & Discovery
+All screenshots below were captured from the actual running application (Laravel API + Vite dev server) after frontend stabilization. Desktop shots are 1440×900, tablet 768×1024, mobile 390×844 (captured at 2× pixel density). Paths are relative to this README.
 
-![Hotel results — desktop](docs/screenshots/03-search/hotel-results-desktop.png)
+### 3.1 Home & Overview (5 screenshots)
 
-*Hotel results with live seeded inventory, filter sidebar and per-night pricing. All nine verticals follow the same results/detail pattern — see [03-search](docs/screenshot-index.md#3-unified-search--the-nine-service-verticals) in the screenshot index.*
+#### 1. Home Page — Hero (Guest)
 
-### Service Details
+The primary entry screen for a signed-out visitor: public-beta badge, the "Everything you need to travel, stay, move & celebrate" headline, primary calls-to-action, and the unified search widget with service tabs, destination, date and guest fields.
 
-![Hotel detail](docs/screenshots/04-details/hotel-detail-desktop.png)
+![Home page hero for guests with unified search widget](docs/screenshots/01-overview/home-desktop.png)
 
-*Hotel detail: room types, rate plans with cancellation rules, amenities and a sticky price summary. Flight detail adds fare options and seat selection; venue detail adds packages, add-ons and a live event configurator.*
+#### 2. Home Page — Hero (Signed In)
 
-### Checkout & Confirmation
+The same hero as an authenticated customer sees it — the header now shows the account chip ("Demo") instead of Sign In/Sign Up, and the search widget holds its state (2 Adults preselected).
 
-![Checkout payment step](docs/screenshots/05-checkout/checkout-payment.png)
+![Home page hero for a signed-in user](docs/screenshots/01-overview/home-hero.png)
 
-*The three-step checkout: review → travelers → payment, with the demo gateway auto-capturing and redirecting to a confirmation page that offers invoice/voucher downloads.*
+#### 3. Home Page — "All Ways to Travel" Services Grid
 
-![Booking confirmation](docs/screenshots/05-checkout/booking-confirmation.png)
+The home page's service catalogue section: one Explore card per vertical — Hotels, Flights, Trains, Buses, Venues, Car Rentals, Activities, Transfers and Packages — each linking into its results page.
 
-*Booking confirmed: server-authoritative pricing, status badges and document downloads.*
+![All Ways to Travel services grid](docs/screenshots/01-overview/home-services.png)
 
-### Role Workspaces
+#### 4. Home Page — Closing CTA & Footer
 
-![Admin dashboard](docs/screenshots/08-admin/admin-dashboard-desktop.png)
+The closing "Ready to Start Your Journey?" call-to-action with account-creation buttons, followed by the site footer with its Services, Support and Company link columns.
 
-*Admin console: KPIs, revenue reporting, bookings/customers/agents/suppliers management, refunds, commissions, audit logs and system health. Agent and customer dashboards follow in the [screenshot index](docs/screenshot-index.md).*
+![Home page CTA banner and footer](docs/screenshots/01-overview/home-footer.png)
 
-### Mobile
+#### 5. Home Page — Responsive Capture Pass
 
-![Home — mobile](docs/screenshots/01-overview/home-mobile.png)
+The signed-in home hero saved during the responsive capture pass (this particular pass was written at desktop width, so it mirrors entry 2; the genuine narrow-viewport states — hamburger navigation, stacked layouts — follow in section 3.9).
 
-*The same journey at 390×844: single-column layouts, a hamburger drawer with all nine services, and filter slide-overs on results pages.*
+![Home page hero captured during the responsive pass](docs/screenshots/01-overview/home-mobile.png)
+
+### 3.2 Authentication (4 screenshots)
+
+#### 6. Login Page
+
+Split-screen authentication: a navy marketing panel ("9 Service Types / 500+ Airlines / 24/7 Support") beside the sign-in card with email, password with show/hide toggle, "Remember me", Forgot-password link and social sign-in placeholders.
+
+![Login page with split-screen layout](docs/screenshots/02-authentication/login-desktop.png)
+
+#### 7. Login — Empty-Submit Validation
+
+Submitting the login form empty surfaces inline Zod validation — "Please enter a valid email address" under the email field and "Password must be at least 8 characters" under the password field.
+
+![Login form validation errors](docs/screenshots/02-authentication/login-validation.png)
+
+#### 8. Registration Page
+
+The account-creation form with name, email, phone, password + confirmation, a live password-requirements checklist and the terms-acceptance checkbox.
+
+![Registration page](docs/screenshots/02-authentication/register-desktop.png)
+
+#### 9. Forgot Password Page
+
+The password-reset request screen added to the auth flow: an email field that posts to the backend's forgot-password endpoint and shows a confirmation state on success.
+
+![Forgot password page](docs/screenshots/02-authentication/forgot-password-desktop.png)
+
+### 3.3 Unified Search & the Nine Service Verticals (10 screenshots)
+
+#### 10. Unified Search Page
+
+The cross-service search hub: "What are you looking for?" service tiles (All Services plus the nine verticals) above destination, check-in/check-out, guest and room fields, followed by per-service category cards.
+
+![Unified search page with service tiles](docs/screenshots/03-search/search-unified-desktop.png)
+
+#### 11. Hotel Results
+
+Hotel search results for Delhi (5–8 Nov, 3 nights): result header with count and dates, sort dropdown, filter sidebar (price sliders, star rating, property type, amenities) and live result cards showing per-night and total pricing.
+
+![Hotel results page with filters](docs/screenshots/03-search/hotel-results-desktop.png)
+
+#### 12. Flight Results
+
+Flight results for DEL → BOM: route and date summary, stops/cabin/price filters, and an IndiGo 6E683 result card with schedule details.
+
+![Flight results page](docs/screenshots/03-search/flight-results-desktop.png)
+
+#### 13. Train Results
+
+Train results with class (1AC–2S) and quota filters, and train cards showing availability for the selected journey date.
+
+![Train results page](docs/screenshots/03-search/train-results-desktop.png)
+
+#### 14. Bus Results
+
+Bus results with AC/sleeper and operator filters; each card lists boarding and dropping points and amenities.
+
+![Bus results page](docs/screenshots/03-search/bus-results-desktop.png)
+
+#### 15. Venue Results
+
+Venue search for Mumbai on 20 Nov for 100 guests: event-type filter chips and a result card with capacity and pricing.
+
+![Venue results page](docs/screenshots/03-search/venue-results-desktop.png)
+
+#### 16. Car Rental Results
+
+Car rentals in Delhi with a per-day price slider, category and transmission filters, and an active-filter count badge on the Filters button.
+
+![Car rental results page](docs/screenshots/03-search/car-results-desktop.png)
+
+#### 17. Activity Results
+
+Activities in Delhi for 2 participants with category and duration filters and book-now cards.
+
+![Activity results page](docs/screenshots/03-search/activity-results-desktop.png)
+
+#### 18. Transfer Results
+
+Airport/city transfer results for Delhi → Jaipur: vehicle classes with per-vehicle pricing and luggage filters.
+
+![Transfer results page](docs/screenshots/03-search/transfer-results-desktop.png)
+
+#### 19. Holiday Package Results
+
+Curated multi-day packages with duration and price sorting and destination badges.
+
+![Package results page](docs/screenshots/03-search/package-results-desktop.png)
+
+### 3.4 Service Detail Pages (3 screenshots)
+
+#### 20. Hotel Detail — Rooms, Rates & Price Summary
+
+The Leela Palace detail page: room types with occupancy and meal plans, selectable rate plans with cancellation rules, amenities and policies, and a sticky sidebar breaking the ₹54,000 total down over 3 nights with the Reserve action.
+
+![Hotel detail page with rooms and price summary](docs/screenshots/04-details/hotel-detail-desktop.png)
+
+#### 21. Flight Detail — Fare Options
+
+The flight detail page for IndiGo 6E683: itinerary timeline and baggage rules, fare-option radios (Economy Saver through first class) with per-fare pricing and availability.
+
+![Flight detail page with fare options](docs/screenshots/04-details/flight-detail-desktop.png)
+
+#### 22. Venue Detail — Package & Add-On Configurator
+
+The venue configurator: selected package panel with guest count (100) and duration (6 hours), package selector modal, add-on checkboxes with per-guest/per-hour/fixed pricing and a live running total.
+
+![Venue detail page with package configurator](docs/screenshots/04-details/venue-detail-desktop.png)
+
+### 3.5 Checkout & Payment (5 screenshots)
+
+#### 23. Checkout Step 1 — Review Your Selection
+
+The cart review step: the hotel line item with dates and guests, its remove control, the price summary (subtotal, taxes & fees, ₹64,800 total) and a promo-code field.
+
+![Checkout review step](docs/screenshots/05-checkout/checkout-review.png)
+
+#### 24. Checkout Step 2 — Traveler Details
+
+One validated traveler form per guest (title, name, email, phone, date of birth, nationality) with completion tracking that gates the Continue action.
+
+![Checkout traveler details step](docs/screenshots/05-checkout/checkout-travelers.png)
+
+#### 25. Checkout Step 3 — Payment Method
+
+The payment step listing the available methods served by the API — Credit/Debit Card, UPI, Net Banking and EventraOS Wallet — with the final "Pay ₹64,800" action.
+
+![Checkout payment method step](docs/screenshots/05-checkout/checkout-payment.png)
+
+#### 26. Payment Processing — Demo Gateway Capture
+
+The payment screen at the moment the demo gateway finishes: all four progress steps (securing, authorizing, capturing, confirming) completed, amount and payment reference shown, and a toast announcing the created booking reference before the automatic redirect.
+
+![Payment processing success screen](docs/screenshots/05-checkout/payment-processing.png)
+
+#### 27. Booking Confirmation
+
+The confirmation page for booking EVR-HTL-2YYGYN: Confirmed + "Payment: Paid" badges, the booked item with dates and traveler chips, server-computed price summary, and actions for My Trips and invoice download.
+
+![Booking confirmation page](docs/screenshots/05-checkout/booking-confirmation.png)
+
+### 3.6 Customer Workspace (12 screenshots)
+
+#### 28. Customer Dashboard
+
+The customer landing page: stat cards (trips, spend, loyalty), the upcoming-trips list, recent bookings with status badges and quick actions into wallet, loyalty and notifications.
+
+![Customer dashboard](docs/screenshots/06-customer/dashboard-desktop.png)
+
+#### 29. My Trips
+
+The trip manager: status tabs (All/Upcoming/Completed/Cancelled/Pending), type filter, search and sort, and trip cards — including confirmed Leela Palace bookings and payment-pending items — each linking into its booking detail.
+
+![My Trips page with filters and trip cards](docs/screenshots/06-customer/my-trips-desktop.png)
+
+#### 30. Booking Detail
+
+A single booking's management page: status timeline, per-item cards with travelers, voucher and invoice download buttons, and cancel/reschedule actions for confirmed bookings.
+
+![Booking detail page with document downloads](docs/screenshots/06-customer/booking-detail-desktop.png)
+
+#### 31. Wallet
+
+The EventraOS wallet: current balance, add-funds and withdraw actions, and the transaction history list.
+
+![Customer wallet page](docs/screenshots/06-customer/wallet-desktop.png)
+
+#### 32. Loyalty — Eventra Rewards
+
+The rewards page: points balance, current tier and the points earn/redemption history.
+
+![Loyalty rewards page](docs/screenshots/06-customer/loyalty-desktop.png)
+
+#### 33. Coupons
+
+Available promo coupons presented as cards with copy-to-clipboard code buttons and validity details.
+
+![Coupons page](docs/screenshots/06-customer/coupons-desktop.png)
+
+#### 34. Favorites
+
+The customer's saved services list with remove controls.
+
+![Favorites page](docs/screenshots/06-customer/favorites-desktop.png)
+
+#### 35. My Reviews
+
+Reviews the customer has written, with ratings and linked services.
+
+![My reviews page](docs/screenshots/06-customer/reviews-desktop.png)
+
+#### 36. Notifications
+
+The notification center with per-item mark-as-read and a mark-all control.
+
+![Notifications page](docs/screenshots/06-customer/notifications-desktop.png)
+
+#### 37. Security Center
+
+The security workspace: active sessions with revoke controls, two-factor-authentication setup (TOTP), password change and the security-event log.
+
+![Security center page](docs/screenshots/06-customer/security-desktop.png)
+
+#### 38. Saved Travelers
+
+The traveler address book used to prefill checkout forms, with add/edit/delete modals.
+
+![Saved travelers page](docs/screenshots/06-customer/saved-travelers-desktop.png)
+
+#### 39. Customer Support
+
+The support ticket list with ticket creation and detail view.
+
+![Customer support page](docs/screenshots/06-customer/support-desktop.png)
+
+### 3.7 Agent Workspace (8 screenshots)
+
+#### 40. Agent Dashboard
+
+The agent landing page: performance targets, the booking pipeline and the agent's task list.
+
+![Agent dashboard](docs/screenshots/07-agent/agent-dashboard-desktop.png)
+
+#### 41. Agent Customers
+
+Client management for agents: searchable customer table with add-customer action.
+
+![Agent customers page](docs/screenshots/07-agent/agent-customers-desktop.png)
+
+#### 42. Agent Booking Workspace
+
+The multi-service booking builder: client picker and service composition workspace for assembling a client's itinerary.
+
+![Agent booking workspace](docs/screenshots/07-agent/agent-booking-workspace-desktop.png)
+
+#### 43. Agent Quotes
+
+Quote management: the quote list with creation flow fed by the agent's customer book.
+
+![Agent quotes page](docs/screenshots/07-agent/agent-quotes-desktop.png)
+
+#### 44. Agent Bookings
+
+All bookings made on behalf of the agency, with status filters and a detail modal.
+
+![Agent bookings page](docs/screenshots/07-agent/agent-bookings-desktop.png)
+
+#### 45. Agent Commissions
+
+The commission ledger with summary totals and per-booking commission rows.
+
+![Agent commissions page](docs/screenshots/07-agent/agent-commissions-desktop.png)
+
+#### 46. Agent Tasks
+
+The agent's task list with status transitions (pending → in progress → completed).
+
+![Agent tasks page](docs/screenshots/07-agent/agent-tasks-desktop.png)
+
+#### 47. Agent Support
+
+The agency support queue with ticket list and detail view.
+
+![Agent support page](docs/screenshots/07-agent/agent-support-desktop.png)
+
+### 3.8 Admin Console (14 screenshots)
+
+#### 48. Admin Dashboard
+
+The console home: KPI cards, revenue chart, booking/activity summaries and a system-health panel, with a date-range selector.
+
+![Admin dashboard with KPIs and system health](docs/screenshots/08-admin/admin-dashboard-desktop.png)
+
+#### 49. Admin — Customers
+
+Customer management table with search, status filters and delete-with-confirmation.
+
+![Admin customers management](docs/screenshots/08-admin/admin-customers-desktop.png)
+
+#### 50. Admin — Agents
+
+Agent account management: create-agent modal and termination controls.
+
+![Admin agents management](docs/screenshots/08-admin/admin-agents-desktop.png)
+
+#### 51. Admin — Bookings
+
+Every booking in the platform with status/type filters and a detail view for status updates.
+
+![Admin bookings management](docs/screenshots/08-admin/admin-bookings-desktop.png)
+
+#### 52. Admin — Suppliers
+
+The supplier registry backing the provider layer, with create and remove actions.
+
+![Admin suppliers registry](docs/screenshots/08-admin/admin-suppliers-desktop.png)
+
+#### 53. Admin — Venues
+
+Venue inventory management with deactivate controls.
+
+![Admin venues inventory](docs/screenshots/08-admin/admin-venues-desktop.png)
+
+#### 54. Admin — Hotels
+
+Hotel inventory management with deactivate controls.
+
+![Admin hotels inventory](docs/screenshots/08-admin/admin-hotels-desktop.png)
+
+#### 55. Admin — Transport
+
+Transport supplier management (the page reads the supplier registry filtered to transport providers).
+
+![Admin transport suppliers](docs/screenshots/08-admin/admin-transports-desktop.png)
+
+#### 56. Admin — Promotions
+
+Promo-code management: create form, active toggles and deletion.
+
+![Admin promotions management](docs/screenshots/08-admin/admin-promotions-desktop.png)
+
+#### 57. Admin — Payments
+
+The platform payment ledger with per-payment detail (read-only).
+
+![Admin payments ledger](docs/screenshots/08-admin/admin-payments-desktop.png)
+
+#### 58. Admin — Refunds
+
+The refund workflow: pending requests with approve/reject/complete actions.
+
+![Admin refunds workflow](docs/screenshots/08-admin/admin-refunds-desktop.png)
+
+#### 59. Admin — Commissions
+
+Commission lifecycle management (eligible → approved → paid) across agents.
+
+![Admin commissions management](docs/screenshots/08-admin/admin-commissions-desktop.png)
+
+#### 60. Admin — Reports
+
+Revenue reporting with a day-range selector: trends plus top customers and agents.
+
+![Admin reports page](docs/screenshots/08-admin/admin-reports-desktop.png)
+
+#### 61. Admin — Audit Logs
+
+The audit-trail viewer for critical operations, with actor/event filters and pagination.
+
+![Admin audit logs viewer](docs/screenshots/08-admin/admin-audit-logs-desktop.png)
+
+### 3.9 Responsive Design (9 screenshots)
+
+#### 62. Home — Tablet (768×1024)
+
+The home page at tablet width between the desktop and mobile breakpoints.
+
+![Home page on tablet](docs/screenshots/09-responsive/home-tablet.png)
+
+#### 63. Hotel Results — Tablet (768×1024)
+
+Hotel results at tablet width: the filter sidebar collapses behind the Filters button and the grid adapts.
+
+![Hotel results on tablet](docs/screenshots/09-responsive/hotel-results-tablet.png)
+
+#### 64. Hotel Results — Mobile (390×844)
+
+Results at phone width: single-column cards with the sticky header and a Filters button replacing the sidebar.
+
+![Hotel results on mobile](docs/screenshots/09-responsive/hotel-results-mobile.png)
+
+#### 65. Hotel Detail — Mobile (390×844)
+
+The hotel detail page stacking to a single column on a phone, with the price summary and Reserve action flowing below the content.
+
+![Hotel detail on mobile](docs/screenshots/09-responsive/hotel-detail-mobile.png)
+
+#### 66. Mobile Navigation Drawer Open
+
+The hamburger navigation drawer open on a phone, listing all nine service links.
+
+![Mobile navigation drawer open](docs/screenshots/09-responsive/mobile-nav-open.png)
+
+#### 67. Hotel Filters — Mobile Slide-Over Open
+
+The results filter slide-over on a phone: price-range slider, star-rating, property-type and amenity checkboxes over a dimmed results page.
+
+![Mobile filter slide-over open](docs/screenshots/09-responsive/hotel-filters-mobile-open.png)
+
+#### 68. Checkout — Mobile (390×844)
+
+The checkout review step on a phone: stepper icons, the cart line item and Continue action in a single column with the price summary following.
+
+![Checkout on mobile](docs/screenshots/09-responsive/checkout-mobile.png)
+
+#### 69. Customer Dashboard — Mobile (390×844)
+
+The customer dashboard at phone width after a card-row overflow fix — no horizontal scrolling at 390 px.
+
+![Customer dashboard on mobile](docs/screenshots/09-responsive/customer-dashboard-mobile.png)
+
+#### 70. Admin — Mobile Slide-Over Sidebar
+
+The admin console on a phone with its navigation drawer slid over a dimmed content area, listing all fourteen console sections.
+
+![Admin mobile sidebar open](docs/screenshots/09-responsive/admin-mobile-sidebar.png)
 
 ## 4. Application Route Reference
 
@@ -192,7 +596,7 @@ EventraOS/
 │   └── vite.config.ts                # Dev server + preview proxy, manual chunks
 │
 └── docs/                             # This audit's deliverables
-    ├── screenshots/                  # 69 screenshots, organized by area (see screenshot-index.md)
+    ├── screenshots/                  # 70 screenshots, organized by area (all embedded in §3)
     ├── screenshot-index.md
     ├── test-coverage.md
     └── ui-audit.md
@@ -365,10 +769,10 @@ Log in as `admin@demo.com` → console with KPI dashboard + revenue reports (ran
 
 Tested at **1440×900**, **768×1024** and **390×844** (plus programmatic horizontal-overflow checks on every route):
 
-- Navigation collapses to a hamburger drawer below `lg` with all nine services ([mobile nav open](docs/screenshots/09-responsive/mobile-nav-open.png)).
-- Results pages swap the desktop filter sidebar for a slide-over Filters modal ([open state](docs/screenshots/09-responsive/hotel-filters-mobile-open.png)).
-- Admin/agent sidebars become slide-overs with a dimmed overlay ([admin sidebar](docs/screenshots/09-responsive/admin-mobile-sidebar.png)).
-- Checkout, dashboards and detail pages stack to single columns ([checkout mobile](docs/screenshots/09-responsive/checkout-mobile.png), [dashboard mobile](docs/screenshots/09-responsive/customer-dashboard-mobile.png)).
+- Navigation collapses to a hamburger drawer below `lg` with all nine services (screenshot 66).
+- Results pages swap the desktop filter sidebar for a slide-over Filters modal (screenshot 67).
+- Admin/agent sidebars become slide-overs with a dimmed overlay (screenshot 70).
+- Checkout, dashboards and detail pages stack to single columns (screenshots 64, 65, 68, 69).
 
 A dashboard overflow defect at 390 px was found and fixed during the audit. No universal device compatibility is claimed beyond the tested viewports.
 
@@ -382,7 +786,7 @@ A dashboard overflow defect at 390 px was found and fixed during the audit. No u
 | `npm run build` | ✅ production build succeeds |
 | Browser coverage | ✅ 54/54 routes rendered & exercised; 2 full booking journeys; 3 viewports |
 
-Detailed records: [`docs/test-coverage.md`](docs/test-coverage.md) (route matrix, interaction tests, observations) and [`docs/ui-audit.md`](docs/ui-audit.md) (29 defects found & fixed, with root causes). Screenshots: [`docs/screenshot-index.md`](docs/screenshot-index.md).
+Detailed records: [`docs/test-coverage.md`](docs/test-coverage.md) (route matrix, interaction tests, observations) and [`docs/ui-audit.md`](docs/ui-audit.md) (29 defects found & fixed, with root causes). The complete image collection is embedded in [Section 3](#3-complete-screenshot-gallery) and catalogued in [`docs/screenshot-index.md`](docs/screenshot-index.md).
 
 Manual browser testing and scripted checks were both used; the frontend has no component/E2E suite in the repo (Playwright is installed as tooling but contains no specs — the backend's `ApiSmokeTest` covers the API end-to-end).
 
@@ -411,7 +815,7 @@ No licence file is present in the repository — all rights are reserved by the 
 
 For issues or questions about this codebase, contact the repository owner. Documentation in this repository:
 
-- [`docs/screenshot-index.md`](docs/screenshot-index.md) — 69 annotated screenshots
+- [`docs/screenshot-index.md`](docs/screenshot-index.md) — catalogue of the screenshot collection
 - [`docs/test-coverage.md`](docs/test-coverage.md) — what was tested and how
 - [`docs/ui-audit.md`](docs/ui-audit.md) — every issue found and fixed, with root causes
 
