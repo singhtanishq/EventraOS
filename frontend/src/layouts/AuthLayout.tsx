@@ -8,7 +8,6 @@ export default function AuthLayout() {
       {/* Brand Side */}
       <div className="hidden lg:flex lg:w-1/2 bg-eventra-navy-900 text-white flex-col items-center justify-center p-12 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-eventra-blue-600/20 via-transparent to-eventra-cyan-600/20" />
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.03%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50" />
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -34,23 +33,19 @@ export default function AuthLayout() {
 
           <div className="grid grid-cols-3 gap-4 text-center">
             <div className="p-4 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10">
-              <div className="text-3xl font-display font-bold text-eventra-cyan-400">10K+</div>
-              <div className="text-sm text-eventra-slate-400">Hotels Worldwide</div>
+              <div className="text-3xl font-display font-bold text-eventra-cyan-400">9</div>
+              <div className="text-sm text-eventra-slate-400">Service Types</div>
             </div>
             <div className="p-4 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10">
               <div className="text-3xl font-display font-bold text-eventra-cyan-400">500+</div>
               <div className="text-sm text-eventra-slate-400">Airlines</div>
             </div>
             <div className="p-4 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10">
-              <div className="text-3xl font-display font-bold text-eventra-cyan-400">2M+</div>
-              <div className="text-sm text-eventra-slate-400">Happy Travelers</div>
+              <div className="text-3xl font-display font-bold text-eventra-cyan-400">24/7</div>
+              <div className="text-sm text-eventra-slate-400">Support</div>
             </div>
           </div>
         </motion.div>
-
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-eventra-slate-500 text-sm">
-          Trusted by travelers worldwide
-        </div>
       </div>
 
       {/* Form Side */}
@@ -62,7 +57,7 @@ export default function AuthLayout() {
           className="w-full max-w-md"
         >
           <div className="text-center mb-10 lg:hidden">
-            <Link to="/" className="inline-flex items-center gap-2 mb-8 justify-center" aria-label="EventraOS Home">
+            <Link to="/" className="inline-flex items-center gap-2 justify-center" aria-label="EventraOS Home">
               <div className="w-12 h-12 rounded-xl bg-eventra-navy-900 flex items-center justify-center">
                 <Building2 className="w-6 h-6 text-white" />
               </div>
