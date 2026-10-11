@@ -132,7 +132,7 @@ class DemoFlightProvider extends BaseProvider
                 ->first();
 
             $inventory = $fare?->inventory()
-                ->where('date', $flight->departure_date)
+                ->whereDate('date', $flight->departure_date)
                 ->where('available_seats', '>', 0)
                 ->first();
 
@@ -214,10 +214,10 @@ class DemoFlightProvider extends BaseProvider
         $cabinClass = $options['cabin_class'] ?? 'economy';
 
         $fare = $flight->fares()->where('cabin_class', $cabinClass)->where('is_active', true)->first();
-        $inventory = $fare?->inventory()->where('date', $flight->departure_date)->where('available_seats', '>', 0)->first();
+        $inventory = $fare?->inventory()->whereDate('date', $flight->departure_date)->where('available_seats', '>', 0)->first();
 
         $fareOptions = $flight->fares->map(function ($f) use ($flight, $passengers) {
-            $inv = $f->inventory()->where('date', $flight->departure_date)->where('available_seats', '>', 0)->first();
+            $inv = $f->inventory()->whereDate('date', $flight->departure_date)->where('available_seats', '>', 0)->first();
             return [
                 'fare_id' => $f->id,
                 'name' => $f->name,
