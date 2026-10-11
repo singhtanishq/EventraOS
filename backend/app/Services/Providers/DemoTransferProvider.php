@@ -34,7 +34,7 @@ class DemoTransferProvider extends BaseProvider
 
         if (!empty($criteria['date'])) {
             $query->whereHas('inventory', function ($q) use ($criteria) {
-                $q->where('date', $criteria['date'])
+                $q->whereDate('date', $criteria['date'])
                     ->where('available_vehicles', '>', 0);
             });
         }
@@ -186,7 +186,7 @@ class DemoTransferProvider extends BaseProvider
         if (! $transfer) return new AvailabilityResult(false, 0, 0, 'INR');
 
         $available = \App\Models\TransferInventory::where('transfer_id', $transfer->id)
-            ->where('date', $criteria['date'] ?? now()->toDateString())
+            ->whereDate('date', $criteria['date'] ?? now()->toDateString())
             ->where('available_vehicles', '>', 0)
             ->exists();
 
