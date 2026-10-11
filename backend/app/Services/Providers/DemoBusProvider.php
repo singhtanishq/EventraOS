@@ -36,6 +36,7 @@ class DemoBusProvider extends BaseProvider
         // Free-text origin/destination: resolve against terminal names and city names
         if (!empty($criteria['origin']) && empty($criteria['origin_terminal_id'])) {
             $originIds = \App\Models\BusTerminal::where('name', 'like', '%' . $criteria['origin'] . '%')
+                ->orWhere('code', 'like', '%' . $criteria['origin'] . '%')
                 ->orWhereHas('city', fn ($c) => $c->where('name', 'like', '%' . $criteria['origin'] . '%'))
                 ->pluck('id');
             if ($originIds->isEmpty()) {
@@ -46,6 +47,7 @@ class DemoBusProvider extends BaseProvider
 
         if (!empty($criteria['destination']) && empty($criteria['destination_terminal_id'])) {
             $destIds = \App\Models\BusTerminal::where('name', 'like', '%' . $criteria['destination'] . '%')
+                ->orWhere('code', 'like', '%' . $criteria['destination'] . '%')
                 ->orWhereHas('city', fn ($c) => $c->where('name', 'like', '%' . $criteria['destination'] . '%'))
                 ->pluck('id');
             if ($destIds->isEmpty()) {
