@@ -295,14 +295,14 @@ class ProviderManager
         return array_map(function ($provider) {
             return [
                 'code' => $provider->getCode(),
-                'name' => $provider->provider->name,
-                'mode' => $provider->provider->mode,
-                'status' => $provider->provider->status,
-                'last_sync' => $provider->provider->last_sync_at?->toISOString(),
-                'last_error' => $provider->provider->last_error_message,
-                'success_count' => $provider->provider->success_count,
-                'error_count' => $provider->provider->error_count,
-                'avg_latency_ms' => $provider->provider->avg_latency_ms,
+                'name' => $provider->getModel()->name,
+                'mode' => $provider->getModel()->mode,
+                'status' => $provider->getModel()->status,
+                'last_sync' => $provider->getModel()->last_sync_at?->toISOString(),
+                'last_error' => $provider->getModel()->last_error_message,
+                'success_count' => $provider->getModel()->success_count,
+                'error_count' => $provider->getModel()->error_count,
+                'avg_latency_ms' => $provider->getModel()->avg_latency_ms,
             ];
         }, $providers);
     }
